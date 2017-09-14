@@ -1,0 +1,45 @@
+
+
+@import "~iview/src/styles/index.less";
+
+@import "./custom";
+
+.iview-upload-list{
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0,0,0,.2);
+  margin-right: 4px;
+}
+.iview-upload-list img{
+  width: 100%;
+  height: 100%;
+}
+.iview-upload-list-cover{
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.6);
+}
+.iview-upload-list:hover .iview-upload-list-cover{
+  display: block;
+}
+.iview-upload-list-cover i{
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 2px;
+}
+.iview-upload-list progress{
+  width: 100%;
+}
