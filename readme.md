@@ -54,4 +54,13 @@ php artisan db:seed
 ## sql
 ```sql
 alter table `click_farms` add `keyword` varchar(100) DEFAULT '' after `bd`;
+alter table `cf_results` add `epic` varchar(1000) DEFAULT '[]' after `content`;
+INSERT INTO `admin_permissions` VALUES (1, 'All permission', '*', '', '*', NULL, NULL);
+INSERT INTO `admin_permissions` VALUES (2, 'Dashboard', 'dashboard', 'GET', '/', NULL, NULL);
+INSERT INTO `admin_permissions` VALUES (3, 'Login', 'auth.login', '', '/auth/login\r\n/auth/logout', NULL, NULL);
+INSERT INTO `admin_permissions` VALUES (4, 'User setting', 'auth.setting', 'GET,PUT', '/auth/setting', NULL, NULL);
+INSERT INTO `admin_permissions` VALUES (5, 'Auth management', 'auth.management', '', '/auth/roles\r\n/auth/permissions\r\n/auth/menu\r\n/auth/logs', NULL, NULL);
+INSERT INTO `admin_role_permissions` VALUES (1, 1, NULL, NULL);
+INSERT INTO `admin_role_permissions` VALUES (2, 1, NULL, NULL);
+
 ```
