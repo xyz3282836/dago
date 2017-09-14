@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\CfResult;
+use App\ExchangeRate;
+use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
