@@ -266,7 +266,7 @@
                     this.formValidate.id = this.list[id].id;
                     this.formValidate.title = this.list[id].title;
                     this.formValidate.star = this.list[id].star;
-                    this.formValidate.epic = this.list[id].epic;
+                    this.formValidate.epic = JSON.parse(this.list[id].epic);
                     this.formValidate.content = this.list[id].content;
                     this.syncUpList(this.formValidate.epic);
                 },
