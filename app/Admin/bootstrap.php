@@ -18,12 +18,10 @@
  *
  */
 
-use Encore\Admin\Admin;
-
 Encore\Admin\Form::forget(['map', 'editor']);
 
 app('view')->prependNamespace('admin', resource_path('views/admin'));
 
 Encore\Admin\Form::extend('weditor', App\Admin\Extensions\Form\WangEditor::class);
 
-Admin::css('css/admin.css');
+Encore\Admin\Admin::css('css/admin.css');
