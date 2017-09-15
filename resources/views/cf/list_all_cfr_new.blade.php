@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('csslib')
+    <link href="{{url('flagicon/css/flag-icon.min.css')}}" rel="stylesheet">
 @endsection
 
 @section('jslib')
@@ -21,6 +22,7 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
         }
+
     </style>
 @endsection
 @section('content')
@@ -28,26 +30,38 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
+                    {{--<div class="panel-heading">--}}
+                        {{----}}
+                    {{--</div>--}}
                     <ol class="breadcrumb">
                         <li><a href="/">首页</a></li>
-                        <li><a href="{{url('orderlist')}}">订单管理</a></li>
-                        <li class="active">订单详情</li>
+                        <li class="active">所有评价任务</li>
                     </ol>
                     <div class="panel-body">
-                        <div class="media margin-bottom-15">
-                            <div class="media-left media-middle">
-                                <a href="#">
-                                    <a href="{{$cf->amazon_pic}}" target="_blank"><img src="{{$cf->amazon_pic}}" width="100" alt=""></a>
-                                </a>
+                        <form class="form-inline margin-bottom-30" action="{{url('mycfrlist')}}" method="get">
+                            <div class="form-group">
+                                <i-Input v-model="asin" name="asin" size="large" placeholder="ASIN"></i-Input>
                             </div>
-                            <div class="media-body">
-                                <h4 class="media-heading">{{$cf->amazon_title}}</h4>
+                            <div class="form-group">
+                                <i-Select v-model="site" style="width:100px" size="large">
+                                    <i-Option v-for="(v,k) in sitec" :value="k" :key="k" v-cloak>@{{ v }}</i-Option>
+                                </i-Select>
+                                <input type="hidden" name="site" v-model="site">
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <i-Select v-model="type" style="width:100px" size="large">
+                                    <i-Option v-for="(v,k) in typec" :value="k" :key="k" v-cloak>@{{ v }}</i-Option>
+                                </i-Select>
+                                <input type="hidden" name="type" v-model="type">
+                            </div>
+                            <button type="submit" class="btn btn-primary ladda-button" data-style="contract">查询</button>
+                        </form>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     {{--<th>#</th>--}}
+                                    <th class="pic">商品图片</th>
+                                    <th class="site">站点</th>
                                     {{--<th>店铺id</th>--}}
                                     <th class="asin">ASIN</th>
                                     <th class="ymxorderid">亚马逊订单号</th>
@@ -61,8 +75,10 @@
                             <tbody>
                                 @forelse($list as $v)
                                 <tr>
-{{--                                    <td>{{$v->id}}</td>--}}
-                                    {{--<td>{{$v->shop_id}}</td>--}}
+                                    {{--<td>{{$v->id}}</td>--}}
+                                    <td><a href="{{$v->cf->amazon_pic}}" target="_blank"><img src="{{$v->cf->amazon_pic}}" width="100" alt=""></a></td>
+                                    <td><span class="flag-icon flag-icon-{{$v->cf->flag}}"></span></td>
+{{--                                    <td>{{$v->shop_id}}</td>--}}
                                     <td>{{$v->asin}}</td>
                                     <td class="break">{{$v->amazon_orderid}}</td>
 {{--                                    <td>{{$v->amazon_logistics_company}}</td>--}}
@@ -85,10 +101,10 @@
                                         @else
                                             {{$v->estatus_text}}
                                         @endif
-                                        @if($v->estatus != 5)
-                                            <br>
-                                            预计{{$v->etime}}后留评
-                                        @endif
+                                            @if($v->estatus != 5)
+                                        <br>
+                                        预计{{$v->etime}}后留评
+                                            @endif
                                         @if($v->estatus == 7)
                                             <br>
                                             <span class="color-red">评价文字重复</span>
@@ -103,33 +119,66 @@
                             </tbody>
                         </table>
                         @if($list)
-                            {!!  $list->links() !!}
+                            {!!  $list->appends(['type'=>$type,'asin'=>$asin,'site'=>$site])->links() !!}
                         @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <Modal
             v-model="modal1"
             cancel-text=''
             ok-text='取消'
             title="评价">
 
-        <i-Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-            <Form-Item label="星级" prop="star">
-                <Rate v-model="formValidate.star"></Rate>
-            </Form-Item>
-            <Form-Item label="标题" prop="title">
-                <i-Input v-model="formValidate.title" placeholder="输入标题"></i-Input>
-            </Form-Item>
-            <Form-Item label="评价正文" prop="content">
-                <i-Input v-model="formValidate.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></i-Input>
-            </Form-Item>
-            <Form-Item>
-                <i-Button type="primary" @click="handleSubmit('formValidate')">提交</i-Button>
-            </Form-Item>
-        </i-Form>
+            <i-Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+                <Form-Item label="星级" prop="star">
+                    <Rate v-model="formValidate.star"></Rate>
+                </Form-Item>
+                <Form-Item label="标题" prop="title">
+                    <i-Input v-model="formValidate.title" placeholder="输入标题"></i-Input>
+                </Form-Item>
+                <Form-Item label="评价正文" prop="content">
+                    <i-Input v-model="formValidate.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></i-Input>
+                </Form-Item>
+                <Form-Item label="评价图片" prop="epic">
+                    <div class="iview-upload-list" v-for="item in uploadList">
+                        <template v-if="item.status === 'finished'">
+                            <img :src="item.url">
+                            <div class="iview-upload-list-cover">
+                                <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
+                                <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                        </template>
+                    </div>
+                    <Upload
+                            ref="upload"
+                            :show-upload-list="false"
+                            :default-file-list="defaultList"
+                            :on-success="handleSuccess"
+                            :format="['jpg','jpeg','png']"
+                            :max-size="2048"
+                            :on-format-error="handleFormatError"
+                            :on-exceeded-size="handleMaxSize"
+                            :before-upload="handleBeforeUpload"
+                            type="drag"
+                            action="{{url('upload?type=epic&_token='.csrf_token())}}"
+                            style="display: inline-block;width:58px;">
+                        <div style="width: 58px;height:58px;line-height: 58px;">
+                            <Icon type="camera" size="20"></Icon>
+                        </div>
+                    </Upload>
+
+                </Form-Item>
+                <Form-Item>
+                    <i-Button type="primary" @click="handleSubmit('formValidate')">提交</i-Button>
+                </Form-Item>
+            </i-Form>
     </Modal>
     <Modal title="查看图片" v-model="visible">
         <img :src="imgName" v-if="visible" style="width: 100%">
@@ -142,6 +191,12 @@
             el: '#app',
             data:{
                 list:{!! $list->keyBy('id') !!},
+                asin: "{{$asin}}",
+                type: "{{$type}}",
+                typec: {!! json_encode(config('linepro.cfr_typec')) !!},
+                site:"{{$site}}",
+                sitec: {!! json_encode(config('linepro.cfr_sitec')) !!},
+
                 imgName: '',
                 visible: false,
                 uploadList: [],
@@ -250,11 +305,7 @@
                     });
                     this.uploadList = upload.fileList;
                 }
-            },
-            mounted: function () {
-                this.$nextTick(() => {
-                })
-            },
+            }
         });
     </script>
 @endsection

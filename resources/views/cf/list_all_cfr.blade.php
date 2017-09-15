@@ -143,38 +143,6 @@
                 <Form-Item label="评价正文" prop="content">
                     <i-Input v-model="formValidate.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></i-Input>
                 </Form-Item>
-                <Form-Item label="评价图片" prop="epic">
-                    <div class="iview-upload-list" v-for="item in uploadList">
-                        <template v-if="item.status === 'finished'">
-                            <img :src="item.url">
-                            <div class="iview-upload-list-cover">
-                                <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                                <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                        </template>
-                    </div>
-                    <Upload
-                            ref="upload"
-                            :show-upload-list="false"
-                            :default-file-list="defaultList"
-                            :on-success="handleSuccess"
-                            :format="['jpg','jpeg','png']"
-                            :max-size="2048"
-                            :on-format-error="handleFormatError"
-                            :on-exceeded-size="handleMaxSize"
-                            :before-upload="handleBeforeUpload"
-                            type="drag"
-                            action="{{url('upload?type=epic&_token='.csrf_token())}}"
-                            style="display: inline-block;width:58px;">
-                        <div style="width: 58px;height:58px;line-height: 58px;">
-                            <Icon type="camera" size="20"></Icon>
-                        </div>
-                    </Upload>
-
-                </Form-Item>
                 <Form-Item>
                     <i-Button type="primary" @click="handleSubmit('formValidate')">提交</i-Button>
                 </Form-Item>
