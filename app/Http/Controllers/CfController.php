@@ -272,6 +272,10 @@ class CfController extends Controller
         $content = trim(request('content'));
         $epic    = json_encode(request('epic'));
 
+        if(strlen($title) > 50){
+            return error('评价标题50个字符');
+        }
+
         $model = CfResult::find($id);
         if (!$model) {
             return error(MODEL_NOT_FOUNT);
