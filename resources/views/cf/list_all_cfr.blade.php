@@ -129,6 +129,8 @@
 
     <Modal
             v-model="modal1"
+            cancel-text=''
+            ok-text='取消'
             title="评价">
 
             <i-Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">

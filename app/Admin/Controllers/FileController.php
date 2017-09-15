@@ -1,8 +1,7 @@
 <?php
 namespace App\Admin\Controllers;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
