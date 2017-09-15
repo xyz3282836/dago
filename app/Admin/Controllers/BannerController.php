@@ -9,6 +9,7 @@
 namespace App\Admin\Controllers;
 
 
+use App\Admin\Extensions\Tools\GridView;
 use App\Banner;
 use App\Http\Controllers\Controller;
 use Cache;
@@ -38,6 +39,15 @@ class BannerController extends Controller
             $grid->title('图片标题');
             $grid->pic('图片')->image();
             $grid->created_at('创建时间');
+
+            $grid->tools(function ($tools) {
+                $tools->append(new GridView());
+            });
+
+            if (request('view') !== 'table') {
+                $grid->setView('admin.grid.image',['image_column'=>'pic','text_column'=>'title','type_column'=>'type_text']);
+
+            }
         });
     }
 
