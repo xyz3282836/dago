@@ -43,7 +43,7 @@ class RoleController extends Controller
 
             $grid->id('ID')->sortable();
             $grid->name('标识');
-            $grid->desc('前台显示');
+            $grid->desc('前台显示')->editable();
 
             $grid->action('功能')->pluck('id')->implode(',')->checkbox(Action::all()->pluck('desc', 'id'), [1, 2]);
 
