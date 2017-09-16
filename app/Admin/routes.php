@@ -25,6 +25,12 @@ Route::group([
 
     $router->resource('rate','RateController');
 
+    $router->resource('role','RoleController');
+
+    $router->resource('action','ActionController');
+
+    $router->resource('roleaction','RoleActionController');
+
     //上传图片(富文本编辑器需要使用)
     $router->post('upload', 'FileController@upload');
 });
