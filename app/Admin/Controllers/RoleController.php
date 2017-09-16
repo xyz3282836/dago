@@ -92,8 +92,6 @@ class RoleController extends Controller
         return Admin::form(Role::class, function (Form $form) {
 
             $form->tab('角色信息', function ($form) {
-                $form->display('id', 'ID');
-
                 $form->text('name', '标识')->rules('required');
                 $form->text('desc', '前台显示')->rules('required');
 
