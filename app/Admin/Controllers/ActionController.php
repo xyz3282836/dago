@@ -41,8 +41,9 @@ class ActionController extends Controller
 
             $grid->id('ID')->sortable();
 
-            $grid->name('标识');
-            $grid->desc('功能描述');
+            $grid->name('标识')->editable();
+            $grid->desc('功能描述')->editable();
+            $grid->auth_desc('权限提示')->editable();
 
             $grid->created_at();
             $grid->updated_at();
@@ -78,6 +79,7 @@ class ActionController extends Controller
             $form->display('id', 'ID');
             $form->text('name', '标识')->rules('required');
             $form->text('desc', '功能描述')->rules('required');
+            $form->text('auth_desc', '权限提示')->rules('required');
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');
         });

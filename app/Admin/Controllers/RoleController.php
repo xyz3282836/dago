@@ -61,6 +61,11 @@ class RoleController extends Controller
             $grid->service_three_min('普通金币')->editable();
             $grid->weight('权重')->editable();
 
+            $grid->gold_recharge('最少充值金币')->editable();
+            $grid->gold_step('金币充值步长')->editable();
+            $grid->balance_recharge('最少充值余额')->editable();
+            $grid->balance_step('余额充值步长')->editable();
+
             $grid->updated_at('更新');
         });
     }
@@ -107,6 +112,11 @@ class RoleController extends Controller
                 $form->number('service_one_min', '限时下单最少金币')->rules('required');
                 $form->number('service_three_min', '普通下单最少金币')->rules('required');
                 $form->number('weight', '权重(￥)')->rules('required');
+
+                $form->number('gold_recharge', '最少充值金币')->rules('required');
+                $form->number('gold_step', '金币充值步长')->rules('required');
+                $form->number('balance_recharge', '最少充值余额')->rules('required');
+                $form->number('balance_step', '余额充值步长')->rules('required');
 
                 $form->display('created_at', 'Created At');
                 $form->display('updated_at', 'Updated At');

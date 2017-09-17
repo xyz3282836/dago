@@ -17,6 +17,7 @@ class CreateActionsTable extends Migration
             $table->increments('id');
             $table->char('name',50)->default('name')->comment('标识');
             $table->char('desc',50)->default('动作')->comment('描述');
+            $table->char('auth_desc',50)->default('')->comment('权限提示');
             $table->timestamps();
         });
     }
