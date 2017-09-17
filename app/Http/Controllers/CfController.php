@@ -272,10 +272,12 @@ class CfController extends Controller
         $content = trim(request('content'));
         $epic    = json_encode(request('epic'));
 
-        if(strlen($title) > 50){
-            return error('评价标题50个字符');
+        if (mb_strlen($title, 'utf-8') >= 50) {
+            return error('评价标题最多50个字符');
         }
-
+        if (mb_strlen($content, 'utf-8') >= 1024) {
+            return error('评价正文最多1024个字符');
+        }
         $model = CfResult::find($id);
         if (!$model) {
             return error(MODEL_NOT_FOUNT);
@@ -301,10 +303,6 @@ class CfController extends Controller
             $p = '/^([^\s]+[\s]){19,}/';
             if (!preg_match($p, $content)) {
                 return error('评价文字必须大于20个单词');
-            }
-        } else {
-            if (mb_strlen($content, 'utf-8') >= 1024) {
-                return error('评价字数超出限制');
             }
         }
         if ($model->estatus == 1 || $model->estatus == 7) {
