@@ -66,7 +66,6 @@ class RoleController extends Controller
             $grid->balance_recharge('最少充值余额')->editable();
             $grid->balance_step('余额充值步长')->editable();
 
-            $grid->updated_at('更新');
         });
     }
 
