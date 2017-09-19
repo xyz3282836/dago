@@ -161,7 +161,7 @@
                             </li>
                             <li class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{Auth::user()->level_text}}
+                                    {{Auth::user()->role->desc}}
                                     金币:<span class="color-red font-yahei">{{Auth::user()->golds - Auth::user()->lock_golds}}<img width="15" src="/img/gold.png" /></span>
                                     <span class="caret"></span>
                                 </a>

@@ -17,6 +17,7 @@ class CreateRolesTable extends Migration
             $table->increments('id');
             $table->char('name',50)->default('name')->comment('标识');
             $table->char('desc',50)->default('会员')->comment('前台显示');
+            $table->char('icon',50)->default('icon')->comment('前台显示icon');
 
             $table->integer('once')->default('1000')->comment('单次金币');
             $table->integer('more')->default('1000')->comment('累加金币');

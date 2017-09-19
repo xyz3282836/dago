@@ -68,6 +68,9 @@ Route::get('refereshcapcha', 'IndexController@captcha');
 //faq
 Route::get('faqs', 'IndexController@faqs');
 
+//qiniu
+Route::get('getuptoken', 'QiniuController@getToken');
+
 //current.version
 Route::get('current.version', function(){
     return 1;

@@ -68,4 +68,30 @@ class User extends Authenticatable
         }
         return $query->where('level', $type);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'level');
+    }
+
+    public function getEpageTable(){
+        $ra = $this->role->actiondesc;
+        $i = 0;
+        $arr = [];
+        foreach ($ra as $v) {
+            if(in_array($v->action->name,['evaluate','euploadimg','euploadvideo'])){
+                $i++;
+                $arr[]=[
+                    'desc'=>$v->action->desc,
+                    'gold'=>$v->service_gold,
+                    'num'=>0,
+                    'allgold'=>0
+                ];
+            }
+            if($i == 3){
+                break;
+            }
+        }
+        return json_encode($arr);
+    }
 }

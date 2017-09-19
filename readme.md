@@ -53,9 +53,8 @@ php artisan db:seed
 
 ## sql
 ```sql
-alter table `roles` add `gold_recharge` int DEFAULT '100' after `weight`;
-alter table `roles` add `gold_step` int DEFAULT '100' after `gold_recharge`;
-alter table `roles` add `balance_recharge` int DEFAULT '100' after `gold_step`;
-alter table `roles` add `balance_step` int DEFAULT '100' after `balance_recharge`;
-alter table `actions` add `auth_desc` char(30) DEFAULT '' after `desc`;
+alter table `cf_results` add `epicnum` tinyint DEFAULT '0' after `epic`;
+alter table `cf_results` drop column `evideonum`;
+alter table `roles` add `icon` char(50) DEFAULT '' after `desc`;
+
 ```

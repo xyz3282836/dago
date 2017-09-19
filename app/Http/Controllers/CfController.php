@@ -215,7 +215,7 @@ class CfController extends Controller
         }
         $list = CfResult::where('cfid', $id);
         $list = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
-        return view('cf.list_cf_result')->with('tname', '已购买商品代购任务列表')->with([
+        return view('cf.list_all_cfr_new')->with('tname', '已购买商品代购任务列表')->with([
             'list' => $list,
             'cf'   => $model,
         ]);
@@ -253,7 +253,7 @@ class CfController extends Controller
 
         }
         $list = $list->where('status', '>', 0)->orderBy('id', 'created_at')->paginate(config('linepro.perpage'));
-        return view('cf.list_all_cfr')->with('tname', '评价任务列表')->with([
+        return view('cf.list_all_cfr_new')->with('tname', '评价任务列表')->with([
             'list' => $list,
             'type' => $type,
             'asin' => $asin,
@@ -270,7 +270,8 @@ class CfController extends Controller
         $star    = request('star');
         $title   = trim(request('title'));
         $content = trim(request('content'));
-        $epic    = json_encode(request('epic'));
+        $epic    = request('epic') == null ? '[]' : json_encode(request('epic'));
+        $evideo  = request('evideo') == null ? '[]' : json_encode(request('evideo'));
 
         if (mb_strlen($title, 'utf-8') >= 50) {
             return error('评价标题最多50个字符');
@@ -308,10 +309,17 @@ class CfController extends Controller
         if ($model->estatus == 1 || $model->estatus == 7) {
             $model->estatus = CfResult::ESTATUS_SUBMIT;
         }
+        if(count(json_decode($epic,true)) > $model->epicnum){
+            $model->epicnum = count(json_decode($epic,true));
+        }
+        if(count(json_decode($evideo,true)) > $model->evideonum){
+            $model->evideonum = count(json_decode($evideo,true));
+        }
         $model->star    = $star;
         $model->title   = $title;
         $model->content = $content;
         $model->epic    = $epic;
+        $model->evideo  = $evideo;
         $model->save();
         $model->evaluate($user);
         return success();

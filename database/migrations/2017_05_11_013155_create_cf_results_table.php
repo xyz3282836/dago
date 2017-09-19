@@ -31,6 +31,10 @@ class CreateCfResultsTable extends Migration
             $table->char('title',64)->default('');//标题
             $table->string('content',1024)->default('');//正文
             $table->string('epic',1000)->default('[]');//图片
+            $table->tinyInteger('epicnum')->default(0);
+            $table->string('evideo',1000)->default('[]');//视频
+            $table->tinyInteger('evideonum')->default(0);
+
 
             // 非业务字段
             $table->tinyInteger('status')->default(1);

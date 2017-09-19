@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RoleAction extends Model
 {
@@ -18,4 +19,5 @@ class RoleAction extends Model
     {
         return $this->belongsTo(Action::class, 'aid');
     }
+
 }
