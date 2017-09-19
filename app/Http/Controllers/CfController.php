@@ -215,7 +215,7 @@ class CfController extends Controller
         }
         $list = CfResult::where('cfid', $id);
         $list = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
-        return view('cf.list_all_cfr_new')->with('tname', '已购买商品代购任务列表')->with([
+        return view('cf.list_all_cfr')->with('tname', '已购买商品代购任务列表')->with([
             'list' => $list,
             'cf'   => $model,
         ]);
@@ -253,7 +253,7 @@ class CfController extends Controller
 
         }
         $list = $list->where('status', '>', 0)->orderBy('id', 'created_at')->paginate(config('linepro.perpage'));
-        return view('cf.list_all_cfr_new')->with('tname', '评价任务列表')->with([
+        return view('cf.list_all_cfr')->with('tname', '评价任务列表')->with([
             'list' => $list,
             'type' => $type,
             'asin' => $asin,
