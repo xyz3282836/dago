@@ -58,7 +58,9 @@ class UserController extends Controller
                 $actions->disableEdit();
             });
             $grid->tools(function ($tools) {
-                $tools->append(new TableType(config('linepro.admin_user_level')));
+                $arr        = User::all()->pluck('desc', 'name');
+                $arr['all'] = '全部';
+                $tools->append(new TableType($arr));
             });
         });
     }
