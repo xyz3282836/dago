@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Log;
 
 class User extends Authenticatable
 {
@@ -74,24 +75,65 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'level');
     }
 
-    public function getEpageTable(){
-        $ra = $this->role->actiondesc;
-        $i = 0;
+    public function getEpageTable()
+    {
+        $ra  = $this->role->actiondesc;
+        $i   = 0;
         $arr = [];
         foreach ($ra as $v) {
-            if(in_array($v->action->name,['evaluate','euploadimg','euploadvideo'])){
+            if (in_array($v->action->name, ['evaluate', 'euploadpic', 'euploadvideo'])) {
                 $i++;
-                $arr[]=[
-                    'desc'=>$v->action->desc,
-                    'gold'=>$v->service_gold,
-                    'num'=>0,
-                    'allgold'=>0
+                $arr[] = [
+                    'desc'    => $v->action->desc,
+                    'gold'    => $v->service_gold,
+                    'num'     => 0,
+                    'allgold' => 0
                 ];
             }
-            if($i == 3){
+            if ($i == 3) {
                 break;
             }
         }
         return json_encode($arr);
+    }
+
+    public function getConsumeGold($payarr, $model = null)
+    {
+        $allgold = 0;
+        $arr     = [];
+        foreach ($this->role->actiondesc as $v) {
+            $arr[$v->action->name] = [
+                'gold' => $v->service_gold,
+                'rate' => $v->service_rate,
+                'type' => $v->type
+            ];
+        }
+        $rarr = [];
+        foreach ($payarr as $k => $v) {
+            if (!isset($arr[$k])) {
+                Log::error('用户id' . $this->id . '没有评价' . $k . '权限');
+                return false;
+            }
+            if ($arr[$k]['type'] == 1) {
+                $allgold += $v * $arr[$k]['gold'];
+            }
+            $rarr[$k] = [
+                'num'  => $v,
+                'gold' => $v * $arr[$k]['gold']
+            ];
+        }
+        return [$allgold, $rarr];
+    }
+
+    public function checkAction($action)
+    {
+        $actions = [];
+        foreach ($this->role->actiondesc as $v) {
+            $actions[] = $v->action->name;
+        }
+        if (!in_array(strtolower($action), $actions)) {
+            return false;
+        }
+        return true;
     }
 }

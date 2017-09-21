@@ -306,15 +306,38 @@ class CfController extends Controller
                 return error('评价文字必须大于20个单词');
             }
         }
+
+        //扣金币
+        $payarr = [];
+        if ($model->title == '') {
+            $payarr['evaluate'] = 1;
+        }
+
         if ($model->estatus == 1 || $model->estatus == 7) {
             $model->estatus = CfResult::ESTATUS_SUBMIT;
         }
-        if(count(json_decode($epic,true)) > $model->epicnum){
-            $model->epicnum = count(json_decode($epic,true));
+        if (count(json_decode($epic, true)) > $model->epicnum) {
+            $payarr['euploadpic'] = count(json_decode($epic, true)) - $model->epicnum;
+            $model->epicnum       = count(json_decode($epic, true));
         }
-        if(count(json_decode($evideo,true)) > $model->evideonum){
-            $model->evideonum = count(json_decode($evideo,true));
+        if (count(json_decode($evideo, true)) > $model->evideonum) {
+            $payarr['euploadvideo'] = count(json_decode($evideo, true)) - $model->evideonum;
+            $model->evideonum       = count(json_decode($evideo, true));
         }
+
+        $paygold = Auth::user()->getConsumeGold($payarr);
+
+        if ($paygold === false) {
+            return error('无权限此操作');
+        }
+        if ((Auth::user()->golds - Auth::user()->lock_golds) < $paygold[0]) {
+            return error('金币不够，请充值');
+        }
+
+        if (!Order::evaluateByGold($paygold)) {
+            return error('支付异常');
+        }
+
         $model->star    = $star;
         $model->title   = $title;
         $model->content = $content;
@@ -324,5 +347,4 @@ class CfController extends Controller
         $model->evaluate($user);
         return success();
     }
-
 }

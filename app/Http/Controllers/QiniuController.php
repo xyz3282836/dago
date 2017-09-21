@@ -18,6 +18,8 @@ class QiniuController extends Controller
     public $bucket;
     public function __construct()
     {
+        $this->middleware('auth');
+
         $accessKey = gconfig('qiniu.ak');
         $secretKey = gconfig('qiniu.sk');
 

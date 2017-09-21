@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CfResult;
-use App\Events\Vip;
 use App\VipBill;
 use Auth;
 use DB;
@@ -85,8 +84,8 @@ class HomeController extends Controller
      */
     public function postAddr()
     {
-        $user                   = Auth::user();
-        if($user->idcardpic == ''){
+        $user = Auth::user();
+        if ($user->idcardpic == '') {
             $this->validate(request(), [
                 'mobile'        => 'required|regex:/^1[345789][0-9]{9}$/|unique:users',
                 'shipping_addr' => 'required|min:5|max:50',
@@ -99,7 +98,7 @@ class HomeController extends Controller
             $pdata['real_name']     = request('real_name');
             $pdata['idcardpic']     = request('idcardpic');
             $pdata['idcardno']      = request('idcardno');
-        }else{
+        } else {
             $this->validate(request(), [
                 'shipping_addr' => 'required|min:5|max:50',
             ]);
@@ -133,6 +132,9 @@ class HomeController extends Controller
                 $fullname = '/upfile/video/' . $filename;
                 break;
             case 'epic':
+                if (!Auth::user()->checkAction('euploadpic')) {
+                    return error(NO_ACCESS);
+                }
                 $file     = $request->file('file');
                 $ext      = $file->getClientOriginalExtension();
                 $filename = time() . rand(100000, 999999) . '.' . $ext;

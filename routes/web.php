@@ -28,8 +28,8 @@ Route::get('viewclickfarm/{id}', 'CfController@listCfResult');
 Route::get('mycfrlist', 'CfController@listMycfr');
 Route::get('orderlist', 'CfController@listOrder');
 
-//cf 评价
-Route::post('cf/evaluate', 'CfController@evaluate');
+//auth
+Route::post('evaluate', 'CfController@evaluate');
 
 //获取环境信息
 Route::get('getinfo', 'IndexController@getInfo');

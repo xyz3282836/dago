@@ -186,10 +186,12 @@
                     </template>
                 </div>
                 <Upload
+                        multiple
                         ref="upload"
                         :show-upload-list="false"
                         :default-file-list="defaultList"
                         :on-success="handleSuccess"
+                        accept="image/*"
                         :format="['jpg','jpeg','png']"
                         :max-size="3072"
                         :on-format-error="handleFormatError"
@@ -214,6 +216,7 @@
                         :on-success="vhandleSuccess"
                         :data="qiniutoken"
                         :format="['mp4']"
+                        accept="video/*"
                         :max-size="51200"
                         :on-format-error="vhandleFormatError"
                         :on-exceeded-size="vhandleMaxSize"
@@ -237,7 +240,7 @@
                 <i-Col span="6">本次评价提交将扣除</i-Col>
                 <i-Col span="18">
                     <i-Table :columns="columns1" :data="data1" size="small"></i-Table>
-                    <hr>
+                    <hr style="margin: 10px 0">
                     <p class="pull-right">总计需求：<span v-text="allgold"></span></p>
                 </i-Col>
             </Row>
@@ -332,6 +335,9 @@
                     return this.data1[0].allgold;
                 },
                 epicgold: function(){
+                    if(this.data1[1] == undefined){
+                        return 0;
+                    }
                     if(this.formValidate.epic.length > this.consume.epicnum){
                         this.data1[1].num = this.formValidate.epic.length - this.consume.epicnum;
                     }else{
@@ -341,6 +347,9 @@
                     return this.data1[1].allgold;
                 },
                 evideogold: function(){
+                    if(this.data1[2] == undefined){
+                        return 0;
+                    }
                     if(this.formValidate.evideo.length > this.consume.evideonum){
                         this.data1[2].num = this.formValidate.evideo.length - this.consume.evideonum;
                     }else{
@@ -445,6 +454,7 @@
                     });
                 },
                 handleBeforeUpload() {
+                    @if(\Auth::user()->checkAction('euploadpic'))
                     const check = this.uploadList.length < 5;
                     if (!check) {
                         this.$Notice.warning({
@@ -452,8 +462,15 @@
                         });
                     }
                     return check;
+                    @else
+                    this.$Notice.error({
+                        title: '请升级会员，暂无权限'
+                    });
+                    return false;
+                    @endif
                 },
                 vhandleBeforeUpload() {
+                    @if(\Auth::user()->checkAction('euploadvideo'))
                     const check = this.vuploadList.length < 1;
                     if (!check) {
                         this.$Notice.warning({
@@ -461,11 +478,17 @@
                         });
                     }
                     return check;
+                    @else
+                    this.$Notice.error({
+                        title: '请升级会员，暂无权限'
+                    });
+                    return false;
+                    @endif
                 },
                 handleSubmit(name) {
                     this.$refs[name].validate((valid) => {
                         if (valid) {
-                            axios.post("{{url('cf/evaluate')}}", app.formValidate).then(res => {
+                            axios.post("{{url('evaluate')}}", app.formValidate).then(res => {
                                 if (res.data.code) {
                                     window.location.reload()
                                 } else {

@@ -28,7 +28,13 @@ class Order extends Model
     const TYPE_CONSUME  = 2;//消费
     const TYPE_REFUND   = 3;//退款
 
+    const TYPE_EVALUATE     = 4;//评价
+    const TYPE_UPLOAD_IMG   = 5;//上传图片
+    const TYPE_UPLOAD_VIDEO = 6;//上传视频
+
     const PTYPE_ALIPAY = 1;
+    const PTYPE_GOLD   = 0;
+
     protected $fillable = [
         'uid', 'type', 'payment_type', 'orderid', 'alipay_orderid', 'balance', 'price', 'golds', 'rate', 'status'
     ];
@@ -95,7 +101,7 @@ class Order extends Model
 //                    'days'     => $adddays,
 //                    'validity' => $validity,
 //                ]);
-                $user->level    = 2;
+                $user->level = 2;
 //                $user->validity = $validity;
             }
             $user->save();
@@ -243,6 +249,64 @@ class Order extends Model
             DB::rollBack();
             throw new MsgException();
         }
+    }
+
+    public static function evaluateByGold($payarr)
+    {
+        if ($payarr[0] == 0) {
+            return true;
+        }
+        $user = Auth::user();
+        DB::beginTransaction();
+        try {
+            $user->golds = $user->golds - $payarr[0];
+            $user->save();
+            foreach ($payarr[1] as $k => $v) {
+                $orderid = get_order_id();
+                $type    = self::transType($k);
+                $one     = self::create([
+                    'uid'          => $user->id,
+                    'type'         => $type,
+                    'payment_type' => self::PTYPE_GOLD,
+                    'orderid'      => $orderid,
+                    'golds'        => $v['gold'],
+                    'rate'         => gconfig('rmbtogold'),
+                    'status'       => self::STATUS_PAID
+                ]);
+                Bill::create([
+                    'uid'     => $user->id,
+                    'oid'     => $one->id,
+                    'type'    => $type,
+                    'orderid' => $one->orderid,
+                    'gout'    => $v['gold'],
+                    'rate'    => gconfig('rmbtogold'),
+                ]);
+            }
+            DB::commit();
+            return true;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+            return false;
+        }
+    }
+
+    public static function transType($str)
+    {
+        switch ($str) {
+            case 'evaluate':
+                $type = self::TYPE_EVALUATE;
+                break;
+            case 'euploadpic':
+                $type = self::TYPE_UPLOAD_IMG;
+                break;
+            case 'euploadvideo':
+                $type = self::TYPE_UPLOAD_VIDEO;
+                break;
+            default:
+                $type = 0;
+        }
+        return $type;
     }
 
     /**

@@ -22,7 +22,8 @@ class IndexController extends Controller
      */
     public function getInfo()
     {
-        phpinfo();
+//        phpinfo();
+        p(\Auth::user()->getActions());
     }
 
     public function captcha()
