@@ -11,7 +11,7 @@ class User extends Authenticatable
     use Notifiable;
 
     const TYPE_REGULAR = 1;
-    const TYPE_VIP     = 2;
+    const TYPE_VIP = 2;
     /**
      * The attributes that are mass assignable.
      *
@@ -63,7 +63,7 @@ class User extends Authenticatable
 
     public function scopeType($query, $type)
     {
-        if (!in_array($type, [self::TYPE_REGULAR, self::TYPE_VIP])) {
+        if ($type == 'all') {
             return $query;
         }
         return $query->where('level', $type);
