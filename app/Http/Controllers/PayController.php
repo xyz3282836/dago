@@ -212,12 +212,12 @@ class PayController extends Controller
         $balance = $user->balance - $user->lock_balance;
         if ($price > $balance) {
             //余额+充值 跳转 不生成bill
-            $one          = Order::consumeByPartRecharge($price, $golds, $balance, $list);
-            return success(['type'=>'p','id'=>$one->id]);
+            $one = Order::consumeByPartRecharge($price, $golds, $balance, $list);
+            return success(['type' => 'p', 'id' => $one->id]);
         }
         //余额 生成bill
         $one = Order::consumeByBalance($price, $golds, $list);
-        return success(['type'=>'b','id'=>$one->id]);
+        return success(['type' => 'b', 'id' => $one->id]);
     }
 
     /**
@@ -230,7 +230,7 @@ class PayController extends Controller
         if ($end == date("Y-m-d")) {
             $dend = date('Y-m-d H:i:s');
         }
-        $type  = request('type', -1);
+        $type = request('type', -1);
 
         $table = Bill::where('uid', Auth::user()->id);
         if ($start != null && $end != null) {
@@ -239,6 +239,8 @@ class PayController extends Controller
 
         if ($type >= 0) {
             $table->where('type', $type);
+        } else {
+            $table->where('type', '<', 10);
         }
         $list = $table->orderBy('id', 'desc')->paginate(10);
         return view('pay.list_bill')->with('tname', '账单列表')->with('list', $list)->with([
