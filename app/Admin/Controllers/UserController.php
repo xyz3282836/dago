@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\Tools\TableType;
 use App\Admin\Extensions\Tools\UserType;
 use App\Http\Controllers\Controller;
+use App\Role;
 use App\User;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
@@ -58,7 +59,7 @@ class UserController extends Controller
                 $actions->disableEdit();
             });
             $grid->tools(function ($tools) {
-                $arr        = User::all()->pluck('desc', 'name');
+                $arr        = Role::all()->pluck('desc', 'name');
                 $arr['all'] = '全部';
                 $tools->append(new TableType($arr));
             });
