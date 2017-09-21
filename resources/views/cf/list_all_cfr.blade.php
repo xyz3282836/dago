@@ -191,8 +191,8 @@
                         :show-upload-list="false"
                         :default-file-list="defaultList"
                         :on-success="handleSuccess"
-                        accept="image/*"
-                        :format="['jpg','jpeg','png']"
+                        accept="image/jpeg"
+                        :format="['jpeg']"
                         :max-size="3072"
                         :on-format-error="handleFormatError"
                         :on-exceeded-size="handleMaxSize"
@@ -216,7 +216,7 @@
                         :on-success="vhandleSuccess"
                         :data="qiniutoken"
                         :format="['mp4']"
-                        accept="video/*"
+                        accept="video/mp4"
                         :max-size="51200"
                         :on-format-error="vhandleFormatError"
                         :on-exceeded-size="vhandleMaxSize"
@@ -432,7 +432,7 @@
                 handleFormatError(file) {
                     this.$Notice.warning({
                         title: '文件格式不正确',
-                        desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 jpeg 或 png 格式的图片。'
+                        desc: '文件 ' + file.name + ' 格式不正确，请上传 jpeg 格式的图片。'
                     });
                 },
                 vhandleFormatError(file) {
