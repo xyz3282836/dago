@@ -32,8 +32,7 @@ class User extends Authenticatable
 
     public function getLevelTextAttribute()
     {
-        $arr = config('linepro.user_level');
-        return $arr[$this->level];
+        return $this->role->desc;
     }
 
     public function getEvaluateAttribute()
