@@ -55,11 +55,11 @@ class RoleController extends Controller
                 2 => '累加充值',
             ]);
 
-            $grid->service_one_rate('限时')->editable();
-            $grid->service_three_rate('普通')->editable();
-            $grid->service_one_min('限时金币')->editable();
-            $grid->service_three_min('普通金币')->editable();
-            $grid->weight('权重')->editable();
+//            $grid->service_one_rate('限时')->editable();
+//            $grid->service_three_rate('普通')->editable();
+//            $grid->service_one_min('限时金币')->editable();
+//            $grid->service_three_min('普通金币')->editable();
+//            $grid->weight('权重')->editable();
 
             $grid->gold_recharge('最少充值金币(￥)')->editable();
             $grid->gold_step('金币充值步长(￥)')->editable();
