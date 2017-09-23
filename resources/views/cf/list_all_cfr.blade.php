@@ -159,7 +159,7 @@
             width="600"
             v-model="modal1"
             cancel-text=''
-            ok-text='取消'
+            :footer-hide='true'
             title="评价">
 
         <i-Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
