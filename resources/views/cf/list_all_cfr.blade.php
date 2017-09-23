@@ -228,7 +228,6 @@
                     <i-Button type="ghost" icon="ios-cloud-upload-outline">上传视频</i-Button>
                 </Upload>
             </Form-Item>
-
             <Form-Item>
                 <Alert type="warning">
                     <template slot="desc">
@@ -240,14 +239,12 @@
                     </template>
                 </Alert>
             </Form-Item>
-
             <Form-Item>
                 <p>本次评价提交将扣除</p>
                 <i-Table :columns="columns1" :data="data1" size="small"></i-Table>
                 <hr style="margin: 10px 0">
                 <p>总计需求：<span v-text="allgold" class="color-red"></span></p>
             </Form-Item>
-            <br>
             <Form-Item>
                 <i-Button type="primary" @click="handleSubmit('formValidate')">提交</i-Button>
             </Form-Item>
