@@ -192,7 +192,7 @@
                         :default-file-list="defaultList"
                         :on-success="handleSuccess"
                         accept="image/jpeg"
-                        :format="['jpeg']"
+                        :format="['jpeg','jpg']"
                         :max-size="3072"
                         :on-format-error="handleFormatError"
                         :on-exceeded-size="handleMaxSize"
@@ -432,7 +432,7 @@
                 handleFormatError(file) {
                     this.$Notice.warning({
                         title: '文件格式不正确',
-                        desc: '文件 ' + file.name + ' 格式不正确，请上传 jpeg 格式的图片。'
+                        desc: '文件 ' + file.name + ' 格式不正确，请上传 jpeg/jpg 格式的图片。'
                     });
                 },
                 vhandleFormatError(file) {
