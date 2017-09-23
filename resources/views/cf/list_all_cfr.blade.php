@@ -228,19 +228,16 @@
                     <i-Button type="ghost" icon="ios-cloud-upload-outline">上传视频</i-Button>
                 </Upload>
             </Form-Item>
-            <Form-Item>
-                <Alert type="warning">
-                    <template slot="desc">
-                        <ul>
-                            <li>· 仅会员可使用传图、传视频功能。{{gconfig('vip.imgvideo.text')}}</li>
-                            <li>· 格式：JPG/PNG单图最大3M，最多5张；视频仅支持MP4，最大50M</li>
-                            <li>· 相关金币一经扣减无法返还，请谨慎操作！扣除后将在账单显示相应内容</li>
-                        </ul>
-                    </template>
-                </Alert>
-            </Form-Item>
-            <Form-Item>
-                <p>本次评价提交将扣除</p>
+            <Alert type="warning">
+                <template slot="desc">
+                    <ul>
+                        <li>· 仅会员可使用传图、传视频功能。{{gconfig('vip.imgvideo.text')}}</li>
+                        <li>· 格式：JPG/PNG单图最大3M，最多5张；视频仅支持MP4，最大50M</li>
+                        <li>· 相关金币一经扣减无法返还，请谨慎操作！扣除后将在账单显示相应内容</li>
+                    </ul>
+                </template>
+            </Alert>
+            <Form-Item  label="金币结算">
                 <i-Table :border="true" :columns="columns1" :data="data1" size="small"></i-Table>
                 <p>总计需求：<span v-text="allgold" class="color-red"></span></p>
             </Form-Item>

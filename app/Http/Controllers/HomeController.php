@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Action;
 use App\CfResult;
 use App\VipBill;
 use Auth;
@@ -133,7 +134,7 @@ class HomeController extends Controller
                 break;
             case 'epic':
                 if (!Auth::user()->checkAction('euploadpic')) {
-                    return error(NO_ACCESS);
+                    return Action::where('name','euploadpic')->value('auth_desc');
                 }
                 $file     = $request->file('file');
                 $ext      = $file->getClientOriginalExtension();
