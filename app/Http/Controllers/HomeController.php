@@ -134,7 +134,7 @@ class HomeController extends Controller
                 break;
             case 'epic':
                 if (!Auth::user()->checkAction('euploadpic')) {
-                    return Action::where('name','euploadpic')->value('auth_desc');
+                    return error(Action::where('name', 'euploadpic')->value('auth_desc'));
                 }
                 $file     = $request->file('file');
                 $ext      = $file->getClientOriginalExtension();
