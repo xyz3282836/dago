@@ -155,6 +155,7 @@
     </div>
 
     <Modal
+            :mask-closable="false"
             width="600"
             v-model="modal1"
             cancel-text=''
