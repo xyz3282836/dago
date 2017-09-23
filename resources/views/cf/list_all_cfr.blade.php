@@ -241,7 +241,7 @@
             </Form-Item>
             <Form-Item>
                 <p>本次评价提交将扣除</p>
-                <i-Table :columns="columns1" :data="data1" size="small"></i-Table>
+                <i-Table :border="true" :columns="columns1" :data="data1" size="small"></i-Table>
                 <p>总计需求：<span v-text="allgold" class="color-red"></span></p>
             </Form-Item>
             <Form-Item>
