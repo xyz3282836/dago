@@ -460,7 +460,7 @@
                     return check;
                     @else
                     this.$Notice.error({
-                        title: '请升级会员，暂无权限'
+                        title: '{{app\Action::where('name','euploadpic')->value('auth_desc')}}'
                     });
                     return false;
                     @endif
@@ -476,7 +476,7 @@
                     return check;
                     @else
                     this.$Notice.error({
-                        title: '请升级会员，暂无权限'
+                        title: '{{app\Action::where('name','euploadvideo')->value('auth_desc')}}'
                     });
                     return false;
                     @endif
