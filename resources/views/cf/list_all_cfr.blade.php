@@ -112,26 +112,32 @@
                                     </td>
                                     <td>{{$v->status_text}}</td>
                                     <td>
-                                        @if(in_array($v->estatus,[1,2,3]))
-                                            <button class="btn btn-primary btn-sm"
-                                                    @click="initForm('formValidate',{{$v->id}})">{{$v->estatus_text}}</button>
-                                        @elseif($v->estatus == 7)
-                                            <button class="btn btn-primary btn-sm"
-                                                    @click="initForm('formValidate',{{$v->id}})">{{$v->estatus_text}}</button>
-                                        @elseif($v->estatus == 5)
-                                            {{$v->estatus_text}} <a href="{{$v->amazon_review_id}}"
-                                                                    target="_blank">查看</a>
+                                        @if($v->is_fba == 0 )
+                                            非亚马逊发货，不可评价
                                         @else
-                                            {{$v->estatus_text}}
+                                            @if(in_array($v->estatus,[1,2,3]))
+                                                <button class="btn btn-primary btn-sm"
+                                                        @click="initForm('formValidate',{{$v->id}})">{{$v->estatus_text}}</button>
+                                            @elseif($v->estatus == 7)
+                                                <button class="btn btn-primary btn-sm"
+                                                        @click="initForm('formValidate',{{$v->id}})">{{$v->estatus_text}}</button>
+                                            @elseif($v->estatus == 5)
+                                                {{$v->estatus_text}} <a href="{{$v->amazon_review_id}}"
+                                                                        target="_blank">查看</a>
+                                            @else
+                                                {{$v->estatus_text}}
+                                            @endif
+                                            @if($v->estatus != 5)
+                                                <br>
+                                                预计{{$v->etime}}后留评
+                                            @endif
+                                            @if($v->estatus == 7)
+                                                <br>
+                                                <span class="color-red">评价文字重复</span>
+                                            @endif
                                         @endif
-                                        @if($v->estatus != 5)
-                                            <br>
-                                            预计{{$v->etime}}后留评
-                                        @endif
-                                        @if($v->estatus == 7)
-                                            <br>
-                                            <span class="color-red">评价文字重复</span>
-                                        @endif
+
+
                                     </td>
                                 </tr>
                             @empty

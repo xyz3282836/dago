@@ -295,7 +295,11 @@ class CfController extends Controller
         if (in_array($model->estatus, [4, 5, 6])) {
             return error('评价已经提交同步，不可更改');
         }
-        $site = $model->cf->from_site;
+        $cf = $model->cf;
+        if ($cf->is_fba == 0) {
+            return error('非亚马逊发货，不可评价');
+        }
+        $site = $cf->from_site;
         if ($site == 6) {
             if (mb_strlen($content, 'utf-8') < 70) {
                 return error('评价文字必须大于60日文字符');
