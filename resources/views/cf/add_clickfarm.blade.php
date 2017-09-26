@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('csslib')
-    <link href="{{URL::asset('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 @endsection
 
 @section('css')
@@ -37,8 +36,6 @@
 @endsection
 
 @section('jslib')
-    <script src="{{URL::asset('bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
-    <script src="{{URL::asset('bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js')}}"></script>
     <script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 @endsection
 @section('content')
@@ -114,6 +111,28 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"><span class="color-red">*</span> 搜索方式</label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" value="1" name="search_type" checked>搜索成交即可
+                                    </label>
+                                    @if(\Auth::user()->checkAction('scpc'))
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" value="2" name="search_type">通过CPC成交
+                                    </label>
+                                    @endif
+                                    @if(\Auth::user()->checkAction('swishlist'))
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" value="3" name="search_type">添加WishList成交
+                                    </label>
+                                    @endif
+                                    <br>
+                                    <p v-show="is_fba == 0">考虑到平台防刷单风险，FBM下单不可留评，还请知晓</p>
+                                    <p class="help-block with-errors"></p>
+                                </div>
+                            </div>
+
                             {{--keyword--}}
                             <div class="form-group {{ $errors->has('keyword') ? ' has-error' : '' }}" v-if="level == 2">
                                 <label class="col-md-4 control-label">
@@ -138,9 +157,11 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 发货方式</label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline" v-for="(v,k) in is_fbac">
+                                    <label class="radio-inline" v-for="(v,k) in is_fbac" v-cloak>
                                         <input disabled type="radio" v-model="is_fba" name="is_fba" :value="k">@{{ v }}
                                     </label>
+                                    <br>
+                                    <p v-show="is_fba == 0">考虑到平台防刷单风险，FBM下单不可留评，还请知晓</p>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
@@ -155,6 +176,7 @@
                                         <input type="hidden" name="from_site" value="{{request('site')}}">
                                         <div class="input-group-addon">{{$ctext}}</div>
                                     </div>
+                                    <span v-show="getUnitPrice < {{gconfig('unitprice')}}">商品金额过低，存在刷单风险，请选择其他商品</span>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
@@ -175,8 +197,8 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 配送方式</label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline" v-for="(v,k) in delivery_typec">
-                                        <input type="radio" v-model="delivery_type" name="delivery_type" :value="k">@{{ v }}
+                                    <label class="radio-inline" v-for="(v,k) in delivery_typec" v-cloak>
+                                        <input type="radio" v-model="delivery_type" name="delivery_type" :value="k" required>@{{ v }}
                                     </label>
                                     <p class="help-block with-errors"></p>
                                 </div>
@@ -267,6 +289,9 @@
                 })
             },
             computed: {
+                getUnitPrice: function () {
+                    return (this.final_price * this.rate).toFixed(2);
+                },
                 getall: function () {
                     return (this.task_num * this.final_price * this.rate + this.alltrans).toFixed(2) + '元   (售价'+this.final_price+'* 数量'+this.task_num+'* 汇率'+this.rate+' + 运费'+this.alltrans+')';
                 },
@@ -297,11 +322,11 @@
                 delivery_typec: {!! json_encode(config('linepro.delivery_type')) !!},
             }
         });
-        $('#dgform').validator().on('submit', function (e) {
-           if(APP.is_fba == 0){
-               layer.msg('本系统暂不支持非亚马逊发货海淘');
-               return false;
-           }
-        })
+//        $('#dgform').validator().on('submit', function (e) {
+//           if(APP.is_fba == 0){
+//               layer.msg('本系统暂不支持非亚马逊发货海淘');
+//               return false;
+//           }
+//        })
     </script>
 @endsection
