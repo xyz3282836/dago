@@ -116,6 +116,7 @@ class CfController extends Controller
         $model->shop_name     = $pdata['shop_name'];
         $model->bd            = $pdata['bd'];
         $model->keyword       = $pdata['keyword'];
+        $model->search_type   = $pdata['search_type'];
         //1.0
         $model->time_type        = 1;
         $model->is_fba           = 1;

@@ -135,4 +135,13 @@ class User extends Authenticatable
         }
         return true;
     }
+
+    public function getActionGold($action)
+    {
+        $ra = RoleAction::where('rid', $this->level)->where('name', $action)->first();
+        if (!$ra) {
+            return 0;
+        }
+        return $ra->service_gold;
+    }
 }

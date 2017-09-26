@@ -156,12 +156,24 @@ function get_currency($site)
 
 function get_cf_price($cf)
 {
-    $trans         = gconfig('cost.transport');
-    $rmbtogold     = gconfig('rmbtogold');
-    $rate          = get_rate($cf->from_site);
-    $srate         = get_srate();
-    $tmp           = round($cf->task_num * $cf->final_price * $rate * $srate[$cf->time_type]['rate'] * $rmbtogold);
-    $tmp           = $tmp < $srate[$cf->time_type]['mingolds'] * $cf->task_num ? $srate[$cf->time_type]['mingolds'] * $cf->task_num : $tmp;
+    $trans     = gconfig('cost.transport');
+    $rmbtogold = gconfig('rmbtogold');
+    $rate      = get_rate($cf->from_site);
+    $srate     = get_srate();
+    $tmp       = round($cf->task_num * $cf->final_price * $rate * $srate[$cf->time_type]['rate'] * $rmbtogold);
+    $tmp       = $tmp < $srate[$cf->time_type]['mingolds'] * $cf->task_num ? $srate[$cf->time_type]['mingolds'] * $cf->task_num : $tmp;
+
+    switch ($cf->search_type) {
+        case 1:
+            $tmp += $cf->task_num * \Auth::user()->getActionGold('sdefault');
+            break;
+        case 2:
+            $tmp += $cf->task_num * (\Auth::user()->getActionGold('scpc') + \Auth::user()->getActionGold('sdefault'));
+            break;
+        case 3:
+            $tmp += $cf->task_num * (\Auth::user()->getActionGold('swishlist') + \Auth::user()->getActionGold('sdefault'));
+            break;
+    }
     $cf->golds     = $tmp;
     $cf->rate      = $rate;
     $cf->srate     = $srate[$cf->time_type]['rate'];

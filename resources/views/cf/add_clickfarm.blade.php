@@ -115,16 +115,16 @@
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 搜索方式</label>
                                 <div class="col-md-6">
                                     <label class="radio-inline">
-                                        <input disabled type="radio" value="1" name="search_type" checked>搜索成交即可
+                                        <input @click="searchprice = {{\Auth::user()->getActionGold('sdefault')}}" type="radio" value="1" name="search_type" checked>搜索成交即可
                                     </label>
                                     @if(\Auth::user()->checkAction('scpc'))
                                     <label class="radio-inline">
-                                        <input disabled type="radio" value="2" name="search_type">通过CPC成交
+                                        <input @click="searchprice = {{\Auth::user()->getActionGold('sdefault') + \Auth::user()->getActionGold('scpc')}}" type="radio" value="2" name="search_type">通过CPC成交
                                     </label>
                                     @endif
                                     @if(\Auth::user()->checkAction('swishlist'))
                                     <label class="radio-inline">
-                                        <input disabled type="radio" value="3" name="search_type">添加WishList成交
+                                        <input @click="searchprice = {{\Auth::user()->getActionGold('sdefault') + \Auth::user()->getActionGold('swishlist')}}" type="radio" value="3" name="search_type">添加WishList成交
                                     </label>
                                     @endif
                                     <br>
@@ -298,7 +298,7 @@
                 getservice: function () {
                     var tmp = (this.task_num * this.final_price * this.rate * this.rmbtogold * this.srate[this.time_type].rate).toFixed(0);
                     tmp = tmp < Number(this.srate[this.time_type].mingolds) * this.task_num ? this.srate[this.time_type].mingolds * this.task_num : tmp;
-                    return tmp ;
+                    return tmp +  + this.searchprice * this.task_num;
                 },
                 gettrans: function () {
                     this.delivery_type == 1 ? this.alltrans = 0 : this.alltrans = this.task_num * this.trans;
@@ -306,6 +306,7 @@
                 }
             },
             data: {
+                searchprice:0,
                 level:{{$level}},
                 ratetable:{!! json_encode(\App\ExchangeRate::getPanel()) !!},
                 alltrans: 0,
