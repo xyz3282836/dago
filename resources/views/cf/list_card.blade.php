@@ -107,9 +107,6 @@
                                     <button v-if="one.status == 1" class="btn btn-danger btn-sm ladda-button"
                                             data-style="contract" @click="cancle(one.id)">删除
                                     </button>
-                                    <button v-if="one.status == 1" class="btn btn-success btn-sm ladda-button"
-                                            data-style="contract" @click="pay(one.id)">购买
-                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="cardlist.length == 0">
@@ -216,46 +213,6 @@
                                 }
                             }
                         })
-                    }, function(index){
-                        layer.close(index);
-                    });
-                },
-                pay: function (id) {
-                    layer.confirm('确定支付？', {
-                        btn: ['是','再想想'],
-                        closeBtn: 0
-                    }, function(index){
-                        layer.close(index);
-                        axios.post("{{url('pay')}}", {id: [id]}).then(function (d) {
-                            var data = d.data;
-                            if (!data.code) {
-                                layer.msg(data.msg, {icon: 2});
-                            } else {
-                                layer.msg('操作成功', {icon: 1});
-                                if(data.data.type == 'b'){
-                                    window.location.href = "/orderlist#o-"+data.data.id;
-                                }else{
-                                    layer.confirm('即将前往支付包扫描付款？', {
-                                        btn: ['是'],
-                                        closeBtn: 0
-                                    }, function(index){
-                                        layer.close(index);
-                                        window.open('/jumppay?id='+ data.data.id)
-                                        layer.confirm('支付完成？', {
-                                            btn: ['已完成支付','支付遇到问题'],
-                                            closeBtn: 0
-                                        }, function(index){
-                                            layer.close(index);
-                                            window.location.href = "/orderlist#o-"+data.data.id;
-                                        }, function(index){
-                                            layer.close(index);
-                                            layer.msg('请联系管理员')
-                                            window.location.href = "/orderlist?type=1#o-"+data.data.id;
-                                        });
-                                    });
-                                }
-                            }
-                        });
                     }, function(index){
                         layer.close(index);
                     });

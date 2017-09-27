@@ -53,8 +53,6 @@ php artisan db:seed
 
 ## sql
 ```sql
-alter table `cf_results` add `epicnum` tinyint DEFAULT '0' after `epic`;
-alter table `cf_results` drop column `evideonum`;
-alter table `roles` add `icon` char(50) DEFAULT '' after `desc`;
+alter table `click_farms` add `search_type` tinyint DEFAULT '1' after `bd`;
 
 ```

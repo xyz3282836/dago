@@ -192,12 +192,37 @@ class PayController extends Controller
      */
     public function postPay()
     {
-        $ids  = request('id');
+        $ids   = request('id');
+        $start = request('startd');
+        $end   = request('endd');
+        //TODO 验证日期
+        $days = diffBetweenTwoDays($start, $end);
+
         $user = Auth::user();
         $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
         if (count($list) == 0) {
             return error(MODEL_NOT_FOUNT);
         }
+
+        if ($days > 1) {
+            for ($i = 0; $i < $days; $i++) {
+                $day = date('Y-m-d', strtotime($start) + 86400 * $i);
+                if ($i == 0) {
+                    if ($start == date('Y-m-d')) {
+                        $day = date('Y-m-d H:i:s');
+                    }
+                }
+                foreach ($list as $v) {
+                    $one             = $v->replicate();
+                    $one->start_time = $day;
+                    $one->save();
+                    $ids[] = $one->id;
+                }
+            }
+        }
+
+        $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
+
         //计算总金币 总价格
         $golds = 0;
         $price = 0.00;
