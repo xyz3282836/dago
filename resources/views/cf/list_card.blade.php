@@ -117,6 +117,11 @@
                             </tr>
                             </tbody>
                         </table>
+                        <Card style="width:250px">
+                            <p slot="title">任务时间段</p>
+                            <Date-Picker :on-change="dates(date)" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                        </Card>
+
                         <div class="pull-right">
                             <div class="col-xs-6">
                                 <p>总金币：<span class="color-red" v-text="allgold"></span> <img width="18" src="/img/gold.png" /></p>
@@ -147,6 +152,16 @@
         new Vue({
             el: '#app',
             data: {
+                options3: {
+                    disabledDate (date) {
+                        return date && date.valueOf() < Date.now() - 86400000;
+                    }
+                },
+                startd:'{{date('Y-m-d')}}',
+                endd:'{{date('Y-m-d')}}',
+                date:[
+                    new Date('{{date('Y-m-d')}}'),new Date('{{date('Y-m-d')}}')
+                ],
                 grate:{{gconfig('rmbtogold')}},
                 cardlist:{!! $list !!},
                 allgold: 0,
@@ -158,14 +173,20 @@
                 deduction_balance: {{Auth::user()->balance - Auth::user()->lock_balance}},
             },
             methods: {
+                dates(date){
+                    this.startd = formatDate(date[0],'yyyy-MM-dd');
+                    this.endd = formatDate(date[1],'yyyy-MM-dd');
+                },
                 payall: function () {
                     var ids = this.ids;
+                    var startd = this.startd;
+                    var endd = this.endd;
                     layer.confirm('确定支付？', {
                         btn: ['是','再想想'],
                         closeBtn: 0
                     }, function(index){
                         layer.close(index);
-                        axios.post("{{url('pay')}}", {id: ids}).then(function (d) {
+                        axios.post("{{url('pay')}}", {id: ids,startd:startd,endd:endd}).then(function (d) {
                             var data = d.data;
                             if (!data.code) {
                                 layer.msg(data.msg, {icon: 2});
