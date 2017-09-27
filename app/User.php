@@ -126,14 +126,13 @@ class User extends Authenticatable
 
     public function checkAction($action)
     {
-        $actions = [];
-        foreach ($this->role->actiondesc as $v) {
-            $actions[] = $v->action->name;
-        }
-        if (!in_array(strtolower($action), $actions)) {
+        $aid = Action::where('name', $action)->value('id');
+        $ra  = RoleAction::where('rid', $this->level)->where('aid', $aid)->first();
+        if (!$ra) {
             return false;
+        }else{
+            return true;
         }
-        return true;
     }
 
     public function getActionGold($action)
