@@ -112,7 +112,7 @@
                                     </td>
                                     <td>{{$v->status_text}}</td>
                                     <td>
-                                        @if($v->is_fba == 0 )
+                                        @if($v->cf->is_fba == 0 )
                                             非亚马逊发货，不可评价
                                         @else
                                             @if(in_array($v->estatus,[1,2,3]))
