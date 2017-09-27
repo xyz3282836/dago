@@ -40,7 +40,10 @@ class CfController extends Controller
             'trans'     => $trans,
             'rmbtogold' => $rmbtogold,
             'ad'        => Banner::getAd(4),
-            'level'     => Auth::user()->level
+            'level'     => Auth::user()->level,
+            's1'        => Auth::user()->getActionGold('sdefault'),
+            's2'        => Auth::user()->getActionGold('scpc'),
+            's3'        => Auth::user()->getActionGold('swishlist'),
         ]);
     }
 
