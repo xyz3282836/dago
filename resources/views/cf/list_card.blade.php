@@ -116,7 +116,7 @@
                         </table>
                         <Card style="width:250px">
                             <p slot="title">任务时间段</p>
-                            <Date-Picker :on-change="dates(date)" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                            <Date-Picker :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
                         </Card>
 
                         <div class="pull-right">
