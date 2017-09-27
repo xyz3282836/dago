@@ -296,9 +296,9 @@
                     return (this.task_num * this.final_price * this.rate + this.alltrans).toFixed(2) + '元   (售价'+this.final_price+'* 数量'+this.task_num+'* 汇率'+this.rate+' + 运费'+this.alltrans+')';
                 },
                 getservice: function () {
-                    var tmp = (this.task_num * this.final_price * this.rate * this.rmbtogold * this.srate[this.time_type].rate).toFixed(0);
-                    tmp = tmp < Number(this.srate[this.time_type].mingolds) * this.task_num ? this.srate[this.time_type].mingolds * this.task_num : tmp;
-                    return tmp +  + this.searchprice * this.task_num;
+                    var tmp = Number((this.task_num * this.final_price * this.rate * this.rmbtogold * this.srate[this.time_type].rate).toFixed(0));
+                    tmp = tmp < Number(this.srate[this.time_type].mingolds) * this.task_num ? Number(this.srate[this.time_type].mingolds) * this.task_num : tmp;
+                    return tmp + this.searchprice * this.task_num;
                 },
                 gettrans: function () {
                     this.delivery_type == 1 ? this.alltrans = 0 : this.alltrans = this.task_num * this.trans;

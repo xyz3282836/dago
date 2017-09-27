@@ -11,7 +11,7 @@ class User extends Authenticatable
     use Notifiable;
 
     const TYPE_REGULAR = 1;
-    const TYPE_VIP = 2;
+    const TYPE_VIP     = 2;
     /**
      * The attributes that are mass assignable.
      *
@@ -138,7 +138,8 @@ class User extends Authenticatable
 
     public function getActionGold($action)
     {
-        $ra = RoleAction::where('rid', $this->level)->where('name', $action)->first();
+        $aid = Action::where('name', $action)->value('id');
+        $ra  = RoleAction::where('rid', $this->level)->where('aid', $aid)->first();
         if (!$ra) {
             return 0;
         }
