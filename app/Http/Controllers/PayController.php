@@ -210,6 +210,11 @@ class PayController extends Controller
                 if ($i == 0) {
                     if ($start == date('Y-m-d')) {
                         $day = date('Y-m-d H:i:s');
+                        foreach ($list as $v) {
+                            $v->start_time = $day;
+                            $v->save();
+                        }
+                        continue;
                     }
                 }
                 foreach ($list as $v) {
