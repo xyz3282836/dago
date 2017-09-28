@@ -28,8 +28,8 @@ class CreateCfResultsTable extends Migration
             $table->char('amazon_logistics_orderid',50)->default('');//亚马逊物流单号
 
             $table->tinyInteger('star')->default(1);//星级
-            $table->char('title',64)->default('');//标题
-            $table->string('content',1024)->default('');//正文
+            $table->char('title',200)->default('');//标题
+            $table->string('content',10240)->default('');//正文
             $table->string('epic',1000)->default('[]');//图片
             $table->tinyInteger('epicnum')->default(0);
             $table->string('evideo',1000)->default('[]');//视频

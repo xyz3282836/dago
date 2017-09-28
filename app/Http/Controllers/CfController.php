@@ -275,11 +275,11 @@ class CfController extends Controller
         $epic    = request('epic') == null ? '[]' : json_encode(request('epic'));
         $evideo  = request('evideo') == null ? '[]' : json_encode(request('evideo'));
 
-        if (mb_strlen($title, 'utf-8') >= 50) {
-            return error('评价标题最多50个字符');
+        if (mb_strlen($title, 'utf-8') >= 200) {
+            return error('评价标题最多200个字符');
         }
-        if (mb_strlen($content, 'utf-8') >= 1024) {
-            return error('评价正文最多1024个字符');
+        if (mb_strlen($content, 'utf-8') >= 10240) {
+            return error('评价正文最多10240个字符');
         }
         $model = CfResult::find($id);
         if (!$model) {
