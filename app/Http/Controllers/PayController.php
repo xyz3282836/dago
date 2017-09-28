@@ -206,7 +206,7 @@ class PayController extends Controller
 
         if ($days > 1) {
             for ($i = 0; $i < $days; $i++) {
-                $day = date('Y-m-d', strtotime($start) + 86400 * $i);
+                $day = date('Y-m-d H:i:s', strtotime($start) + 86400 * $i + rand(0, 86400));
                 if ($i == 0) {
                     if ($start == date('Y-m-d')) {
                         $day = date('Y-m-d H:i:s');

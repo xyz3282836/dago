@@ -131,7 +131,7 @@
                                     </label>
                                     @if(\Auth::user()->checkAction('scpc'))
                                     <label class="radio-inline">
-                                        <input @click="searchprice = {{$s1+$s2}}" type="radio" value="2" name="search_type">通过CPC成交
+                                        <input @click="searchprice = {{$s1+$s2}}" type="radio" value="2" name="search_type">通过CPC成交(sponsored)
                                     </label>
                                     @endif
                                     @if(\Auth::user()->checkAction('swishlist'))
