@@ -111,6 +111,7 @@
                                 </div>
                             </div>
 
+                            @if(\Auth::user()->checkAction('sdefault'))
                             <div class="form-group">
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 搜索方式</label>
                                 <div class="col-md-6">
@@ -128,13 +129,12 @@
                                     </label>
                                     @endif
                                     <br>
-                                    <p v-show="is_fba == 0">考虑到平台防刷单风险，FBM下单不可留评，还请知晓</p>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
 
                             {{--keyword--}}
-                            <div class="form-group {{ $errors->has('keyword') ? ' has-error' : '' }}" v-if="level == 2">
+                            <div class="form-group {{ $errors->has('keyword') ? ' has-error' : '' }}">
                                 <label class="col-md-4 control-label">
                                     使用指定关键词搜索</label>
                                 <div class="col-md-6">
@@ -142,6 +142,7 @@
                                     <p class="help-block with-errors">{{ $errors->first('keyword') }}</p>
                                 </div>
                             </div>
+                            @endif
 
                             {{--店铺id--}}
                             <div class="form-group">
@@ -158,10 +159,11 @@
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 发货方式</label>
                                 <div class="col-md-6">
                                     <label class="radio-inline" v-for="(v,k) in is_fbac" v-cloak>
-                                        <input disabled type="radio" v-model="is_fba" name="is_fba" :value="k">@{{ v }}
+                                        <input disabled type="radio" v-model="is_fba" :value="k">@{{ v }}
                                     </label>
+                                    <input type="hidden" name="is_fba" v-model="is_fba">
                                     <br>
-                                    <p v-show="is_fba == 0">考虑到平台防刷单风险，FBM下单不可留评，还请知晓</p>
+                                    <p v-show="is_fba == 0" class="color-red">考虑到平台防刷单风险，FBM下单不可留评，还请知晓</p>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
@@ -176,7 +178,7 @@
                                         <input type="hidden" name="from_site" value="{{request('site')}}">
                                         <div class="input-group-addon">{{$ctext}}</div>
                                     </div>
-                                    <span v-show="getUnitPrice < {{gconfig('unitprice')}}">商品金额过低，存在刷单风险，请选择其他商品</span>
+                                    <span v-show="getUnitPrice < {{gconfig('unitprice')}}" class="color-red">商品金额过低，存在刷单风险，请选择其他商品</span>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
@@ -217,7 +219,7 @@
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 代购件数</label>
                                 <div class="col-md-6">
                                     <input type="number" placeholder="" class="form-control" name="task_num" min="1" max="9999" v-model="task_num" required>
-                                    <span>多件商品时，为保护您的隐私，我们会使用不同账号进行代购</span>
+                                    <p class="color-red">多件商品时，为保护您的隐私，我们会使用不同账号进行代购</p>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>

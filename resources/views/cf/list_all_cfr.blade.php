@@ -113,7 +113,7 @@
                                     <td>{{$v->status_text}}</td>
                                     <td>
                                         @if($v->cf->is_fba == 0 )
-                                            非亚马逊发货，不可评价
+                                            考虑到平台防刷单风险，FBM下单不可留评
                                         @else
                                             @if(in_array($v->estatus,[1,2,3]))
                                                 <button class="btn btn-primary btn-sm"

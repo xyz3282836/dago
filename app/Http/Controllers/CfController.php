@@ -53,10 +53,6 @@ class CfController extends Controller
      */
     public function postAddClickFarm()
     {
-        $isfba = request('is_fba', 1);
-        if ($isfba != 1) {
-            return error('可能收不到货，本系统暂不支持非亚马逊发货海淘');
-        }
         $this->validate(request(), [
             'asin'          => 'required|min:1|max:24',
             'amazon_url'    => 'required|active_url',
@@ -70,16 +66,18 @@ class CfController extends Controller
             'keyword'       => 'max:100',
             'from_site'     => 'required|integer',
             'delivery_type' => 'required|integer',
+            'is_fba'        => 'required|integer',
         ]);
 
         $pdata = request()->all();
         if ($pdata['delivery_type'] == 1) {
             $pdata['delivery_addr'] = '';
         }
-        $pdata['bd']      = request('bd') == null ? '' : request('bd');
-        $pdata['keyword'] = request('keyword') == null ? '' : request('keyword');
-        $pdata['amount']  = get_amount_clickfarm($pdata);
-        $pdata['mixdata'] = json_encode([
+        $pdata['bd']          = request('bd') == null ? '' : request('bd');
+        $pdata['keyword']     = request('keyword') == null ? '' : request('keyword');
+        $pdata['search_type'] = request('search_type') == null ? 1 : request('search_type');
+        $pdata['amount']      = get_amount_clickfarm($pdata);
+        $pdata['mixdata']     = json_encode([
             'lower_classification1' => '',
             'lower_classification2' => '',
             'lower_classification3' => '',
@@ -120,9 +118,9 @@ class CfController extends Controller
         $model->bd            = $pdata['bd'];
         $model->keyword       = $pdata['keyword'];
         $model->search_type   = $pdata['search_type'];
+        $model->is_fba        = $pdata['is_fba'];
         //1.0
         $model->time_type        = 1;
-        $model->is_fba           = 1;
         $model->discount_code    = '';
         $model->is_reviews       = 0;
         $model->is_link          = 0;
