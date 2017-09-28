@@ -9,11 +9,27 @@
 namespace App;
 
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class ClickFarm extends Model
 {
-    protected $appends = ['status_text', 'delivery_type_text', 'from_site_text', 'time_type_text', 'final_price_text', 'flag'];
+    protected $appends = ['status_text', 'delivery_type_text', 'from_site_text', 'time_type_text', 'final_price_text', 'flag', 'search_type_text', 'fba_text'];
+
+    public function getSearchTypeTextAttribute()
+    {
+        $arr = config('linepro.cf_search_type');
+        if (Auth::user()->level == 1) {
+            return $arr[0];
+        }
+        return $arr[$this->search_type];
+    }
+
+    public function getFbaTextAttribute()
+    {
+        $arr = config('linepro.cf_fba');
+        return $arr[$this->is_fba];
+    }
 
     public function getStatusTextAttribute()
     {

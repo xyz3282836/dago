@@ -60,9 +60,10 @@
                                 <th>商品图片</th>
                                 <th>ASIN</th>
                                 <th>亚马逊商品标题</th>
-                                <th>商铺名称</th>
+                                <th>商铺ID</th>
                                 <th>站点</th>
                                 <th>配送方式</th>
+                                <th>下单模式</th>
                                 <th>送货地址</th>
                                 {{--<th>下单方式</th>--}}
                                 <th>单价</th>
@@ -91,9 +92,17 @@
                                         <a :href="one.amazon_url" v-text="one.amazon_title"></a>
                                     </div>
                                 </td>
-                                <td v-text="one.shop_id"></td>
+                                <td>
+                                    @{{ one.shop_id }}
+                                    <br>
+                                    <span style="font-size:16px;font-weight:bold;color:#464c5b;" v-text="'('+one.fba_text+')'"></span>
+                                </td>
                                 <td><span class="flag-icon" :class="'flag-icon-'+one.flag"></span></td>
                                 <td v-text="one.delivery_type_text"></td>
+                                <td>
+                                    <span style="font-size:14px;font-weight:bold;color:#464c5b;" v-text="one.search_type_text"></span><br>
+                                    <span v-if="one.keyword != ''">关键词搜索：@{{ one.keyword }}</span>
+                                </td>
                                 <td v-text="one.delivery_addr"></td>
                                 {{--<td v-text="one.time_type_text"></td>--}}
                                 <td v-text="one.final_price_text"></td>

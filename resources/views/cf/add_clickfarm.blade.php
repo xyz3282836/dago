@@ -112,6 +112,17 @@
                             </div>
 
                             @if(\Auth::user()->checkAction('sdefault'))
+                            {{--keyword--}}
+                            <div class="form-group {{ $errors->has('keyword') ? ' has-error' : '' }}">
+                                <label class="col-md-4 control-label">
+                                    使用指定关键词搜索</label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="" maxlength="100" value="" class="form-control" name="keyword" style="border: 1px solid #f7820a;">
+                                    <p class="help-block with-errors">{{ $errors->first('keyword') }}</p>
+                                </div>
+                            </div>
+
+                            {{--keyword search--}}
                             <div class="form-group">
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 搜索方式</label>
                                 <div class="col-md-6">
@@ -128,20 +139,11 @@
                                         <input @click="searchprice = {{$s1+$s3}}" type="radio" value="3" name="search_type">添加WishList成交
                                     </label>
                                     @endif
-                                    <br>
+                                    <p>{{gconfig('vip.keysearch.text')}}</p>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
 
-                            {{--keyword--}}
-                            <div class="form-group {{ $errors->has('keyword') ? ' has-error' : '' }}">
-                                <label class="col-md-4 control-label">
-                                    使用指定关键词搜索</label>
-                                <div class="col-md-6">
-                                    <input type="text" placeholder="" maxlength="100" value="" class="form-control" name="keyword" style="border: 1px solid #f7820a;">
-                                    <p class="help-block with-errors">{{ $errors->first('keyword') }}</p>
-                                </div>
-                            </div>
                             @endif
 
                             {{--店铺id--}}
