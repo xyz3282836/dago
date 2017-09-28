@@ -180,7 +180,11 @@
                 dates(date){
                     this.startd = formatDate(date[0],'yyyy-MM-dd');
                     this.endd = formatDate(date[1],'yyyy-MM-dd');
-                    this.getAll()
+                    if(this.ids.length > 0){
+//                        this.getAll()
+                        console.log(this.startd)
+                        console.log(this.endd)
+                    }
                 },
                 payall: function () {
                     var ids = this.ids;
