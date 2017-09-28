@@ -219,7 +219,7 @@
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 代购件数</label>
                                 <div class="col-md-6">
                                     <input type="number" placeholder="" class="form-control" name="task_num" min="1" max="9999" v-model="task_num" required>
-                                    <p class="color-red">多件商品时，为保护您的隐私，我们会使用不同账号进行代购</p>
+                                    <p>多件商品时，为保护您的隐私，我们会使用不同账号进行代购</p>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
