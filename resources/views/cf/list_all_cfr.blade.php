@@ -446,7 +446,7 @@
                 handleMaxSize(file) {
                     this.$Notice.warning({
                         title: '超出文件大小限制',
-                        desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+                        desc: '文件 ' + file.name + ' 太大，不能超过 3M。'
                     });
                 },
                 vhandleMaxSize(file) {
