@@ -168,9 +168,19 @@
                 deduction_balance: {{Auth::user()->balance - Auth::user()->lock_balance}},
             },
             methods: {
+                dateDiff(sDate1, sDate2) { //sDate1和sDate2是2006-12-18格式
+                    var aDate, oDate1, oDate2, iDays;
+                    aDate = sDate1.split("-");
+                    oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+                    aDate = sDate2.split("-");
+                    oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+                    iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);
+                    return iDays + 1;
+                },
                 dates(date){
                     this.startd = formatDate(date[0],'yyyy-MM-dd');
                     this.endd = formatDate(date[1],'yyyy-MM-dd');
+                    this.getAll()
                 },
                 payall: function () {
                     var ids = this.ids;
@@ -243,7 +253,9 @@
                             this.allprice += Number(v.amount);
                         }
                     });
-                    this.allprice = this.allprice.toFixed(2)
+                    var days = this.dateDiff(this.startd,this.endd);
+                    this.allprice = (this.allprice * days).toFixed(2);
+                    this.allgold = (this.allgold * days);
                 },
             },
             computed:{
