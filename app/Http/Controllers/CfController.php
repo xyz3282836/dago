@@ -271,9 +271,9 @@ class CfController extends Controller
         $id      = request('id', 0);
         $star    = request('star');
         $title   = trim(request('title'));
-        $content = trim(request('content'));
         $epic    = request('epic') == null ? '[]' : json_encode(request('epic'));
         $evideo  = request('evideo') == null ? '[]' : json_encode(request('evideo'));
+        $content = str_replace(chr(194) . chr(160), ' ', trim(request('content')));
 
         if (mb_strlen($title, 'utf-8') >= 200) {
             return error('评价标题最多200个字符');
@@ -307,8 +307,7 @@ class CfController extends Controller
                 return error('评价文字必须大于60日文字符');
             }
         } elseif (in_array($site, [3, 4, 5, 8, 10])) {
-            $p       = '/^([\S]+[\s]+){19,}/';
-            $content = str_replace(chr(194) . chr(160), ' ', $content);
+            $p = '/^([\S]+[\s]+){19,}/';
             if (!preg_match($p, $content)) {
                 return error('评价文字必须大于20个单词');
             }
