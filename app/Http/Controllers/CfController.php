@@ -307,7 +307,8 @@ class CfController extends Controller
                 return error('评价文字必须大于60日文字符');
             }
         } elseif (in_array($site, [3, 4, 5, 8, 10])) {
-            $p = '/^([^\s]+[\s]){19,}/';
+            $p       = '/^([\S]+[\s]+){19,}/';
+            $content = preg_replace('/\x{A0}/', ' ', $content);
             if (!preg_match($p, $content)) {
                 return error('评价文字必须大于20个单词');
             }
