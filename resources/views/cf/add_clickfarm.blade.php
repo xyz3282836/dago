@@ -328,9 +328,11 @@
             }
         });
         $('#dgform').validator().on('submit', function (e) {
-            if(APP.getUnitPrice < {{gconfig('unitprice')}}){
-               layer.msg('商品金额过低，存在刷单风险，请选择其他商品');
-               return false;
+            if(APP.is_fba == 0){
+                if(APP.getUnitPrice < {{gconfig('unitprice')}}){
+                    layer.msg('商品金额过低，存在刷单风险，请选择其他商品');
+                    return false;
+                }
             }
         })
     </script>
