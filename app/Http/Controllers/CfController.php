@@ -308,7 +308,7 @@ class CfController extends Controller
             }
         } elseif (in_array($site, [3, 4, 5, 8, 10])) {
             $p       = '/^([\S]+[\s]+){19,}/';
-            $content = preg_replace('/\x{A0}/', ' ', $content);
+            $content = str_replace(chr(194) . chr(160), ' ', $content);
             if (!preg_match($p, $content)) {
                 return error('评价文字必须大于20个单词');
             }
