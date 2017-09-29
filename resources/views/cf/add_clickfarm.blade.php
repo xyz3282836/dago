@@ -327,11 +327,11 @@
                 delivery_typec: {!! json_encode(config('linepro.delivery_type')) !!},
             }
         });
-//        $('#dgform').validator().on('submit', function (e) {
-//           if(APP.is_fba == 0){
-//               layer.msg('本系统暂不支持非亚马逊发货海淘');
-//               return false;
-//           }
-//        })
+        $('#dgform').validator().on('submit', function (e) {
+            if(APP.getUnitPrice < {{gconfig('unitprice')}}){
+               layer.msg('商品金额过低，存在刷单风险，请选择其他商品');
+               return false;
+            }
+        })
     </script>
 @endsection
