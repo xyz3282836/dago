@@ -31,7 +31,7 @@ class PayController extends Controller
     public function getRecharge()
     {
         //充值时资料要完善
-        return view('pay.recharge');
+        return view('pay.recharge', ['role' => Auth::user()->role]);
     }
 
     /**
