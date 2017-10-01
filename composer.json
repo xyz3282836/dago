@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "barryvdh/laravel-debugbar": "^3.0",
-        "encore/laravel-admin": "1.5.4",
+        "encore/laravel-admin": "^1.5",
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "^6.2",
         "intervention/image": "^2.4",

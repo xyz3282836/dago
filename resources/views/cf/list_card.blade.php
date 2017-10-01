@@ -123,9 +123,19 @@
                             </tr>
                             </tbody>
                         </table>
-                        <Card style="width:250px">
-                            <p slot="title">安排代购时间</p>
-                            <Date-Picker :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                        <Card style="width:350px">
+                            <p slot="title">计划任务</p>
+                            <i-Form>
+                                <Form-Item>
+                                    <Radio-Group v-model="plantype">
+                                        <Radio label="once">一次性任务</Radio>
+                                        <Radio label="cycle">周期性任务</Radio>
+                                    </Radio-Group>
+                                </Form-Item>
+                                <Form-Item label="安排代购时间" v-if="plantype == 'cycle'">
+                                    <Date-Picker :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                </Form-Item>
+                            </i-Form>
                         </Card>
 
                         <div class="pull-right">
@@ -156,6 +166,7 @@
         var app = new Vue({
             el: '#app',
             data: {
+                plantype:'once',
                 options3: {
                     disabledDate (date) {
                         return date && date.valueOf() < Date.now() - 86400000;
@@ -194,12 +205,13 @@
                     var ids = this.ids;
                     var startd = this.startd;
                     var endd = this.endd;
+                    var ptype = this.plantype;
                     layer.confirm('确定支付？', {
                         btn: ['是','再想想'],
                         closeBtn: 0
                     }, function(index){
                         layer.close(index);
-                        axios.post("{{url('pay')}}", {id: ids,startd:startd,endd:endd}).then(function (d) {
+                        axios.post("{{url('pay')}}", {id: ids,startd:startd,endd:endd,ptype:ptype}).then(function (d) {
                             var data = d.data;
                             if (!data.code) {
                                 layer.msg(data.msg, {icon: 2});
