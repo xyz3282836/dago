@@ -195,38 +195,39 @@ class PayController extends Controller
         $ids   = request('id');
         $start = request('startd');
         $end   = request('endd');
-        //TODO 验证日期
-        $days = diffBetweenTwoDays($start, $end);
+        $ptype = request('ptype');
 
         $user = Auth::user();
         $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
         if (count($list) == 0) {
             return error(MODEL_NOT_FOUNT);
         }
-
-        if ($days > 1) {
-            for ($i = 0; $i < $days; $i++) {
-                $day = date('Y-m-d H:i:s', strtotime($start) + 86400 * $i + rand(0, 86400));
-                if ($i == 0) {
-                    if ($start == date('Y-m-d')) {
-                        $day = date('Y-m-d H:i:s');
+        if ($ptype == 'cycle') {
+            //TODO 验证日期
+            $days = diffBetweenTwoDays($start, $end);
+            if ($days > 1) {
+                for ($i = 0; $i < $days; $i++) {
+                    $day = date('Y-m-d H:i:s', strtotime($start) + 86400 * $i + rand(0, 86400));
+                    if ($i == 0) {
+                        if ($start == date('Y-m-d')) {
+                            $day = date('Y-m-d H:i:s');
+                        }
+                        foreach ($list as $v) {
+                            $v->start_time = $day;
+                            $v->save();
+                        }
+                        continue;
                     }
                     foreach ($list as $v) {
-                        $v->start_time = $day;
-                        $v->save();
+                        $one             = $v->replicate();
+                        $one->start_time = $day;
+                        $one->save();
+                        $ids[] = $one->id;
                     }
-                    continue;
                 }
-                foreach ($list as $v) {
-                    $one             = $v->replicate();
-                    $one->start_time = $day;
-                    $one->save();
-                    $ids[] = $one->id;
-                }
+                $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
             }
         }
-
-        $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
 
         //计算总金币 总价格
         $golds = 0;
