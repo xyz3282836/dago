@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('csslib')
-    <link href="{{URL::asset('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 @endsection
 @section('css')
     <style type="text/css">
@@ -10,8 +9,6 @@
     </style>
 @endsection
 @section('jslib')
-    <script src="{{URL::asset('bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
-    <script src="{{URL::asset('bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js')}}"></script>
     <script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 @endsection
 @section('content')
