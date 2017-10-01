@@ -69,14 +69,6 @@
 
 @section('js')
     <script>
-        $(function () {
-            $('#recharge_time').datetimepicker({
-                format: 'yyyy-mm-dd hh:ii',
-                language:'zh-CN',
-                autoclose:true,
-                todayHighlight: 1,
-            });
-        })
         new Vue({
             el: '#app',
             data:{
