@@ -84,6 +84,72 @@ class Order extends Model
             $one->status         = self::STATUS_PAID;
             $one->alipay_orderid = $alipay_orderid;
             $one->save();
+            $user->golds            += $one->golds;
+            $user->cumulative_golds += $one->golds;
+            //升级
+            $level     = $user->level;
+            $golds     = $one->golds / $one->rate;
+            $levellist = Role::get(['name', 'once', 'more', 'type'])->keyBy('name')->toArray();
+            foreach ($levellist as $k => $v) {
+                $flag = false;
+                if ($level < $k) {
+                    switch ($v->type) {
+                        case 1:
+                            if ($golds >= $v->once) {
+                                $level = $k;
+                            } else {
+                                $flag = true;
+                            }
+                            break;
+                        case 2:
+                            if ($golds >= $v->more) {
+                                $level = $k;
+                            } else {
+                                $flag = true;
+                            }
+                            break;
+                    }
+                    if ($flag) {
+                        break;
+                    }
+                } else {
+                    continue;
+                }
+            }
+            $user->level = $level;
+            $user->save();
+            Bill::create([
+                'uid'            => $user->id,
+                'oid'            => $one->id,
+                'type'           => Bill::TYPE_RECHARGE,
+                'orderid'        => $one->orderid,
+                'alipay_orderid' => $one->alipay_orderid,
+                'gin'            => $one->golds,
+                'rate'           => gconfig('rmbtogold'),
+            ]);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw new MsgException();
+        }
+    }
+
+    /**
+     * @deprecated
+     * old
+     * 完成充值金币
+     * @param Order $one
+     * @param $alipay_orderid
+     * @throws MsgException
+     */
+    public static function oldPayRechargeGolds(self $one, $alipay_orderid)
+    {
+        $user = User::find($one->uid);
+        DB::beginTransaction();
+        try {
+            $one->status         = self::STATUS_PAID;
+            $one->alipay_orderid = $alipay_orderid;
+            $one->save();
             $user->golds = $user->golds + $one->golds;
             $amount      = $one->golds / $one->rate;
             //有效期

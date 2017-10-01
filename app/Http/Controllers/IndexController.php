@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Banner;
 use App\Faq;
 
 class IndexController extends Controller
@@ -22,8 +21,7 @@ class IndexController extends Controller
      */
     public function getInfo()
     {
-//        phpinfo();
-        p(\Auth::user()->getActions());
+        phpinfo();
     }
 
     public function captcha()
@@ -31,7 +29,8 @@ class IndexController extends Controller
         return captcha_img('flat');
     }
 
-    public function faqs(){
-        return view('index.faq')->with('list',Faq::getFaqs());
+    public function faqs()
+    {
+        return view('index.faq')->with('list', Faq::getFaqs());
     }
 }
