@@ -89,7 +89,7 @@ class Order extends Model
             //升级
             $level     = $user->level;
             $golds     = $one->golds / $one->rate;
-            $levellist = Role::get(['name', 'once', 'more', 'type'])->keyBy('name')->toArray();
+            $levellist = Role::get(['name', 'once', 'more', 'type'])->keyBy('name');
             foreach ($levellist as $k => $v) {
                 $flag = false;
                 if ($level < $k) {
@@ -130,7 +130,7 @@ class Order extends Model
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
-            throw new MsgException();
+            throw new MsgException($e);
         }
     }
 
