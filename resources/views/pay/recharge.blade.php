@@ -81,7 +81,7 @@
             el: '#app',
             data:{
                 type:'1',
-                amount:{{gconfig('cost.vip')}},
+                amount:{{$role->gold_recharge}},
                 rate:{{gconfig('rmbtogold')}},
                 typec: {!! json_encode(config('linepro.order_ptype')) !!},
             },
