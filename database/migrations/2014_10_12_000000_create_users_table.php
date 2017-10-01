@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('level')->default(1); // 1 普通会员 2 认证会员
             $table->decimal('balance', 10, 2)->default(0.00);//余额
             $table->decimal('lock_balance', 10, 2)->default(0.00);//余额
+            $table->integer('cumulative_golds')->default(0);//金币余额
             $table->integer('golds')->default(0);//金币余额
             $table->integer('lock_golds')->default(0);//金币余额
             $table->char('mobile', 15)->default('');
