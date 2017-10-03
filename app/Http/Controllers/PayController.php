@@ -16,7 +16,6 @@ use App\Order;
 use App\Recharge;
 use Auth;
 use Exception;
-use Log;
 
 class PayController extends Controller
 {
@@ -156,7 +155,6 @@ class PayController extends Controller
                 $flag = false;
             }
         } catch (Exception $e) {
-            Log::error($e);
             $flag = false;
         } finally {
             if ($flag) {
@@ -299,5 +297,22 @@ class PayController extends Controller
             default:
                 throw new MsgException();
         }
+    }
+
+    public function cancelOrder()
+    {
+        $id    = request('id', 0);
+        $model = Order::find($id);
+        if (!$model) {
+            return error(MODEL_NOT_FOUNT);
+        }
+        if ($model->uid != Auth::user()->id) {
+            return error(NO_ACCESS);
+        }
+        if ($model->status != Order::STATUS_FROZEN) {
+            return error('订单已经开始执行，无法退单');
+        }
+        Order::afterChargeback($model);
+        return success();
     }
 }

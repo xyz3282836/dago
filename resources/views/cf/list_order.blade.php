@@ -100,6 +100,10 @@
                                             <button class="btn btn-danger btn-sm ladda-button"
                                                     data-style="contract" @click="del({{$v->id}})">取消订单
                                             </button>
+                                        @elseif($v->status == \App\Order::STATUS_FROZEN)
+                                            <button class="btn btn-danger btn-sm ladda-button"
+                                                    data-style="contract" @click="cancel({{$v->id}})">退单
+                                            </button>
                                         @else
                                             {{$v->status_text}}
                                         @endif
@@ -222,6 +226,17 @@
             methods:{
                 del(id) {
                     axios.post("{{url('delorder')}}", {id: id}).then(function (d) {
+                        var data = d.data;
+                        if (!data.code) {
+                            layer.msg(data.msg, {icon: 2});
+                        } else {
+                            layer.msg('操作成功', {icon: 1});
+                            window.location.reload();
+                        }
+                    })
+                },
+                cancel(id) {
+                    axios.post("{{url('cancelorder')}}", {id: id}).then(function (d) {
                         var data = d.data;
                         if (!data.code) {
                             layer.msg(data.msg, {icon: 2});

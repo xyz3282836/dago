@@ -46,13 +46,14 @@ Route::get('viplist', 'HomeController@listVip');
 //recharge 充值
 Route::get('recharge', 'PayController@getRecharge');
 Route::post('recharge/pay', 'PayController@recharge');
-Route::any('recharge/result','PayController@result');
+Route::any('recharge/result', 'PayController@result');
 Route::get('rechargelist', 'PayController@listRecharge');
 
 //pay 支付产品
 Route::post('pay', 'PayController@postPay');
 Route::get('jumppay', 'PayController@jumpAlipay');
 Route::post('delorder', 'PayController@delOrder');
+Route::post('cancelorder', 'PayController@cancelOrder');
 
 //资金流水
 Route::get('billlist', 'PayController@listBill');
@@ -72,6 +73,6 @@ Route::get('faqs', 'IndexController@faqs');
 Route::get('getuptoken', 'QiniuController@getToken');
 
 //current.version
-Route::get('current.version', function(){
+Route::get('current.version', function () {
     return 1;
 });

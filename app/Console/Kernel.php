@@ -3,7 +3,10 @@
 namespace App\Console;
 
 use App\CfResult;
+use App\ClickFarm;
+use App\Events\CfResults;
 use App\ExchangeRate;
+use App\Order;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -32,6 +35,9 @@ class Kernel extends ConsoleKernel
         })->daily();
         $schedule->call(function () {
             $this->dealRefund();
+        })->everyFiveMinutes();
+        $schedule->call(function () {
+            $this->makeCfr();
         })->everyFiveMinutes();
     }
 
@@ -102,5 +108,20 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    private function makeCfr()
+    {
+        $list = Order::where('status', Order::STATUS_FROZEN)->get();
+        foreach ($list as $v) {
+            if (strtotime($v->updated_at) + 60 * gconfig('order.frozentime') < time()) {
+                $v->status = Order::STATUS_PAID;
+                $llist     = ClickFarm::where('oid', $v->id)->get();
+                foreach ($llist as $model) {
+                    event(new CfResults($model));
+                }
+                $v->save();
+            }
+        }
     }
 }

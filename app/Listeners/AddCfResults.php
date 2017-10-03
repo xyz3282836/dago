@@ -36,8 +36,8 @@ class AddCfResults
                 'from_site'  => $model->from_site,
                 'shop_id'    => $model->shop_id,
                 'status'     => CfResult::STATUS_WAITING,
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString(),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ];
         }
         CfResult::insert($dbarr);
