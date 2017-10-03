@@ -69,19 +69,11 @@
 
 @section('js')
     <script>
-        $(function () {
-            $('#recharge_time').datetimepicker({
-                format: 'yyyy-mm-dd hh:ii',
-                language:'zh-CN',
-                autoclose:true,
-                todayHighlight: 1,
-            });
-        })
         new Vue({
             el: '#app',
             data:{
                 type:'1',
-                amount:{{gconfig('cost.vip')}},
+                amount:{{$role->gold_recharge}},
                 rate:{{gconfig('rmbtogold')}},
                 typec: {!! json_encode(config('linepro.order_ptype')) !!},
             },
@@ -93,5 +85,3 @@
         })
     </script>
 @endsection
-
-

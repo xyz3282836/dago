@@ -16,6 +16,7 @@ use App\Order;
 use App\Recharge;
 use Auth;
 use Exception;
+use Log;
 
 class PayController extends Controller
 {
@@ -155,13 +156,12 @@ class PayController extends Controller
                 $flag = false;
             }
         } catch (Exception $e) {
+            Log::error($e);
             $flag = false;
         } finally {
             if ($flag) {
-                $text = '支付成功';
                 $json = 'success';
             } else {
-                $text = '此次支付失败';
                 $json = 'fail';
             }
             if (request()->isMethod('get')) {
