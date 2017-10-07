@@ -31,11 +31,17 @@ class Kernel extends ConsoleKernel
 //        $schedule->call(function () {
 //            $this->getRate();
 //        })->daily();
+
         $schedule->call(function () {
             $this->dealRefund();
         })->everyFiveMinutes();
+
         $schedule->call(function () {
             $this->makeCfr();
+        })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            $this->makeRefund();
         })->everyFiveMinutes();
     }
 
