@@ -304,6 +304,10 @@ class PayController extends Controller
         }
     }
 
+    /**
+     * 已支付退单
+     * @return string
+     */
     public function cancelOrder()
     {
         $id    = request('id', 0);

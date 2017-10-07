@@ -3,8 +3,6 @@
 namespace App\Console;
 
 use App\CfResult;
-use App\ClickFarm;
-use App\Events\CfResults;
 use App\ExchangeRate;
 use App\Order;
 use GuzzleHttp\Client;
@@ -88,13 +86,26 @@ class Kernel extends ConsoleKernel
     }
 
     /**
-     * 退款
+     * cfr失败退款
      */
     private function dealRefund()
     {
         $list = CfResult::where('status', 0)->get();
         foreach ($list as $v) {
             $v->refund();
+        }
+    }
+
+    /**
+     * 已经支付的执行子任务
+     */
+    private function makeCfr()
+    {
+        $list = Order::where('status', Order::STATUS_FROZEN)->get();
+        foreach ($list as $v) {
+            if (strtotime($v->updated_at) + 60 * gconfig('order.afterpay.frozentime') < time()) {
+                Order::dealOrder($v);
+            }
         }
     }
 
@@ -110,17 +121,15 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 
-    private function makeCfr()
+    /**
+     * 未支付超时退单
+     */
+    private function makeRefund()
     {
-        $list = Order::where('status', Order::STATUS_FROZEN)->get();
+        $list = Order::where('status', Order::STATUS_UNPAID)->get();
         foreach ($list as $v) {
-            if (strtotime($v->updated_at) + 60 * gconfig('order.frozentime') < time()) {
-                $v->status = Order::STATUS_PAID;
-                $llist     = ClickFarm::where('oid', $v->id)->get();
-                foreach ($llist as $model) {
-                    event(new CfResults($model));
-                }
-                $v->save();
+            if (strtotime($v->updated_at) + 60 * gconfig('order.beforpay.frozentime') < time()) {
+                Order::delOrder($v);
             }
         }
     }
