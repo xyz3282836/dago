@@ -79,3 +79,5 @@ Route::get('current.version', function () {
 
 //zan
 Route::get('promotionlist', 'PromotionController@list');
+Route::get('promotion/add', 'PromotionController@add');
+Route::post('checkpromotionurl', 'HomeController@checkPromotionUrl');

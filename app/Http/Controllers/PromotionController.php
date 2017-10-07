@@ -49,4 +49,8 @@ class PromotionController extends Controller
             'status' => $status,
         ]);
     }
+
+    public function add(){
+        return view('promotion.add');
+    }
 }

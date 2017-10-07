@@ -73,7 +73,7 @@ function success($data = '')
     return json_encode($arr);
 }
 
-function error($msg)
+function error($msg = '')
 {
     $arr = [
         'code' => 0,

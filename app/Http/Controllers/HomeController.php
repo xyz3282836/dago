@@ -45,6 +45,17 @@ class HomeController extends Controller
         return view('auth.passwords.up');
     }
 
+    public function checkPromotionUrl()
+    {
+        $url = request('url');
+        $a   = rand(0, 1);
+        if ($a) {
+            return error();
+        } else {
+            return success();
+        }
+    }
+
     /**
      * 个人资料
      */
