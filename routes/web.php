@@ -78,4 +78,4 @@ Route::get('current.version', function () {
 });
 
 //zan
-Route::get('zanlist', 'ZanController@list');
+Route::get('promotionlist', 'PromotionController@list');

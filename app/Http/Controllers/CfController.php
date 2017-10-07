@@ -13,7 +13,6 @@ use App\Banner;
 use App\CfResult;
 use App\ClickFarm;
 use App\Order;
-use App\QuotaBill;
 use Auth;
 use Carbon\Carbon;
 

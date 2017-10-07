@@ -140,7 +140,7 @@
                             <a href="{{url('mycfrlist')}}">我要评价</a>
                         </li>
                         <li>
-                            <a href="{{url('zanlist')}}">我要点赞</a>
+                            <a href="{{url('promotionlist')}}">我要点赞</a>
                         </li>
                     </ul>
                     @endif
