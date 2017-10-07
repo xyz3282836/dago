@@ -433,9 +433,9 @@ class Order extends Model
      */
     public static function delOrder(self $order)
     {
-        $user = Auth::user();
         DB::beginTransaction();
         try {
+            $user               = $order->user;
             $user->lock_golds   = $user->lock_golds - $order->golds;
             $user->lock_balance = $user->lock_balance - $order->balance;
             $user->save();
@@ -448,6 +448,28 @@ class Order extends Model
         }
     }
 
+    /**
+     * 支付后执行子任务
+     * @param Order $order
+     */
+    public static function dealOrder(self $order)
+    {
+        DB::beginTransaction();
+        try {
+            $order->status = Order::STATUS_PAID;
+            $list         = ClickFarm::where('oid', $order->id)->get();
+            foreach ($list as $model) {
+                event(new CfResults($model));
+            }
+            $order->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('支付后执行子任务');
+            Log::error($e);
+        }
+    }
+
     public function cfs()
     {
         return $this->hasMany(ClickFarm::class, 'oid');
@@ -456,6 +478,11 @@ class Order extends Model
     public function cfrs()
     {
         return $this->hasOne(CfResults::class, 'oid');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'uid');
     }
 
     public function getTypeTextAttribute()

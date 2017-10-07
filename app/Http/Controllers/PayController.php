@@ -200,6 +200,22 @@ class PayController extends Controller
         if (count($list) == 0) {
             return error(MODEL_NOT_FOUNT);
         }
+        //计算总金币 总价格
+        $golds = 0;
+        $price = 0.00;
+        foreach ($list as $one) {
+            $golds += $one->golds;
+            $price += $one->amount;
+        }
+        //金币不够
+        if ($ptype == 'cycle') {
+            $days  = diffBetweenTwoDays($start, $end);
+            $golds *= $days;
+            $price *= $days;
+        }
+        if (($user->golds - $user->lock_golds) < $golds) {
+            return error(NO_ENOUGH_GOLDS);
+        }
         if ($ptype == 'cycle') {
             //TODO 验证日期
             $days = diffBetweenTwoDays($start, $end);
@@ -227,17 +243,6 @@ class PayController extends Controller
             }
         }
 
-        //计算总金币 总价格
-        $golds = 0;
-        $price = 0.00;
-        foreach ($list as $one) {
-            $golds += $one->golds;
-            $price += $one->amount;
-        }
-        //金币不够
-        if (($user->golds - $user->lock_golds) < $golds) {
-            return error(NO_ENOUGH_GOLDS);
-        }
         $balance = $user->balance - $user->lock_balance;
         if ($price > $balance) {
             //余额+充值 跳转 不生成bill
@@ -299,6 +304,10 @@ class PayController extends Controller
         }
     }
 
+    /**
+     * 已支付退单
+     * @return string
+     */
     public function cancelOrder()
     {
         $id    = request('id', 0);
