@@ -77,11 +77,11 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="one in cardlist">
+                            <tr v-for="one in list">
                                 <td>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" v-model="ids" :value="one.id" @click="selectone">
+                                            <input type="checkbox" v-model="ids" :value="one.id">
                                         </label>
                                     </div>
                                 </td>
@@ -133,19 +133,19 @@
                                     </Radio-Group>
                                 </Form-Item>
                                 <Form-Item label="安排代购时间" v-if="plantype == 'cycle'">
-                                    <Date-Picker :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
                                 </Form-Item>
                             </i-Form>
                         </Card>
 
                         <div class="pull-right">
                             <div class="col-xs-6">
-                                <p>总金币：<span class="color-red" v-text="allgold"></span> <img width="18" src="/img/gold.png" /></p>
+                                <p>总金币：<span class="color-red" v-text="allGold"></span> <img width="18" src="/img/gold.png" /></p>
                                 <p>抵扣金币：<span class="color-red" v-text="payg"></span> <img width="18" src="/img/gold.png" /></p>
                                 <p>需要充值：<span class="color-red" v-text="needPay"></span> 元</p>
                             </div>
                             <div class="col-xs-6">
-                                <p>总价格：<span class="color-red" v-text="allprice"></span> 元</p>
+                                <p>总价格：<span class="color-red" v-text="allPrice"></span> 元</p>
                                 <p>抵扣余额：<span class="color-red" v-text="rmb"></span> 元</p>
                                 <p>待支付：<span class="color-red" v-text="needRmb"></span> 元</p>
 
@@ -178,10 +178,9 @@
                     new Date('{{date('Y-m-d')}}'),new Date('{{date('Y-m-d')}}')
                 ],
                 grate:{{gconfig('rmbtogold')}},
-                cardlist:{!! $list !!},
-                allgold: 0,
-                allprice: 0,
-                allc: false,
+                list:{!! $list !!},
+                cardlist:{!! $list->keyBy('id') !!},
+                allc: true,
                 ids: [],
                 allids: [],
                 deduction_gold: {{Auth::user()->golds - Auth::user()->lock_golds}},
@@ -256,55 +255,55 @@
                         }
                     })
                 },
-                selectone(){
-                    this.getAll()
-                },
                 selectall(){
                     this.allc = !this.allc;
                     this.allc ? this.ids = this.allids : this.ids = []
-                    this.getAll();
-                },
-                getAll(){
-                    this.allgold = 0;
-                    this.allprice = 0.00;
-                    this.cardlist.forEach((v) => {
-                        if (this.ids.indexOf(v.id) > -1) {
-                            this.allgold += v.golds;
-                            this.allprice += Number(v.amount);
-                        }
-                    });
-                    var days = this.dateDiff(this.startd,this.endd);
-                    this.allprice = (this.allprice * days).toFixed(2);
-                    this.allgold = (this.allgold * days);
                 },
             },
             computed:{
                 payg(){
-                    if(this.deduction_gold >= this.allgold){
-                        return this.allgold;
+                    if(this.deduction_gold >= this.allGold){
+                        return this.allGold;
                     }else{
                         return this.deduction_gold;
                     }
                 },
                 rmb(){
-                    if(this.deduction_balance >= this.allprice){
-                        return this.allprice;
+                    if(this.deduction_balance >= this.allPrice){
+                        return this.allPrice;
                     }else{
                         return this.deduction_balance;
                     }
                 },
                 needPay(){
-                    return ((this.allgold - this.payg)/this.grate).toFixed(2);
+                    return ((this.allGold - this.payg)/this.grate).toFixed(2);
                 },
                 needRmb(){
-                    return (this.allprice - this.rmb).toFixed(2);
+                    return (this.allPrice - this.rmb).toFixed(2);
+                },
+                allPrice(){
+                    var price = 0;
+                    this.ids.forEach((v) => {
+                        price += Number(this.cardlist[v].amount);
+                    });
+                    var days = this.dateDiff(this.startd,this.endd);
+                    return (price * days).toFixed(2);
+                },
+                allGold(){
+                    var golds = 0;
+                    this.ids.forEach((v) => {
+                        golds += Number(this.cardlist[v].golds);
+                    });
+                    var days = this.dateDiff(this.startd,this.endd);
+                    return golds * days;
                 }
             },
             mounted: function () {
                 this.$nextTick(() => {
-                    this.cardlist.forEach((v, k) => {
+                    this.list.forEach((v, k) => {
                         this.allids.push(v.id)
                         })
+                    this.ids = this.allids
                     }
                 )
             }

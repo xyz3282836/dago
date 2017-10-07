@@ -76,3 +76,6 @@ Route::get('getuptoken', 'QiniuController@getToken');
 Route::get('current.version', function () {
     return 1;
 });
+
+//zan
+Route::get('zanlist', 'ZanController@list');

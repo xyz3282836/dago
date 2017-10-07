@@ -30,9 +30,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            $this->getRate();
-        })->daily();
+//        $schedule->call(function () {
+//            $this->getRate();
+//        })->daily();
         $schedule->call(function () {
             $this->dealRefund();
         })->everyFiveMinutes();
@@ -110,6 +110,9 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 
+    /**
+     * 新建子任务
+     */
     private function makeCfr()
     {
         $list = Order::where('status', Order::STATUS_FROZEN)->get();
