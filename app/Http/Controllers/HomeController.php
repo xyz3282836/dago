@@ -165,7 +165,7 @@ class HomeController extends Controller
         } else {
             $tname = '会员有效期记录';
         }
-        $list = VipBill::where('uid', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+        $list = VipBill::where('uid', Auth::user()->id)->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         return view('my.list_vip')->with('tname', $tname)->with('list', $list);
     }
 

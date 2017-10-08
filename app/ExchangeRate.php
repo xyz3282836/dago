@@ -101,7 +101,7 @@ class ExchangeRate extends Model
                 return 'it';
                 break;
         }
-        return 'um';
+        return '';
     }
 
     public static function getRate($site)

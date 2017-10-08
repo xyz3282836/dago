@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePromotionsTable extends Migration
 {
@@ -18,10 +18,10 @@ class CreatePromotionsTable extends Migration
             $table->integer('uid')->default(0);//用户id
             $table->integer('oid')->default(0);//order-id
 
-            $table->char('asin',24)->default('');//购买的asin
-            $table->tinyInteger('from_site')->default(1); // 来自站点
-            $table->char('eid',50)->default('');//评价详情id
-            $table->string('url',500)->default('');//推广链接
+            $table->char('asin', 24)->default('');//购买的asin
+            $table->tinyInteger('from_site')->default(0); // 来自站点
+            $table->char('eid', 50)->default('');//评价详情id
+            $table->string('url', 500)->default('');//推广链接
 
             $table->tinyInteger('type')->default(1); // 1up 2down
             $table->smallInteger('num')->default(0);//zan
@@ -31,11 +31,11 @@ class CreatePromotionsTable extends Migration
             $table->timestamps();
 
             //索引
-            $table->index('uid','from_site');
-            $table->index('uid','status');
-            $table->index('uid','asin');
-            $table->index('uid','eid');
-            $table->index('oid');
+            $table->index(['uid', 'from_site']);
+            $table->index(['uid', 'status']);
+            $table->index(['uid', 'asin']);
+            $table->index(['uid', 'eid']);
+            $table->index(['oid']);
         });
     }
 

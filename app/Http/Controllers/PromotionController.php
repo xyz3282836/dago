@@ -44,6 +44,7 @@ class PromotionController extends Controller
         if ($status != 'all') {
             $list = $list->where('status', $status);
         }
+        $list = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         return view('promotion.list')->with([
             'list'   => $list,
             'eid'    => $eid,

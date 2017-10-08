@@ -58,7 +58,42 @@
                             </Form-Item>
                         </i-Form>
 
-                        <Table border :columns="tcolumns" :data="tdata"></Table>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>需求发布时间</th>
+                                <th>站点</th>
+                                <th>ASIN</th>
+                                <th>评价详情ID</th>
+                                <th>类型</th>
+                                <th>花费金币</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($list as $v)
+                            <tr>
+                               <td>{{$v->created_at}}</td>
+                               <td>
+                                   <span class="flag-icon" class="flag-icon-{{$v->flag}}"></span>
+                               </td>
+                               <td>{{$v->asin}}</td>
+                               <td>{{$v->eid}}</td>
+                               <td>{{$v->type_text}}</td>
+                               <td>{{$v->golds}} <img width="12" src="/img/gold.png" /></td>
+                               <td>{{$v->status_text}}</td>
+                               <td>
+
+                               </td>
+                            </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="99">暂无数据</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
 
                         @if($list)
                             {!!  $list->appends(['site'=>$site,'status'=>$status,'asin'=>$asin,'eid'=>$eid])->links() !!}
@@ -81,82 +116,6 @@
                 eid:"{{$eid}}",
                 sitec: {!! json_encode(config('linepro.cfr_sitec')) !!},
                 statusc: {!! json_encode(config('linepro.promotion_statusc')) !!},
-                tcolumns: [
-                    {
-                        title: '需求发布时间',
-                        key: 'created_at',
-                    },
-                    {
-                        title: '站点',
-                        key: 'site'
-                    },
-                    {
-                        title: 'ASIN',
-                        key: 'asin'
-                    },
-                    {
-                        title: '评价详情ID',
-                        key: 'edi'
-                    },
-                    {
-                        title: '需求',
-                        key: 'up'
-                    },
-                    {
-                        title: '花费金币',
-                        key: 'golds'
-                    },
-                    {
-                        title: '状态',
-                        key: 'status_text'
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        width: 150,
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '查看'),
-                            ]);
-                        }
-                    }
-                ],
-                tdata: [
-                    {
-                        name: '王小明',
-                        age: 18,
-                        address: '北京市朝阳区芍药居'
-                    },
-                    {
-                        name: '张小刚',
-                        age: 25,
-                        address: '北京市海淀区西二旗'
-                    },
-                    {
-                        name: '李小红',
-                        age: 30,
-                        address: '上海市浦东新区世纪大道'
-                    },
-                    {
-                        name: '周小伟',
-                        age: 26,
-                        address: '深圳市南山区深南大道'
-                    }
-                ]
             },
             methods:{
                 handleSubmit(){
