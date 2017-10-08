@@ -24,8 +24,7 @@ class CreatePromotionsTable extends Migration
             $table->string('url',500)->default('');//推广链接
 
             $table->tinyInteger('type')->default(1); // 1up 2down
-            $table->smallInteger('up')->default(0);//zan
-            $table->smallInteger('down')->default(0);//cai
+            $table->smallInteger('num')->default(0);//zan
             $table->integer('golds')->default(0);//金币
 
             $table->tinyInteger('status')->default(1);//-1已退款 0失败 1进行中 3已同步 3成功

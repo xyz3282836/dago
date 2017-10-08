@@ -123,7 +123,8 @@ class RoleController extends Controller
                 $form->display('updated_at', 'Updated At');
             })->tab('功能信息列表', function ($form) {
                 $form->hasMany('actiondesc', '', function (Form\NestedForm $form) {
-                    $form->radio('aid', '功能')->options(Action::all()->pluck('desc', 'id'))->rules('required');
+                    $form->display('action_desc', '功能');
+//                    $form->radio('aid', '功能')->options(Action::all()->pluck('desc', 'id'))->rules('required');
                     $form->number('service_gold', '指定金币')->rules('required');
                     $form->text('service_rate', '百分比')->rules('required');
                     $form->radio('type', '类型')->options(['1' => '指定金币', '2' => '百分比'])->default('1')->rules('required');

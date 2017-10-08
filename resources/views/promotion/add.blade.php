@@ -101,7 +101,10 @@
                                 <p>合计结算：<span v-text="allgold"></span><img width="15" src="/img/gold.png"></p>
                             </Form-Item>
                             <Form-Item>
-                                <i-Button type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
+                                <i-Button type="primary" :loading="loading" @click="handleSubmit('formDynamic')">
+                                    <span v-if="!loading">提交</span>
+                                    <span v-else>Loading...</span>
+                                </i-Button>
                                 {{--<i-Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">重置</i-Button>--}}
                             </Form-Item>
                         </i-Form>
@@ -130,8 +133,9 @@
         var app = new Vue({
             el: '#app',
             data:{
-                goldUp:100,
-                goldDown:50,
+                loading: false,
+                goldUp:{{\Auth::user()->getActionGold('eup')}},
+                goldDown:{{\Auth::user()->getActionGold('edown')}},
                 formDynamic: {
                     items: [
                         {
@@ -164,9 +168,19 @@
                 handleSubmit (name) {
                     this.$refs[name].validate((valid) => {
                         if (valid) {
-                            this.$Message.success('提交成功!');
-                        } else {
-                            this.$Message.error('表单验证失败!');
+                            this.loading = true;
+                            axios.post("{{url('addpromotion')}}", {data:this.formDynamic.items}).then(res => {
+                                if (res.data.code) {
+                                    this.$Message.success('提交成功!');
+                                    window.location = '/promotionlist';
+                                } else {
+                                    this.$Notice.error({
+                                        title: '提交失败',
+                                        desc: res.data.msg
+                                    });
+                                }
+                                this.loading = false;
+                            })
                         }
                     })
                 },
@@ -189,7 +203,6 @@
                             return true;
                         }
                     }
-                    console.log('is not num')
                     return false;
                 }
             }

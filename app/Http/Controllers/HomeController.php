@@ -47,13 +47,7 @@ class HomeController extends Controller
 
     public function checkPromotionUrl()
     {
-        $url = request('url');
-        $a   = rand(0, 1);
-        if ($a) {
-            return error();
-        } else {
-            return success();
-        }
+        return success();
     }
 
     /**

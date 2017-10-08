@@ -19,4 +19,15 @@ class Promotion extends Model
     const STATUS_SYNC    = 2;//已同步
     const STATUS_SUCCESS = 3;//成功
 
+    protected $fillable = [
+        'uid', 'oid', 'url', 'up', 'down', 'type', 'golds'
+    ];
+    protected $appends = ['status_text'];
+
+    public function getStatusTextAttribute()
+    {
+        $arr = config('linepro.promotion_status');
+        return $arr[$this->status];
+    }
+
 }

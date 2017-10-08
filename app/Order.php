@@ -36,6 +36,8 @@ class Order extends Model
     const TYPE_UPLOAD_IMG   = 5;//上传图片
     const TYPE_UPLOAD_VIDEO = 6;//上传视频
 
+    const TYPE_PROMOTION = 7;//点赞需求
+
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
 
@@ -190,6 +192,42 @@ class Order extends Model
         } catch (\Throwable $e) {
             DB::rollBack();
             throw new MsgException();
+        }
+    }
+
+    /**
+     * 消费电子需求
+     * @param $list
+     * @param $golds
+     * @param null $user
+     * @throws MsgException
+     */
+    public static function consumePromotion($list, $golds, $user = null)
+    {
+        $user = $user == null ? Auth::user() : $user;
+        DB::beginTransaction();
+        try {
+            $one         = self::create([
+                'uid'          => $user->id,
+                'type'         => self::TYPE_PROMOTION,
+                'payment_type' => self::PTYPE_GOLD,
+                'orderid'      => get_order_id(),
+                'golds'        => $golds,
+                'rate'         => gconfig('rmbtogold'),
+                'status'       => self::STATUS_PAID
+            ]);
+            $user->golds -= $golds;
+            $user->save();
+            foreach ($list as $k => $v) {
+                $list[$k]['oid'] = $one->id;
+            }
+            Promotion::insert($list);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('点赞');
+            Log::error($e);
+            throw new MsgException('');
         }
     }
 
@@ -457,7 +495,7 @@ class Order extends Model
         DB::beginTransaction();
         try {
             $order->status = Order::STATUS_PAID;
-            $list         = ClickFarm::where('oid', $order->id)->get();
+            $list          = ClickFarm::where('oid', $order->id)->get();
             foreach ($list as $model) {
                 event(new CfResults($model));
             }

@@ -81,3 +81,4 @@ Route::get('current.version', function () {
 Route::get('promotionlist', 'PromotionController@list');
 Route::get('promotion/add', 'PromotionController@add');
 Route::post('checkpromotionurl', 'HomeController@checkPromotionUrl');
+Route::post('addpromotion', 'PromotionController@postAdd');

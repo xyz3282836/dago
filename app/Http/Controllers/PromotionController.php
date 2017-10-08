@@ -9,8 +9,11 @@
 namespace App\Http\Controllers;
 
 
+use App\Action;
+use App\Order;
 use App\Promotion;
 use Auth;
+use Carbon\Carbon;
 
 class PromotionController extends Controller
 {
@@ -50,7 +53,48 @@ class PromotionController extends Controller
         ]);
     }
 
-    public function add(){
+    public function add()
+    {
         return view('promotion.add');
+    }
+
+    public function postAdd()
+    {
+        $list  = request('data');
+        $golds = 0;
+        $dbarr = [];
+        $user  = Auth::user();
+        if (!$user->checkAction('eup')) {
+            return error(Action::where('name', 'eup')->value('auth_desc'));
+        }
+        if (!$user->checkAction('edown')) {
+            return error(Action::where('name', 'edown')->value('auth_desc'));
+        }
+        $upgold   = $user->getActionGold('eup');
+        $downgold = $user->getActionGold('edown');
+        foreach ($list as $v) {
+            $tmparr = [
+                'uid'        => $user->id,
+                'url'        => $v['url'],
+                'num'        => $v['num'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            if ($v['type'] != 'true') {
+                $tmparr['type']  = 2;
+                $tmparr['golds'] = $downgold * $v['num'];
+            } else {
+                $tmparr['type']  = 1;
+                $tmparr['golds'] = $upgold * $v['num'];
+            }
+            $golds   += $tmparr['golds'];
+            $dbarr[] = $tmparr;
+        }
+        if (($user->golds - $user->lock_golds) < $golds) {
+            return error(NO_ENOUGH_GOLDS);
+        }
+        Order::consumePromotion($dbarr, $golds, $user);
+        return success();
+
     }
 }
