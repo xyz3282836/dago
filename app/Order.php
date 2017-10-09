@@ -25,7 +25,6 @@ class Order extends Model
     const STATUS_FULL_SUCCESS   = 4;//全部完成
     const STATUS_FULL_FAILURE   = 5;//全部失败
     const STATUS_PART_FAILURE   = 6;//部分失败
-    const STATUS_UNDONE_WAITING = 7;//未完全付款等待阶段
     const STATUS_FROZEN         = 8;//下单后冻结时间
 
     const TYPE_RECHARGE = 1;//充值

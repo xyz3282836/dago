@@ -174,7 +174,7 @@ class CfController extends Controller
                 $list = $list->where('status', '>', 0);
         }
 
-        $list = $list->whereBetween('created_at', [$start, $dend])->orderBy('status', 'asc')->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
+        $list = $list->whereBetween('created_at', [$start, $dend])->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         return view('cf.list_order')->with('tname', '订单管理')->with('list', $list)->with([
             'start' => $start,
             'end'   => $end,
