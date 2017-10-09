@@ -24,10 +24,14 @@
                     </ol>
                     <div class="panel-body">
                         <Alert closable>
-                            自定义关闭内容
-                            自定义关闭内容
-                            自定义关闭内容
-                            自定义关闭内容
+                            <Row>
+                                <i-Col span="12">
+                                    <img src="{{URL::asset('img/promotion.gif')}}" alt="">
+                                </i-Col>
+                                <i-Col span="12">
+                                    {{\App\Faq::getFaq(18)}}
+                                </i-Col>
+                            </Row>
                             <span slot="close">我知道了</span>
                         </Alert>
 
@@ -55,8 +59,11 @@
                             </Form-Item>
                             <Form-Item>
                                 <i-Button type="primary" @click="handleSubmit">查询</i-Button>
+                                <i-Button class="pull-right" @click="goadd">发布新点赞需求</i-Button>
                             </Form-Item>
                         </i-Form>
+
+
 
                         <table class="table table-bordered">
                             <thead>
@@ -65,7 +72,7 @@
                                 <th>站点</th>
                                 <th>ASIN</th>
                                 <th>评价详情ID</th>
-                                <th>类型</th>
+                                <th>需求</th>
                                 <th>花费金币</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -80,7 +87,13 @@
                                </td>
                                <td>{{$v->asin}}</td>
                                <td>{{$v->eid}}</td>
-                               <td>{{$v->type_text}}</td>
+                               <td>
+                                    @if($v->type == 1)
+                                        {{$v->num}}个<Icon type="thumbsup"></Icon>
+                                    @else
+                                       {{$v->num}}个<Icon type="thumbsdown"></Icon>
+                                    @endif
+                               </td>
                                <td>{{$v->golds}} <img width="12" src="/img/gold.png" /></td>
                                <td>{{$v->status_text}}</td>
                                <td>
@@ -120,6 +133,9 @@
             methods:{
                 handleSubmit(){
                     $('#pform').submit();
+                },
+                goadd(){
+                    window.location = '{{url('promotion/add')}}'
                 }
             }
         });

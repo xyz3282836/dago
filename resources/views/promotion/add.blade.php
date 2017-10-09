@@ -27,14 +27,19 @@
                 <div class="panel panel-default">
                     <ol class="breadcrumb">
                         <li><a href="/">首页</a></li>
-                        <li class="active">我要点赞</li>
+                        <li><a href="{{url('promotionlist')}}">我要点赞</a></li>
+                        <li class="active">发布新点赞需求</li>
                     </ol>
                     <div class="panel-body">
                         <Alert closable>
-                            自定义关闭内容
-                            自定义关闭内容
-                            自定义关闭内容
-                            自定义关闭内容
+                            <Row>
+                                <i-Col span="12">
+                                    <img src="{{URL::asset('img/promotion.gif')}}" alt="">
+                                </i-Col>
+                                <i-Col span="12">
+                                    {{\App\Faq::getFaq(18)}}
+                                </i-Col>
+                            </Row>
                             <span slot="close">我知道了</span>
                         </Alert>
                         <Row>

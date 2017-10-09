@@ -22,18 +22,12 @@ class Promotion extends Model
 //    protected $fillable = [
 //        'uid', 'oid', 'url', 'up', 'down', 'type', 'golds'
 //    ];
-    protected $appends = ['status_text', 'type_text', 'flag'];
+    protected $appends = ['status_text', 'flag'];
 
     public function getStatusTextAttribute()
     {
         $arr = config('linepro.promotion_status');
         return $arr[$this->status];
-    }
-
-    public function getTypeTextAttribute()
-    {
-        $arr = config('linepro.promotion_type');
-        return $arr[$this->type];
     }
 
     public function getFlagAttribute()
