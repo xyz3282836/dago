@@ -18,14 +18,14 @@ use Log;
 
 class Order extends Model
 {
-    const STATUS_DEL            = 0;//已删除
-    const STATUS_UNPAID         = 1;//待付款
-    const STATUS_PAID           = 2;//已付款
-    const STATUS_UNDERWAY       = 3;//进行中
-    const STATUS_FULL_SUCCESS   = 4;//全部完成
-    const STATUS_FULL_FAILURE   = 5;//全部失败
-    const STATUS_PART_FAILURE   = 6;//部分失败
-    const STATUS_FROZEN         = 8;//下单后冻结时间
+    const STATUS_DEL          = 0;//已删除
+    const STATUS_UNPAID       = 1;//待付款
+    const STATUS_PAID         = 2;//已付款
+    const STATUS_UNDERWAY     = 3;//进行中
+    const STATUS_FULL_SUCCESS = 4;//全部完成
+    const STATUS_FULL_FAILURE = 5;//全部失败
+    const STATUS_PART_FAILURE = 6;//部分失败
+    const STATUS_FROZEN       = 8;//下单后冻结时间
 
     const TYPE_RECHARGE = 1;//充值
     const TYPE_CONSUME  = 2;//消费
@@ -35,7 +35,7 @@ class Order extends Model
     const TYPE_UPLOAD_IMG   = 5;//上传图片
     const TYPE_UPLOAD_VIDEO = 6;//上传视频
 
-    const TYPE_DEL_PAID     = 7;//删除后付款 订单异常补偿
+    const TYPE_DEL_PAID = 7;//删除后付款 订单异常补偿
 
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
@@ -284,12 +284,12 @@ class Order extends Model
      */
     public static function errorBack(self $one, $alipay_orderid)
     {
-        $user = Auth::user();
         DB::beginTransaction();
         try {
-            $user->balance += $one->price;
+            $user                = $one->user;
+            $user->balance       += $one->price;
             $one->alipay_orderid = $alipay_orderid;
-            $order         = Order::create([
+            $order               = Order::create([
                 'uid'     => $user->id,
                 'type'    => Order::TYPE_DEL_PAID,
                 'orderid' => get_order_id(),
@@ -497,7 +497,7 @@ class Order extends Model
         DB::beginTransaction();
         try {
             $order->status = Order::STATUS_PAID;
-            $list         = ClickFarm::where('oid', $order->id)->get();
+            $list          = ClickFarm::where('oid', $order->id)->get();
             foreach ($list as $model) {
                 event(new CfResults($model));
             }
