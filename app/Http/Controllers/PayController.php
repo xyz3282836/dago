@@ -129,7 +129,7 @@ class PayController extends Controller
         $request = $gateway->completePurchase();
         $request->setParams(array_merge($_POST, $_GET));
         $flag    = false;
-        $typeurl = Order::TYPE_RECHARGE;
+        $typeurl = 'billlist';
         try {
             $response = $request->send();
             if ($response->isPaid()) {
@@ -140,16 +140,20 @@ class PayController extends Controller
                 if ($model->status == Order::STATUS_UNPAID) {
                     switch ($model->type) {
                         case Order::TYPE_RECHARGE:
+                            $typeurl = 'rechargelist';
                             Order::payRechargeGolds($model, $alipay_orderid);
                             break;
                         case Order::TYPE_CONSUME:
-                            $typeurl = Order::TYPE_CONSUME;
+                            $typeurl = 'orderlist';
                             Order::payOrder($model, $alipay_orderid);
                             break;
                     }
                     $flag = true;
                 } elseif ($model->status == Order::STATUS_PAID) {
                     $flag = true;
+                } elseif ($model->status == Order::STATUS_DEL){
+                    $flag = true;
+                    Order::errorBack($model, $alipay_orderid);
                 }
             } else {
                 $flag = false;
@@ -163,11 +167,7 @@ class PayController extends Controller
                 $json = 'fail';
             }
             if (request()->isMethod('get')) {
-                if ($typeurl == Order::TYPE_RECHARGE) {
-                    return redirect('orderlist');
-                } else {
-                    return redirect('rechargelist');
-                }
+                return redirect($typeurl);
             } else {
                 die($json);
             }

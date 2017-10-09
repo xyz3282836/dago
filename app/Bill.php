@@ -20,6 +20,7 @@ class Bill extends Model
     const TYPE_EVALUATE     = 4;//评价
     const TYPE_UPLOAD_IMG   = 5;//上传图片
     const TYPE_UPLOAD_VIDEO = 6;//上传视频
+    const TYPE_DEL_PAID     = 7;//订单异常补偿
 
     protected $appends = ['type_text'];
     protected $fillable = [

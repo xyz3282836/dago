@@ -35,6 +35,8 @@ class Order extends Model
     const TYPE_UPLOAD_IMG   = 5;//上传图片
     const TYPE_UPLOAD_VIDEO = 6;//上传视频
 
+    const TYPE_DEL_PAID     = 7;//删除后付款 订单异常补偿
+
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
 
@@ -272,6 +274,45 @@ class Order extends Model
             Log::error($e);
             DB::rollBack();
             throw new Exception();
+        }
+    }
+
+    /**
+     * 订单异常补偿
+     * @param Order $one
+     * @throws MsgException
+     */
+    public static function errorBack(self $one, $alipay_orderid)
+    {
+        $user = Auth::user();
+        DB::beginTransaction();
+        try {
+            $user->balance += $one->price;
+            $one->alipay_orderid = $alipay_orderid;
+            $order         = Order::create([
+                'uid'     => $user->id,
+                'type'    => Order::TYPE_DEL_PAID,
+                'orderid' => get_order_id(),
+                'price'   => $one->price,
+                'rate'    => gconfig('rmbtogold'),
+                'status'  => Order::STATUS_PAID
+            ]);
+            Bill::create([
+                'uid'     => $user->id,
+                'oid'     => $order->id,
+                'type'    => Bill::TYPE_DEL_PAID,
+                'orderid' => $order->orderid,
+                'in'      => $one->price,
+                'rate'    => gconfig('rmbtogold'),
+            ]);
+            $user->save();
+            $one->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('订单异常补偿：');
+            Log::error($e);
+            throw new MsgException();
         }
     }
 
