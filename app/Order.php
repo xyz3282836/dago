@@ -12,17 +12,21 @@ use App\Events\CfResults;
 use App\Exceptions\MsgException;
 use Auth;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class Order extends Model
 {
-    const STATUS_DEL          = 0;//已删除
-    const STATUS_UNPAID       = 1;//待付款
-    const STATUS_PAID         = 2;//已付款
-    const STATUS_UNDERWAY     = 3;//进行中
-    const STATUS_FULL_SUCCESS = 4;//全部完成
-    const STATUS_FULL_FAILURE = 5;//全部失败
-    const STATUS_PART_FAILURE = 6;//部分失败
+    const STATUS_DEL            = 0;//已删除
+    const STATUS_UNPAID         = 1;//待付款
+    const STATUS_PAID           = 2;//已付款
+    const STATUS_UNDERWAY       = 3;//进行中
+    const STATUS_FULL_SUCCESS   = 4;//全部完成
+    const STATUS_FULL_FAILURE   = 5;//全部失败
+    const STATUS_PART_FAILURE   = 6;//部分失败
+    const STATUS_UNDONE_WAITING = 7;//未完全付款等待阶段
+    const STATUS_FROZEN         = 8;//下单后冻结时间
 
     const TYPE_RECHARGE = 1;//充值
     const TYPE_CONSUME  = 2;//消费
@@ -129,8 +133,10 @@ class Order extends Model
             ]);
             DB::commit();
         } catch (\Throwable $e) {
+            Log::error('回调充值支付失败：');
+            Log::error($e);
             DB::rollBack();
-            throw new MsgException($e);
+            throw new Exception();
         }
     }
 
@@ -237,10 +243,10 @@ class Order extends Model
     public static function payOrder(self $one, $alipay_orderid)
     {
         $user = User::find($one->uid);
-        $list = ClickFarm::where('oid', $one->id)->get();
+//        $list = ClickFarm::where('oid', $one->id)->get();
         DB::beginTransaction();
         try {
-            $one->status         = self::STATUS_PAID;
+            $one->status         = self::STATUS_FROZEN;
             $one->alipay_orderid = $alipay_orderid;
             $one->save();
             $user->lock_golds   = $user->lock_golds - $one->golds;
@@ -258,12 +264,55 @@ class Order extends Model
                 'gout'           => $one->golds,
                 'rate'           => gconfig('rmbtogold'),
             ]);
-            foreach ($list as $model) {
-                event(new CfResults($model));
-            }
+//            foreach ($list as $model) {
+//                event(new CfResults($model));
+//            }
+            DB::commit();
+        } catch (\Throwable $e) {
+            Log::error('回调消费支付失败：');
+            Log::error($e);
+            DB::rollBack();
+            throw new Exception();
+        }
+    }
+
+    /**
+     * 下单后取消订单
+     * @throws MsgException
+     */
+    public static function afterChargeback(self $one)
+    {
+        $user = Auth::user();
+        DB::beginTransaction();
+        try {
+            $user->balance += $one->price;
+            $user->golds   += $one->golds;
+            $one->status   = Order::STATUS_DEL;
+            $order         = Order::create([
+                'uid'     => $user->id,
+                'type'    => Order::TYPE_REFUND,
+                'orderid' => get_order_id(),
+                'price'   => $one->price,
+                'golds'   => $one->golds,
+                'rate'    => gconfig('rmbtogold'),
+                'status'  => Order::STATUS_PAID
+            ]);
+            Bill::create([
+                'uid'     => $user->id,
+                'oid'     => $order->id,
+                'type'    => Bill::TYPE_REFUND,
+                'orderid' => $order->orderid,
+                'in'      => $one->price,
+                'gin'     => $one->golds,
+                'rate'    => gconfig('rmbtogold'),
+            ]);
+            $user->save();
+            $one->save();
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
+            Log::error('下单后取消订单：');
+            Log::error($e);
             throw new MsgException();
         }
     }
@@ -293,7 +342,7 @@ class Order extends Model
                 'price'        => $price,
                 'golds'        => $golds,
                 'rate'         => gconfig('rmbtogold'),
-                'status'       => self::STATUS_PAID
+                'status'       => self::STATUS_FROZEN
             ]);
             Bill::create([
                 'uid'     => $user->id,
@@ -307,11 +356,12 @@ class Order extends Model
                 $model->oid    = $one->id;
                 $model->status = 2;
                 $model->save();
-                event(new CfResults($model));
+                //event(new CfResults($model));
             }
             DB::commit();
             return $one;
         } catch (\Throwable $e) {
+            Log::error($e);
             DB::rollBack();
             throw new MsgException();
         }
@@ -352,7 +402,8 @@ class Order extends Model
             return true;
         } catch (\Throwable $e) {
             DB::rollBack();
-            report($e);
+            //report($e);
+            Log::error($e);
             return false;
         }
     }
@@ -382,9 +433,9 @@ class Order extends Model
      */
     public static function delOrder(self $order)
     {
-        $user = Auth::user();
         DB::beginTransaction();
         try {
+            $user               = $order->user;
             $user->lock_golds   = $user->lock_golds - $order->golds;
             $user->lock_balance = $user->lock_balance - $order->balance;
             $user->save();
@@ -397,6 +448,27 @@ class Order extends Model
         }
     }
 
+    /**
+     * 支付后执行子任务
+     * @param Order $order
+     */
+    public static function dealOrder(self $order)
+    {
+        DB::beginTransaction();
+        try {
+            $order->status = Order::STATUS_PAID;
+            $list         = ClickFarm::where('oid', $order->id)->get();
+            foreach ($list as $model) {
+                event(new CfResults($model));
+            }
+            $order->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('支付后执行子任务');
+            Log::error($e);
+        }
+    }
 
     public function cfs()
     {
@@ -408,6 +480,11 @@ class Order extends Model
         return $this->hasOne(CfResults::class, 'oid');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'uid');
+    }
+
     public function getTypeTextAttribute()
     {
         $arr = config('linepro.order_type');
@@ -417,6 +494,9 @@ class Order extends Model
     public function getStatusTextAttribute()
     {
         $arr = config('linepro.order_status');
+        if (!isset($arr[$this->status])) {
+            return '未定义';
+        }
         return $arr[$this->status];
     }
 

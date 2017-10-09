@@ -184,7 +184,7 @@ class CfController extends Controller
     }
 
     /**
-     * 购物车车删除
+     * 购物车删除
      * @return string
      */
     public function postCancle()

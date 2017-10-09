@@ -4,6 +4,9 @@ namespace App\Console;
 
 use App\CfResult;
 use App\ExchangeRate;
+use App\Gconfig;
+use App\Order;
+use Cache;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -27,11 +30,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            $this->getRate();
-        })->daily();
+//        $schedule->call(function () {
+//            $this->getRate();
+//        })->daily();
+
         $schedule->call(function () {
             $this->dealRefund();
+        })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            $this->makeCfr();
+        })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            $this->makeRefund();
         })->everyFiveMinutes();
     }
 
@@ -82,13 +94,26 @@ class Kernel extends ConsoleKernel
     }
 
     /**
-     * 退款
+     * cfr失败退款
      */
     private function dealRefund()
     {
         $list = CfResult::where('status', 0)->get();
         foreach ($list as $v) {
             $v->refund();
+        }
+    }
+
+    /**
+     * 已经支付的执行子任务
+     */
+    private function makeCfr()
+    {
+        $list = Order::where('status', Order::STATUS_FROZEN)->get();
+        foreach ($list as $v) {
+            if (strtotime($v->updated_at) + 60 * $this->gconfig('order.afterpay.frozentime') < time()) {
+                Order::dealOrder($v);
+            }
         }
     }
 
@@ -102,5 +127,28 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    /**
+     * 未支付超时退单
+     */
+    private function makeRefund()
+    {
+        $list = Order::where('status', Order::STATUS_UNPAID)->get();
+        foreach ($list as $v) {
+            if (strtotime($v->updated_at) + 60 * $this->gconfig('order.beforpay.frozentime') < time()) {
+                Order::delOrder($v);
+            }
+        }
+    }
+
+    private function gconfig($key)
+    {
+        $value = Cache::get($key, false);
+        if ($value === false) {
+            $value = Gconfig::where('key', $key)->value('value');
+            Cache::forever($key, $value);
+        }
+        return $value;
     }
 }
