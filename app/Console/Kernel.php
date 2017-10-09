@@ -45,11 +45,6 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $this->makeRefund();
         })->everyFiveMinutes();
-
-        $schedule->call(function () {
-            $model = Order::where('orderid', '201710092313132023316050')->first();
-            Order::errorBack($model, '2017100921001004030321233303');
-        })->daily();
     }
 
     /**
