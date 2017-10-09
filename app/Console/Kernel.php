@@ -4,7 +4,9 @@ namespace App\Console;
 
 use App\CfResult;
 use App\ExchangeRate;
+use App\Gconfig;
 use App\Order;
+use Cache;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -109,7 +111,7 @@ class Kernel extends ConsoleKernel
     {
         $list = Order::where('status', Order::STATUS_FROZEN)->get();
         foreach ($list as $v) {
-            if (strtotime($v->updated_at) + 60 * gconfig('order.afterpay.frozentime') < time()) {
+            if (strtotime($v->updated_at) + 60 * $this->gconfig('order.afterpay.frozentime') < time()) {
                 Order::dealOrder($v);
             }
         }
@@ -134,9 +136,19 @@ class Kernel extends ConsoleKernel
     {
         $list = Order::where('status', Order::STATUS_UNPAID)->get();
         foreach ($list as $v) {
-            if (strtotime($v->updated_at) + 60 * gconfig('order.beforpay.frozentime') < time()) {
+            if (strtotime($v->updated_at) + 60 * $this->gconfig('order.beforpay.frozentime') < time()) {
                 Order::delOrder($v);
             }
         }
+    }
+
+    private function gconfig($key)
+    {
+        $value = Cache::get($key, false);
+        if ($value === false) {
+            $value = Gconfig::where('key', $key)->value('value');
+            Cache::forever($key, $value);
+        }
+        return $value;
     }
 }

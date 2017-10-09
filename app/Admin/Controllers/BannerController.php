@@ -64,7 +64,7 @@ class BannerController extends Controller
     public function form($type = 1)
     {
         return Admin::form(Banner::class, function (Form $form) use ($type) {
-            $form->radio('type', '图片类型')->options(['1' => 'Banner(1920x600)', '2' => 'Logo(100x50)', '3' => '购物车页banner', '4' => '新建页面banner', '5' => '充值页面图片(750x400)'])->default('1')->rules('required');
+            $form->radio('type', '图片类型')->options(['1' => 'Banner(1920x600)', '2' => 'Logo(100x50)', '3' => '购物车页banner', '4' => '新建页面banner', '5' => '充值页面图片'])->default('1')->rules('required');
             switch ($type) {
                 case 1:
                     $form->text('title', '图片标题')->default('banner')->rules('required');
@@ -81,7 +81,7 @@ class BannerController extends Controller
                     break;
                 case 5:
                     $form->text('title', '充值页面图片')->default('')->rules('required');
-                    $form->image('pic', '图片')->resize(750, 400)->uniqueName()->move('banner')->rules('required|dimensions:min_width=750,min_height=400');
+                    $form->image('pic', '图片')->uniqueName()->move('banner')->rules('required');
                     break;
                 default:
                     return false;
