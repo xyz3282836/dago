@@ -46,30 +46,6 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $this->makeRefund();
         })->everyFiveMinutes();
-
-        $schedule->call(function () {
-            $arr = [21596,21570,21547,21535,21531,21516,21439,21436,21413,21392,21322,21321,21317];
-
-            foreach ($arr as $v) {
-                \DB::transaction(function () use($v){
-                    $order = Order::find($v);
-                    if($order){
-                        $user = User::find($order->uid);
-                        $bill = Bill::where('orderid',$order->orderid)->first();
-                        $old = $user->balance;
-                        $user->balance -= $order->price;
-                        $user->save();
-
-                        $bill->delete();
-                        $order->delete();
-                        Log::error('uid为'.$user->id.'的用户原始账号余额'.$old.' 还原后，余额'.$user->balance);
-                    }
-
-                });
-
-
-            }
-        })->daily();
     }
 
     /**
