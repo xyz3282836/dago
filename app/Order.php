@@ -467,6 +467,19 @@ class Order extends Model
     }
 
     /**
+     * 未支付超时退单
+     */
+    public static function makeRefund()
+    {
+        $list = self::where('status', self::STATUS_UNPAID)->get();
+        foreach ($list as $v) {
+            if (strtotime($v->updated_at) + 60 * gconfig('order.beforpay.frozentime') < time()) {
+                self::delOrder($v);
+            }
+        }
+    }
+
+    /**
      * 删除订单
      * @param Order $order
      * @throws MsgException
@@ -485,6 +498,19 @@ class Order extends Model
         } catch (\Throwable $e) {
             DB::rollBack();
             throw new MsgException();
+        }
+    }
+
+    /**
+     * 已经支付的执行子任务
+     */
+    public static function makeCfr()
+    {
+        $list = self::where('status', self::STATUS_FROZEN)->get();
+        foreach ($list as $v) {
+            if (strtotime($v->updated_at) + 60 * gconfig('order.afterpay.frozentime') < time()) {
+                self::dealOrder($v);
+            }
         }
     }
 
