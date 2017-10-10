@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Faq;
+use App\Order;
 
 class IndexController extends Controller
 {
@@ -21,7 +22,8 @@ class IndexController extends Controller
      */
     public function getInfo()
     {
-        phpinfo();
+        Order::makeCfr();
+//        phpinfo();
     }
 
     public function captcha()
