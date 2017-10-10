@@ -579,7 +579,7 @@ class Order extends Model
 
     public function scopeType($query, $type)
     {
-        if (!in_array($type, [self::TYPE_RECHARGE, self::TYPE_CONSUME, self::TYPE_REFUND])) {
+        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7])) {
             return $query;
         }
 
