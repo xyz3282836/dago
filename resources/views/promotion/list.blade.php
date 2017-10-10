@@ -29,7 +29,7 @@
                                     <img src="{{URL::asset('img/promotion.gif')}}" alt="">
                                 </i-Col>
                                 <i-Col span="12">
-                                    {{\App\Faq::getFaq(18)}}
+                                    {{\App\Faq::getFaqA(18)}}
                                 </i-Col>
                             </Row>
                             <span slot="close">我知道了</span>
