@@ -472,7 +472,7 @@ class Order extends Model
     public static function makeRefund()
     {
         $list = self::where('status', self::STATUS_UNPAID)->get();
-        $time = gconfig('order.beforpay.frozentime');
+        $time = gconfig('order.beforepay.frozentime');
         Log::error($time);
         foreach ($list as $v) {
             if (strtotime($v->updated_at) + 60 * $time < time()) {
