@@ -151,7 +151,11 @@
                                                     <td>{{$vv->amount}} 元</td>
                                                     <td>
                                                         @if($v->status > 1)
-                                                        <a class="btn btn-primary btn-sm" href="{{url('viewclickfarm/'.$vv->id)}}">详情</a>
+                                                            @if($v->status == 8)
+                                                                代下单任务派遣中，这几分钟内仍然可以取消订单哟~
+                                                                @else
+                                                                <a class="btn btn-primary btn-sm" href="{{url('viewclickfarm/'.$vv->id)}}">详情</a>
+                                                            @endif
                                                         @endif
                                                     </td>
                                                 </tr>

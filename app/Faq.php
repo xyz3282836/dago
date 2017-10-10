@@ -34,4 +34,13 @@ class Faq extends Model
         }
     }
 
+    public static function getFaqA($id){
+        $arr = self::getFaqs();
+        if(isset($arr[$id])){
+            return $arr[$id]['a'];
+        }else{
+            return '';
+        }
+    }
+
 }

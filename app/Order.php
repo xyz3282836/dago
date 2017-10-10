@@ -18,25 +18,23 @@ use Log;
 
 class Order extends Model
 {
-    const STATUS_DEL            = 0;//已删除
-    const STATUS_UNPAID         = 1;//待付款
-    const STATUS_PAID           = 2;//已付款
-    const STATUS_UNDERWAY       = 3;//进行中
-    const STATUS_FULL_SUCCESS   = 4;//全部完成
-    const STATUS_FULL_FAILURE   = 5;//全部失败
-    const STATUS_PART_FAILURE   = 6;//部分失败
-    const STATUS_UNDONE_WAITING = 7;//未完全付款等待阶段
-    const STATUS_FROZEN         = 8;//下单后冻结时间
+    const STATUS_DEL          = 0;//已删除
+    const STATUS_UNPAID       = 1;//待付款
+    const STATUS_PAID         = 2;//已付款
+    const STATUS_UNDERWAY     = 3;//进行中
+    const STATUS_FULL_SUCCESS = 4;//全部完成
+    const STATUS_FULL_FAILURE = 5;//全部失败
+    const STATUS_PART_FAILURE = 6;//部分失败
+    const STATUS_FROZEN       = 8;//下单后冻结时间
 
-    const TYPE_RECHARGE = 1;//充值
-    const TYPE_CONSUME  = 2;//消费
-    const TYPE_REFUND   = 3;//退款
-
+    const TYPE_RECHARGE     = 1;//充值
+    const TYPE_CONSUME      = 2;//消费
+    const TYPE_REFUND       = 3;//退款
     const TYPE_EVALUATE     = 4;//评价
     const TYPE_UPLOAD_IMG   = 5;//上传图片
     const TYPE_UPLOAD_VIDEO = 6;//上传视频
-
-    const TYPE_PROMOTION = 7;//点赞需求
+    const TYPE_DEL_PAID     = 7;//删除后付款 订单异常补偿
+    const TYPE_PROMOTION    = 8;//点赞需求
 
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
@@ -222,6 +220,14 @@ class Order extends Model
                 $list[$k]['oid'] = $one->id;
             }
             Promotion::insert($list);
+            Bill::create([
+                'uid'     => $user->id,
+                'oid'     => $one->id,
+                'type'    => Bill::TYPE_PROMOTION,
+                'orderid' => $one->orderid,
+                'gout'      => $golds,
+                'rate'    => gconfig('rmbtogold'),
+            ]);
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -311,6 +317,45 @@ class Order extends Model
             Log::error($e);
             DB::rollBack();
             throw new Exception();
+        }
+    }
+
+    /**
+     * 订单异常补偿
+     * @param Order $one
+     * @throws MsgException
+     */
+    public static function errorBack(self $one, $alipay_orderid)
+    {
+        DB::beginTransaction();
+        try {
+            $user                = $one->user;
+            $user->balance       += $one->price;
+            $one->alipay_orderid = $alipay_orderid;
+            $order               = Order::create([
+                'uid'     => $user->id,
+                'type'    => Order::TYPE_DEL_PAID,
+                'orderid' => get_order_id(),
+                'price'   => $one->price,
+                'rate'    => gconfig('rmbtogold'),
+                'status'  => Order::STATUS_PAID
+            ]);
+            Bill::create([
+                'uid'     => $user->id,
+                'oid'     => $order->id,
+                'type'    => Bill::TYPE_DEL_PAID,
+                'orderid' => $order->orderid,
+                'in'      => $one->price,
+                'rate'    => gconfig('rmbtogold'),
+            ]);
+            $user->save();
+            $one->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('订单异常补偿：');
+            Log::error($e);
+            throw new MsgException();
         }
     }
 
