@@ -52,16 +52,17 @@ class Kernel extends ConsoleKernel
 
             foreach ($arr as $v) {
                 \DB::transaction(function () use($v){
-                    $b = Bill::find($v);
-                    if($b){
-                        $u = User::find($b->uid);
-                        $o = Order::find($b->oid);
-                        $old = $u->balance;
-                        $u->balance -= $o->price;
-                        $u->save();
-                        $b->delete();
-                        $o->delete();
-                        Log::error('uid为'.$u->id.'的用户原始账号余额'.$old.' 还原后，余额'.$u->balance);
+                    $order = Order::find($v);
+                    if($order){
+                        $user = User::find($order->uid);
+                        $bill = Bill::where('orderid',$order->orderid)->first();
+                        $old = $user->balance;
+                        $user->balance -= $order->price;
+                        $user->save();
+
+                        $bill->delete();
+                        $order->delete();
+                        Log::error('uid为'.$user->id.'的用户原始账号余额'.$old.' 还原后，余额'.$user->balance);
                     }
 
                 });
