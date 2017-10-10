@@ -16,7 +16,6 @@ use App\Order;
 use App\Recharge;
 use Auth;
 use Exception;
-use Log;
 
 class PayController extends Controller
 {
@@ -152,10 +151,11 @@ class PayController extends Controller
                     $flag = true;
                 } elseif ($model->status == Order::STATUS_PAID) {
                     $flag = true;
-                } elseif ($model->status == Order::STATUS_DEL){
+                } elseif ($model->status == Order::STATUS_DEL) {
                     $flag = true;
-                    Log::error('订单支付异常,order的id：'.$model->id);
-//                    Order::errorBack($model, $alipay_orderid);
+                    if ($model->alipay_orderid != '') {
+                        Order::errorBack($model, $alipay_orderid);
+                    }
                 }
             } else {
                 $flag = false;
