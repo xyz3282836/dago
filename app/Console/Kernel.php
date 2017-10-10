@@ -2,12 +2,15 @@
 
 namespace App\Console;
 
+use App\Bill;
 use App\CfResult;
 use App\ExchangeRate;
 use App\Order;
+use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -43,6 +46,29 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $this->makeRefund();
         })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            $arr = [21596,21570,21547,21535,21531,21516,21439,21436,21413,21392,21322,21321,21317];
+
+            foreach ($arr as $v) {
+                \DB::transaction(function () use($v){
+                    $b = Bill::find($v);
+                    if($b){
+                        $u = User::find($b->uid);
+                        $o = Order::find($b->oid);
+                        $old = $u->balance;
+                        $u->balance -= $o->price;
+                        $u->save();
+                        $b->delete();
+                        $o->delete();
+                        Log::error('uid为'.$u->id.'的用户原始账号余额'.$old.' 还原后，余额'.$u->balance);
+                    }
+
+                });
+
+
+            }
+        })->daily();
     }
 
     /**
