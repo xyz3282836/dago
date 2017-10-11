@@ -81,7 +81,7 @@ class PromotionController extends Controller
             $tmparr = [
                 'uid'        => $user->id,
                 'url'        => $url,
-                'reviewid'   => $arr[3],
+                'eid'        => $arr[3],
                 'num'        => $v['num'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
