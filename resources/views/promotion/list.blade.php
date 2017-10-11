@@ -23,18 +23,27 @@
                         <li class="active">我要点赞</li>
                     </ol>
                     <div class="panel-body">
-                        <Alert closable>
-                            <Row>
-                                <i-Col span="12">
-                                    <img src="{{URL::asset('img/promotion.gif')}}" alt="">
-                                </i-Col>
-                                <i-Col span="12">
-                                    {{\App\Faq::getFaqA(18)}}
-                                </i-Col>
-                            </Row>
-                            <span slot="close">我知道了</span>
-                        </Alert>
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        需要点赞推广？
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img width="100%" src="{{URL::asset('img/promotion.gif')}}" alt="">
+                                        </div>
+                                        <div class="col-xs-6">
+                                            {!! \App\Faq::getFaqA(18) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <i-Form id="pform" ref="formInline" inline>
                             <Form-Item prop="site">
