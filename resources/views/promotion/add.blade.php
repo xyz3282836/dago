@@ -56,6 +56,12 @@
                         <Row>
                             <i-Col span="8" class-name="text-center">
                                 需求推广review详情链接
+                                <Tooltip placement="top">
+                                    <Icon type="help-circled"></Icon>
+                                    <div slot="content" style="white-space: normal;">
+                                        产品评价区域，点击评价标题，跳转的页面URL地址栏即评价详情链接，页面左上方动图为教程
+                                    </div>
+                                </Tooltip>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
                                 <Icon type="thumbsup"></Icon>或者<Icon type="thumbsdown"></Icon>
@@ -117,16 +123,10 @@
                                 <p>合计结算：<span v-text="allgold"></span><img width="15" src="/img/gold.png"></p>
                             </Form-Item>
                             <Form-Item>
-                                <i-Button type="primary" :loading="loading" @click="handleSubmit('formDynamic')">
-                                    <span v-if="!loading">提交</span>
-                                    <span v-else>Loading...</span>
-                                </i-Button>
+                                <i-Button type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
                                 {{--<i-Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">重置</i-Button>--}}
                             </Form-Item>
                         </i-Form>
-
-
-
                     </div>
                 </div>
             </div>
@@ -137,19 +137,25 @@
 @section('js')
     <script>
         var validateUrl = (rule,value,callback) => {
-            axios.post("{{url('checkpromotionurl')}}", {url:value}).then(function (d) {
-                var data = d.data;
-                if (data.code) {
-                    callback();
-                } else {
-                    callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'))
-                }
-            });
+            var strRegex ='https://www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)/(review|gp/customer-reviews)/[0-9A-Z]+/[\\S]*';
+            var re=new RegExp(strRegex);
+            if (!re.test(value)) {
+                callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'));
+            }else{
+                callback();
+            }
+        {{--axios.post("{{url('checkpromotionurl')}}", {url:value}).then(function (d) {--}}
+                {{--var data = d.data;--}}
+                {{--if (data.code) {--}}
+                    {{--callback();--}}
+                {{--} else {--}}
+                    {{--callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'))--}}
+                {{--}--}}
+            {{--});--}}
         };
         var app = new Vue({
             el: '#app',
             data:{
-                loading: false,
                 goldUp:{{\Auth::user()->getActionGold('eup')}},
                 goldDown:{{\Auth::user()->getActionGold('edown')}},
                 formDynamic: {
@@ -184,19 +190,25 @@
                 handleSubmit (name) {
                     this.$refs[name].validate((valid) => {
                         if (valid) {
-                            this.loading = true;
-                            axios.post("{{url('addpromotion')}}", {data:this.formDynamic.items}).then(res => {
-                                if (res.data.code) {
-                                    this.$Message.success('提交成功!');
-                                    window.location = '/promotionlist';
-                                } else {
-                                    this.$Notice.error({
-                                        title: '提交失败',
-                                        desc: res.data.msg
+                            this.$Modal.confirm({
+                                title: '提交信息正确，确认金币扣减！',
+                                content: '<p>·确认后将进入评价详情预检，请确认评价详情URL准确；</p><p>·提交评价成功后即作下单，金币无法回退</p>',
+                                loading: true,
+                                onOk: () => {
+                                    axios.post("{{url('addpromotion')}}", {data:this.formDynamic.items}).then(res => {
+                                        if (res.data.code) {
+                                            this.$Message.success('提交成功!');
+                                            window.location = '/promotionlist';
+                                        } else {
+                                            this.$Notice.error({
+                                                title: '提交失败',
+                                                desc: res.data.msg
+                                            });
+                                        }
+                                        this.$Modal.remove();
                                     });
                                 }
-                                this.loading = false;
-                            })
+                            });
                         }
                     })
                 },

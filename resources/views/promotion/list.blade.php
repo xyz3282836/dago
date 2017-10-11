@@ -72,8 +72,6 @@
                             </Form-Item>
                         </i-Form>
 
-
-
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -90,7 +88,7 @@
                             <tbody>
                             @forelse($list as $v)
                             <tr>
-                               <td>{{$v->created_at}}</td>
+                               <td>{{substr($v->created_at,0,10)}}</td>
                                <td>
                                    <span class="flag-icon" class="flag-icon-{{$v->flag}}"></span>
                                </td>
@@ -98,15 +96,15 @@
                                <td>{{$v->eid}}</td>
                                <td>
                                     @if($v->type == 1)
-                                        {{$v->num}}个<Icon type="thumbsup"></Icon>
+                                        {{$v->num}}个 <Icon type="thumbsup" size="16"></Icon>
                                     @else
-                                       {{$v->num}}个<Icon type="thumbsdown"></Icon>
+                                       {{$v->num}}个 <Icon type="thumbsdown" size="16"></Icon>
                                     @endif
                                </td>
                                <td>{{$v->golds}} <img width="12" src="/img/gold.png" /></td>
                                <td>{{$v->status_text}}</td>
                                <td>
-
+                                   <a target="_blank" href="{{$v->url}}">查看效果</a>
                                </td>
                             </tr>
                             @empty
