@@ -2,14 +2,15 @@
 
 namespace App\Console;
 
+use App\Bill;
 use App\CfResult;
 use App\ExchangeRate;
-use App\Gconfig;
 use App\Order;
-use Cache;
+use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -45,6 +46,45 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $this->makeRefund();
         })->everyFiveMinutes();
+    }
+
+    /**
+     * cfr失败退款
+     */
+    private function dealRefund()
+    {
+        $list = CfResult::where('status', 0)->get();
+        foreach ($list as $v) {
+            $v->refund();
+        }
+    }
+
+    /**
+     * 已经支付的执行子任务
+     */
+    private function makeCfr()
+    {
+        Order::makeCfr();
+    }
+
+    /**
+     * 未支付超时退单
+     */
+    private function makeRefund()
+    {
+        Order::makeRefund();
+    }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__ . '/Commands');
+
+        require base_path('routes/console.php');
     }
 
     /**
@@ -91,64 +131,5 @@ class Kernel extends ConsoleKernel
         $sign    = strtolower(md5($signStr));
         $paraStr .= 'showapi_sign=' . $sign;
         return $paraStr;
-    }
-
-    /**
-     * cfr失败退款
-     */
-    private function dealRefund()
-    {
-        $list = CfResult::where('status', 0)->get();
-        foreach ($list as $v) {
-            $v->refund();
-        }
-    }
-
-    /**
-     * 已经支付的执行子任务
-     */
-    private function makeCfr()
-    {
-        $list = Order::where('status', Order::STATUS_FROZEN)->get();
-        foreach ($list as $v) {
-            if (strtotime($v->updated_at) + 60 * $this->gconfig('order.afterpay.frozentime') < time()) {
-                Order::dealOrder($v);
-            }
-        }
-    }
-
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
-    protected function commands()
-    {
-        $this->load(__DIR__ . '/Commands');
-
-        require base_path('routes/console.php');
-    }
-
-    /**
-     * 未支付超时退单
-     */
-    private function makeRefund()
-    {
-        $list = Order::where('status', Order::STATUS_UNPAID)->get();
-        foreach ($list as $v) {
-            if (strtotime($v->updated_at) + 60 * $this->gconfig('order.beforpay.frozentime') < time()) {
-                Order::delOrder($v);
-            }
-        }
-    }
-
-    private function gconfig($key)
-    {
-        $value = Cache::get($key, false);
-        if ($value === false) {
-            $value = Gconfig::where('key', $key)->value('value');
-            Cache::forever($key, $value);
-        }
-        return $value;
     }
 }

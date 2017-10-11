@@ -510,6 +510,20 @@ class Order extends Model
     }
 
     /**
+     * 未支付超时退单
+     */
+    public static function makeRefund()
+    {
+        $list = self::where('status', self::STATUS_UNPAID)->get();
+//        $time = gconfig('order.beforepay.frozentime');
+        foreach ($list as $v) {
+            if ((strtotime($v->updated_at) + 60 * 10080) < time()) {
+                self::delOrder($v);
+            }
+        }
+    }
+
+    /**
      * 删除订单
      * @param Order $order
      * @throws MsgException
@@ -528,6 +542,20 @@ class Order extends Model
         } catch (\Throwable $e) {
             DB::rollBack();
             throw new MsgException();
+        }
+    }
+
+    /**
+     * 已经支付的执行子任务
+     */
+    public static function makeCfr()
+    {
+        $list = self::where('status', self::STATUS_FROZEN)->get();
+//        $time = gconfig('order.afterpay.frozentime');
+        foreach ($list as $v) {
+            if ((strtotime($v->updated_at) + 60 * 5) < time()) {
+                self::dealOrder($v);
+            }
         }
     }
 
@@ -596,7 +624,7 @@ class Order extends Model
 
     public function scopeType($query, $type)
     {
-        if (!in_array($type, [self::TYPE_RECHARGE, self::TYPE_CONSUME, self::TYPE_REFUND])) {
+        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7])) {
             return $query;
         }
 
