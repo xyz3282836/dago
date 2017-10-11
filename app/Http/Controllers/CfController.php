@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Banner;
 use App\CfResult;
 use App\ClickFarm;
+use App\Exceptions\MsgException;
 use App\Order;
 use App\QuotaBill;
 use Auth;
