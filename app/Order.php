@@ -472,10 +472,9 @@ class Order extends Model
     public static function makeRefund()
     {
         $list = self::where('status', self::STATUS_UNPAID)->get();
-        $time = gconfig('order.beforepay.frozentime');
-        Log::error($time);
+//        $time = gconfig('order.beforepay.frozentime');
         foreach ($list as $v) {
-            if ((strtotime($v->updated_at) + 60 * $time) < time()) {
+            if ((strtotime($v->updated_at) + 60 * 10080) < time()) {
                 self::delOrder($v);
             }
         }
@@ -510,10 +509,8 @@ class Order extends Model
     {
         $list = self::where('status', self::STATUS_FROZEN)->get();
 //        $time = gconfig('order.afterpay.frozentime');
-        $time = gconfig('order.beforepay.frozentime');
-        Log::error($time);
         foreach ($list as $v) {
-            if ((strtotime($v->updated_at) + 60 * $time) < time()) {
+            if ((strtotime($v->updated_at) + 60 * 10) < time()) {
                 self::dealOrder($v);
             }
         }
