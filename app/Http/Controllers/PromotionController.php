@@ -74,9 +74,14 @@ class PromotionController extends Controller
         $upgold   = $user->getActionGold('eup');
         $downgold = $user->getActionGold('edown');
         foreach ($list as $v) {
+            $p   = '/https:\/\/www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)\/(review|gp\/customer-reviews)\/([0-9A-Z]+)/';
+            $url = trim($v['url']);
+            $arr = [];
+            preg_match($p, $url, $arr);
             $tmparr = [
                 'uid'        => $user->id,
-                'url'        => $v['url'],
+                'url'        => $url,
+                'reviewid'   => $arr[3],
                 'num'        => $v['num'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

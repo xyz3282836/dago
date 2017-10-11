@@ -55,22 +55,24 @@
 
                         <Row>
                             <i-Col span="8" class-name="text-center">
-                                需求推广review详情链接
-                                <Tooltip placement="top">
-                                    <Icon type="help-circled"></Icon>
-                                    <div slot="content" style="white-space: normal;">
-                                        产品评价区域，点击评价标题，跳转的页面URL地址栏即评价详情链接，页面左上方动图为教程
-                                    </div>
-                                </Tooltip>
+                                <span style="font-size: 16px">
+                                    需求推广review详情链接
+                                    <Tooltip placement="top">
+                                        <Icon type="help-circled"></Icon>
+                                        <div slot="content" style="white-space: normal;">
+                                            产品评价区域，点击评价标题，跳转的页面URL地址栏即评价详情链接，页面左上方动图为教程
+                                        </div>
+                                    </Tooltip>
+                                </span>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
-                                <Icon type="thumbsup"></Icon>或者<Icon type="thumbsdown"></Icon>
+                                <span style="font-size: 16px"><Icon type="thumbsup"></Icon> 或者 <Icon type="thumbsdown"></Icon></span>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
-                                需求数量
+                                <span style="font-size: 16px">点赞需求数量</span>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
-                                需花费金币
+                                <span style="font-size: 16px">需花费金币</span>
                             </i-Col>
                         </Row>
                         <br>
@@ -81,7 +83,7 @@
                                 <i-Col span="8">
                                     <Form-Item
                                             :prop="'items.' + index + '.url'"
-                                            :rules="[{required: true, message: '该评价详情链接不能为空', trigger: 'blur'},{validator:validateUrl, trigger: 'blur'}]">
+                                            :rules="[{required: true, message: '该评价详情链接不能为空', trigger: 'blur'},{type: 'url', message: '必须为正确url', trigger: 'blur'},{validator:validateUrl, trigger: 'blur'}]">
                                         <i-Input type="text" v-model="item.url" placeholder="请输入评价详情链接"></i-Input>
                                     </Form-Item>
                                 </i-Col>
@@ -109,7 +111,12 @@
                                     &nbsp;
                                 </i-Col>
                                 <i-Col span="3" offset="1">
-                                    <i-Button type="ghost" @click="handleRemove(index)" icon="close-round">删除</i-Button>
+                                    <Poptip
+                                            confirm
+                                            title="有未保存的内容，是否确定删除？"
+                                            @on-ok="handleRemove(index)">
+                                        <i-Button type="ghost" icon="close-round">删除</i-Button>
+                                    </Poptip>
                                 </i-Col>
                             </Row>
                             <Form-Item>
@@ -137,7 +144,7 @@
 @section('js')
     <script>
         var validateUrl = (rule,value,callback) => {
-            var strRegex ='https://www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)/(review|gp/customer-reviews)/[0-9A-Z]+/[\\S]*';
+            var strRegex ='https://www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)/(review|gp/customer-reviews)/[0-9A-Z]+';
             var re=new RegExp(strRegex);
             if (!re.test(value)) {
                 callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'));
@@ -191,8 +198,8 @@
                     this.$refs[name].validate((valid) => {
                         if (valid) {
                             this.$Modal.confirm({
-                                title: '提交信息正确，确认金币扣减！',
-                                content: '<p>·确认后将进入评价详情预检，请确认评价详情URL准确；</p><p>·提交评价成功后即作下单，金币无法回退</p>',
+                                title: '确认扣款支付吗？',
+                                content: '提交评价成功后即作下单，金币无法回退',
                                 loading: true,
                                 onOk: () => {
                                     axios.post("{{url('addpromotion')}}", {data:this.formDynamic.items}).then(res => {
