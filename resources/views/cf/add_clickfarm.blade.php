@@ -180,7 +180,7 @@
                                         <input type="hidden" name="from_site" value="{{request('site')}}">
                                         <div class="input-group-addon">{{$ctext}}</div>
                                     </div>
-                                    <span v-show="getUnitPrice < {{gconfig('unitprice')}} && is_fba == 0" class="color-red">商品金额过低，存在刷单风险，请选择其他商品</span>
+                                    <span v-show="(getUnitPrice < {{gconfig('fbm.low.price')}} && is_fba == 0) || (getUnitPrice < {{gconfig('fba.low.price')}} && is_fba == 1)" class="color-red">商品金额过低，存在刷单风险，请选择其他商品</span>
                                     <p class="help-block with-errors"></p>
                                 </div>
                             </div>
