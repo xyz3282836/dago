@@ -70,6 +70,22 @@ class CfController extends Controller
         ]);
 
         $pdata = request()->all();
+
+        switch ($pdata['is_fba']){
+            case 0:
+                if($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fbm.low.price')){
+                    return error('商品金额过低，存在刷单风险，请选择其他商品');
+                }
+                break;
+            case 1:
+                if($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fba.low.price')){
+                    return error('商品金额过低，存在刷单风险，请选择其他商品');
+                }
+                break;
+            default:
+                throw new MsgException();
+        }
+
         if ($pdata['delivery_type'] == 1) {
             $pdata['delivery_addr'] = '';
         }
