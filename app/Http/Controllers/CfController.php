@@ -68,6 +68,7 @@ class CfController extends Controller
             'delivery_type' => 'required|integer',
             'is_fba'        => 'required|integer',
         ]);
+
         $pdata = request()->all();
 
         switch ($pdata['is_fba']){
