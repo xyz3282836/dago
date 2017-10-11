@@ -96,7 +96,7 @@
                                 </i-Col>
                                 <i-Col span="3" offset="1" class-name="text-center">
                                     &nbsp;
-                                    <span v-if="checkNum(item.num)">
+                                    <span v-if="checkNum(item.num)" v-cloak>
                                         <span v-if="item.type == true"> @{{ goldUp }}<img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldUp * item.num) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
                                         <span v-if="item.type == false"> @{{ goldDown }}<img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldDown * item.num).toFixed(0) }}<img width="15" src="/img/gold.png"></span>
                                     </span>

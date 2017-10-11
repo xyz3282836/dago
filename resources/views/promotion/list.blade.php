@@ -68,7 +68,7 @@
                             </Form-Item>
                             <Form-Item>
                                 <i-Button type="primary" @click="handleSubmit">查询</i-Button>
-                                <i-Button type="primary" @click="goadd">发布新点赞需求</i-Button>
+                                <i-Button type="success" @click="goadd">发布新点赞需求</i-Button>
                             </Form-Item>
                         </i-Form>
 
