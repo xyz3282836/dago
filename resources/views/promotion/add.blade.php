@@ -60,7 +60,7 @@
                                     <Tooltip placement="top">
                                         <Icon type="help-circled"></Icon>
                                         <div slot="content" style="white-space: normal;">
-                                            产品评价区域，点击评价标题，跳转的页面URL地址栏即评价详情链接，页面左上方动图为教程
+                                            产品评价区域，点击评价标题，跳转的页面URL地址栏即评价详情链接，页面左上方点击【查看帮助】看教程
                                         </div>
                                     </Tooltip>
                                 </span>
