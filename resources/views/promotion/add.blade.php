@@ -35,7 +35,7 @@
                             <div class="panel-heading" role="tab" id="headingTwo">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        需要点赞推广？
+                                        不知道怎么发布需求？[点击这里查看帮助]
                                     </a>
                                 </h4>
                             </div>
