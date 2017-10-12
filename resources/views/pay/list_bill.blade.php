@@ -15,12 +15,12 @@
 
                         <form class="form-inline margin-bottom-30" action="{{url('billlist')}}" method="get">
                             <div class="form-group">
-                                <Date-Picker :editable="false" :on-change="dates(date)" size="large" type="daterange" v-model="date"  :options="options2" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                <Date-Picker :editable="false" :on-change="dates(date)" size="large" type="daterange" v-model="date" :options="options2" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
                                 <input type="hidden" name="start" v-model="start">
                                 <input type="hidden" name="end" v-model="end">
                             </div>
                             <div class="form-group">
-                                <i-Select v-model="type" style="width:110px" size="large">
+                                <i-Select v-model="type" style="width:120px" size="large">
                                     <i-Option v-for="(v,k) in typec" :value="k" :key="k" v-cloak>@{{ v }}</i-Option>
                                 </i-Select>
                                 <input type="hidden" name="type" v-model="type">
