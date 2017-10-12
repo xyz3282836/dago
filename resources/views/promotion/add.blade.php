@@ -130,7 +130,8 @@
                                 <p>合计结算：<span v-text="allgold"></span><img width="15" src="/img/gold.png"></p>
                             </Form-Item>
                             <Form-Item>
-                                <i-Button type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
+                                <i-Button {{$btn}} type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
+                                <span class="color-red" v-if="'{{$btn}}' == 'disabled'" v-text="'{{\app\Action::where('name', 'eup')->value('auth_desc')}}'"></span>
                                 {{--<i-Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">重置</i-Button>--}}
                             </Form-Item>
                         </i-Form>

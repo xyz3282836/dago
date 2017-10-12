@@ -56,7 +56,11 @@ class PromotionController extends Controller
 
     public function add()
     {
-        return view('promotion.add');
+        $btndisable = '';
+        if (!Auth::user()->checkAction('eup')) {
+            $btndisable = 'disabled';
+        }
+        return view('promotion.add')->with('btn', $btndisable);
     }
 
     public function postAdd()
@@ -78,11 +82,40 @@ class PromotionController extends Controller
             $url = trim($v['url']);
             $arr = [];
             preg_match($p, $url, $arr);
+            switch ($arr[1]) {
+                case 'com':
+                    $site = 1;
+                    break;
+                case 'ca':
+                    $site = 2;
+                    break;
+                case 'co.uk':
+                    $site = 3;
+                    break;
+                case 'de':
+                    $site = 4;
+                    break;
+                case 'fr':
+                    $site = 5;
+                    break;
+                case 'co.jp':
+                    $site = 6;
+                    break;
+                case 'es':
+                    $site = 8;
+                    break;
+                case 'it':
+                    $site = 10;
+                    break;
+                default:
+                    $site = 0;
+            }
             $tmparr = [
                 'uid'        => $user->id,
                 'url'        => $url,
                 'eid'        => $arr[3],
                 'num'        => $v['num'],
+                'from_site'  => $site,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];

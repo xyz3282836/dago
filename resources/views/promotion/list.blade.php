@@ -90,9 +90,9 @@
                             <tr>
                                <td>{{substr($v->created_at,0,10)}}</td>
                                <td>
-                                   <span class="flag-icon" class="flag-icon-{{$v->flag}}"></span>
+                                   <span class="flag-icon flag-icon-{{$v->flag}}"></span>
                                </td>
-                               <td>{{$v->asin}}</td>
+                               <td v-text="'{{$v->asin}}' == ''? '获取中':'{{$v->asin}}'"></td>
                                <td>{{$v->eid}}</td>
                                <td>
                                     @if($v->type == 1)
