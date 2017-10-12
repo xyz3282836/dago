@@ -61,6 +61,9 @@ class Banner extends Model
     public function getTypeTextAttribute()
     {
         $arr = config('linepro.banner_type_text');
+        if (!isset($arr[$this->type])) {
+            return '未定义';
+        }
         return $arr[$this->type];
     }
 

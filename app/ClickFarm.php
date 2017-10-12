@@ -22,30 +22,45 @@ class ClickFarm extends Model
         if (Auth::user()->level == 1) {
             return $arr[0];
         }
+        if (!isset($arr[$this->search_type])) {
+            return '未定义';
+        }
         return $arr[$this->search_type];
     }
 
     public function getFbaTextAttribute()
     {
         $arr = config('linepro.cf_fba');
+        if (!isset($arr[$this->is_fba])) {
+            return '未定义';
+        }
         return $arr[$this->is_fba];
     }
 
     public function getStatusTextAttribute()
     {
         $arr = config('linepro.cf_status');
+        if (!isset($arr[$this->status])) {
+            return '未定义';
+        }
         return $arr[$this->status];
     }
 
     public function getDeliveryTypeTextAttribute()
     {
         $arr = config('linepro.delivery_type');
+        if (!isset($arr[$this->delivery_type])) {
+            return '未定义';
+        }
         return $arr[$this->delivery_type];
     }
 
     public function getFromSiteTextAttribute()
     {
         $arr = config('linepro.from_site');
+        if (!isset($arr[$this->from_site])) {
+            return '未定义';
+        }
         return $arr[$this->from_site];
     }
 
@@ -57,6 +72,9 @@ class ClickFarm extends Model
     public function getTimeTypeTextAttribute()
     {
         $arr = config('linepro.time_type');
+        if (!isset($arr[$this->time_type])) {
+            return '未定义';
+        }
         return $arr[$this->time_type];
     }
 

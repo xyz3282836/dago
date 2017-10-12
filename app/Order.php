@@ -599,6 +599,9 @@ class Order extends Model
     public function getTypeTextAttribute()
     {
         $arr = config('linepro.order_type');
+        if (!isset($arr[$this->type])) {
+            return '未定义';
+        }
         return $arr[$this->type];
     }
 
@@ -614,6 +617,9 @@ class Order extends Model
     public function getPaymentTypeTextAttribute()
     {
         $arr = config('linepro.order_ptype');
+        if (!isset($arr[$this->payment_type])) {
+            return '未定义';
+        }
         return $arr[$this->payment_type];
     }
 

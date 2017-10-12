@@ -50,6 +50,9 @@ class Bill extends Model
     public function getTypeTextAttribute()
     {
         $arr = config('linepro.bill_type');
+        if (!isset($arr[$this->type])) {
+            return '未定义';
+        }
         return $arr[$this->type];
     }
 

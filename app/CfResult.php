@@ -131,6 +131,9 @@ class CfResult extends Model
     public function getEstatusTextAttribute()
     {
         $arr = config('linepro.cfresult_estatuss');
+        if (!isset($arr[$this->estatus])) {
+            return '未定义';
+        }
         return $arr[$this->estatus];
     }
 
