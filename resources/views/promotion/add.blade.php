@@ -105,8 +105,8 @@
                                 <i-Col span="3" offset="1" class-name="text-center">
                                     &nbsp;
                                     <span v-if="checkNum(item.num)" v-cloak>
-                                        <span v-if="item.type == true"> @{{ goldUp }}<img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldUp * item.num) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
-                                        <span v-if="item.type == false"> @{{ goldDown }}<img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldDown * item.num).toFixed(0) }}<img width="15" src="/img/gold.png"></span>
+                                        <span v-if="item.type == true"> @{{ goldUp }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldUp * item.num) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
+                                        <span v-if="item.type == false"> @{{ goldDown }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldDown * item.num).toFixed(0) }}<img width="15" src="/img/gold.png"></span>
                                     </span>
                                     &nbsp;
                                 </i-Col>
@@ -127,7 +127,7 @@
                                 </Row>
                             </Form-Item>
                             <Form-Item>
-                                <p>合计结算：<span v-text="allgold"></span><img width="15" src="/img/gold.png"></p>
+                                <p>合计结算：<span v-text="allgold"></span> <img width="15" src="/img/gold.png"></p>
                             </Form-Item>
                             <Form-Item>
                                 <i-Button {{$btn}} type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
