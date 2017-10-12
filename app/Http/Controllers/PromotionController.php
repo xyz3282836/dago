@@ -42,7 +42,11 @@ class PromotionController extends Controller
             $list = $list->where('from_site', $site);
         }
         if ($status != 'all') {
-            $list = $list->where('status', $status);
+            if($status == 1){
+                $list = $list->whereIn('status', [1, 2]);
+            }else{
+                $list = $list->where('status', $status);
+            }
         }
         $list = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         return view('promotion.list')->with([
