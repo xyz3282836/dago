@@ -220,3 +220,10 @@ function diffBetweenTwoDays($day1, $day2)
     }
     return ($second2 - $second1) / 86400 + 1;
 }
+
+function msectime()
+{
+    list($msec, $sec) = explode(' ', microtime());
+    $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+    return $msectime;
+}

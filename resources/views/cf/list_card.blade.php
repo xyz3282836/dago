@@ -173,7 +173,7 @@
                 plantype:'once',
                 options3: {
                     disabledDate (date) {
-                        return date && date.valueOf() < Date.now() - 86400000;
+                        return date && date.valueOf() < {{msectime()}} - 86400000;
                     }
                 },
                 startd:'{{date('Y-m-d')}}',
