@@ -133,7 +133,7 @@
                                     </Radio-Group>
                                 </Form-Item>
                                 <Form-Item label="安排代购时间" v-if="plantype == 'cycle'">
-                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                    <Date-Picker :editable="false" confirm :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
                                 </Form-Item>
                             </i-Form>
                         </Card>
