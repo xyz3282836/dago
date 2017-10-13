@@ -312,7 +312,7 @@
                 this.$nextTick(() => {
                     this.list.forEach((v, k) => {
                         this.allids.push(v.id)
-                        });
+                        })
                     this.ids = this.allids
                     }
                 )
