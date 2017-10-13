@@ -211,6 +211,9 @@ class PayController extends Controller
         }
         //金币不够
         if ($ptype == 'cycle') {
+            if (strtotime($start) > strtotime($end)) {
+                return error('开始时间不能大于结束时间');
+            }
             $days  = diffBetweenTwoDays($start, $end);
             $golds *= $days;
             $price *= $days;

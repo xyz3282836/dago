@@ -123,7 +123,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <Card style="width:350px">
+                        <Card style="width:370px">
                             <p slot="title">计划任务</p>
                             <i-Form>
                                 <Form-Item>
@@ -132,8 +132,12 @@
                                         <Radio label="cycle">周期性任务</Radio>
                                     </Radio-Group>
                                 </Form-Item>
+                                {{--<Form-Item label="安排代购时间" v-if="plantype == 'cycle'">--}}
+                                    {{--<Date-Picker :editable="false" confirm :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>--}}
+                                {{--</Form-Item>--}}
                                 <Form-Item label="安排代购时间" v-if="plantype == 'cycle'">
-                                    <Date-Picker :editable="false" confirm :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="date" v-model="date[0]" :options="options3" placement="bottom-start" placeholder="选择开始日期" style="width: 120px"></Date-Picker>
+                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="date" v-model="date[1]" :options="options3" placement="bottom-start" placeholder="选择结束日期" style="width: 120px"></Date-Picker>
                                 </Form-Item>
                             </i-Form>
                         </Card>
@@ -286,7 +290,10 @@
                     this.ids.forEach((v) => {
                         price += Number(this.cardlist[v].amount);
                     });
-                    var days = this.dateDiff(this.startd,this.endd);
+                    var days = 1;
+                    if(this.plantype == 'cycle'){
+                        days = this.dateDiff(this.startd,this.endd);
+                    }
                     return (price * days).toFixed(2);
                 },
                 allGold(){
@@ -294,7 +301,10 @@
                     this.ids.forEach((v) => {
                         golds += Number(this.cardlist[v].golds);
                     });
-                    var days = this.dateDiff(this.startd,this.endd);
+                    var days = 1;
+                    if(this.plantype == 'cycle'){
+                        days = this.dateDiff(this.startd,this.endd);
+                    }
                     return golds * days;
                 }
             },
