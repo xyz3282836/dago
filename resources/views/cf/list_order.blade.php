@@ -112,7 +112,31 @@
                                 </tr>
                                 @if($v->type == 2)
                                 <tr>
-                                    <td></td>
+                                    <td>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <th>下单模式</th>
+                                            <th>商铺ID</th>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($v->cfs as $vv)
+                                                <tr>
+                                                    <td style="height: 136px">
+                                                        <span style="font-size:14px;font-weight:bold;color:#464c5b;">{{$vv->search_type_text}}</span><br>
+                                                        @if($vv->keyword != '')
+                                                            <span>关键词搜索：{{ $vv->keyword }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ $vv->shop_id }}
+                                                        <br>
+                                                        <span style="font-size:16px;font-weight:bold;color:#464c5b;">({{$vv->fba_text}})</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </td>
                                     <td colspan="99">
                                         <table class="table table-bordered">
                                             <thead>

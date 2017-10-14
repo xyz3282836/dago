@@ -123,7 +123,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <Card style="width:370px">
+                        <Card style="width:380px">
                             <p slot="title">计划任务</p>
                             <i-Form>
                                 <Form-Item>
@@ -136,8 +136,8 @@
                                     {{--<Date-Picker :editable="false" confirm :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>--}}
                                 {{--</Form-Item>--}}
                                 <Form-Item label="安排代购时间" v-if="plantype == 'cycle'">
-                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="date" v-model="date[0]" :options="options3" placement="bottom-start" placeholder="选择开始日期" style="width: 120px"></Date-Picker>
-                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="date" v-model="date[1]" :options="options3" placement="bottom-start" placeholder="选择结束日期" style="width: 120px"></Date-Picker>
+                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="date" v-model="date[0]" :options="options3" placement="bottom-start" placeholder="选择开始日期" style="width: 125px"></Date-Picker>
+                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="date" v-model="date[1]" :options="options3" placement="bottom-start" placeholder="选择结束日期" style="width: 125px"></Date-Picker>
                                 </Form-Item>
                             </i-Form>
                         </Card>
@@ -178,9 +178,7 @@
                 },
                 startd:'{{date('Y-m-d')}}',
                 endd:'{{date('Y-m-d')}}',
-                date:[
-                    new Date('{{date('Y-m-d')}}'),new Date('{{date('Y-m-d')}}')
-                ],
+                date:[],
                 grate:{{gconfig('rmbtogold')}},
                 list:{!! $list !!},
                 cardlist:{!! $list->keyBy('id') !!},
@@ -201,8 +199,10 @@
                     return iDays + 1;
                 },
                 dates(date){
-                    this.startd = formatDate(date[0],'yyyy-MM-dd');
-                    this.endd = formatDate(date[1],'yyyy-MM-dd');
+                    if((date[0] != '' && date[0] != undefined) && (date[1] != '' && date[1] != undefined)){
+                        this.startd = formatDate(date[0],'yyyy-MM-dd');
+                        this.endd = formatDate(date[1],'yyyy-MM-dd');
+                    }
                 },
                 payall: function () {
                     var ids = this.ids;
