@@ -147,6 +147,11 @@
                                         </i-Col>
                                     </Row>
                                 </Form-Item>
+                                <Alert type="warning">
+                                    <template slot="desc">
+                                        {!! \App\Faq::getFaqA(19) !!}
+                                    </template>
+                                </Alert>
                             </i-Form>
                         </Card>
                         <div class="pull-right">

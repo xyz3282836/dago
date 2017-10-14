@@ -139,8 +139,10 @@
                                         <input @click="searchprice = {{$s1+$s3}}" type="radio" value="3" name="search_type">添加WishList成交
                                     </label>
                                     @endif
-                                    <p>{{gconfig('vip.keysearch.text')}}</p>
                                     <p class="help-block with-errors"></p>
+                                    <div>
+                                        {!! \App\Faq::getFaqA(20) !!}
+                                    </div>
                                 </div>
                             </div>
 
