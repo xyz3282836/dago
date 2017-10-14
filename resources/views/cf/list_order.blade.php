@@ -116,7 +116,7 @@
                                         <table class="table table-bordered">
                                             <thead>
                                             <th>下单模式</th>
-                                            <th>商铺ID</th>
+                                            <th>商铺名</th>
                                             <th>计划任务时间</th>
                                             </thead>
                                             <tbody>
@@ -129,6 +129,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
+                                                        {{$vv->shop_name}}<br>
                                                         {{ $vv->shop_id }}
                                                         <br>
                                                         <span style="font-size:12px;color:#464c5b;">({{$vv->fba_text}})</span>
