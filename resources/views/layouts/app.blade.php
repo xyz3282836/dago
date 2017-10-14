@@ -172,10 +172,10 @@
 {{--                                    <li><a href="{{ url('addr') }}">达购转运</a></li>--}}
                                 </ul>
                             </li>
-                            <li><a href="{{ url('card') }}"><Icon type="android-cart"></Icon> 购物车</a></li>
+                            <li><a href="{{ url('card') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> 购物车</a></li>
                             <li class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    <Icon type="heart"></Icon> 海淘心愿 <span class="caret"></span>
+                                    <i class="fa fa-heart" aria-hidden="true"></i> 海淘心愿 <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="{{ url('faqs') }}">产品Q&A</a></li>
