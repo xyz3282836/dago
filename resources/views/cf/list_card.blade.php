@@ -95,7 +95,7 @@
                                 <td>
                                     @{{ one.shop_id }}
                                     <br>
-                                    <span style="font-size:16px;font-weight:bold;color:#464c5b;" v-text="'('+one.fba_text+')'"></span>
+                                    <span style="font-size:12px;color:#464c5b;" v-text="'('+one.fba_text+')'"></span>
                                 </td>
                                 <td><span class="flag-icon" :class="'flag-icon-'+one.flag"></span></td>
                                 <td v-text="one.delivery_type_text"></td>

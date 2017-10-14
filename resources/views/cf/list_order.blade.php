@@ -117,6 +117,7 @@
                                             <thead>
                                             <th>下单模式</th>
                                             <th>商铺ID</th>
+                                            <th>计划任务时间</th>
                                             </thead>
                                             <tbody>
                                             @foreach($v->cfs as $vv)
@@ -130,7 +131,11 @@
                                                     <td>
                                                         {{ $vv->shop_id }}
                                                         <br>
-                                                        <span style="font-size:16px;font-weight:bold;color:#464c5b;">({{$vv->fba_text}})</span>
+                                                        <span style="font-size:12px;color:#464c5b;">({{$vv->fba_text}})</span>
+                                                    </td>
+                                                    <td>
+                                                        {{substr($vv->start_time,0,10)}}<br>
+                                                        {{substr($vv->start_time,10,6)}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -148,7 +153,7 @@
                                                 <th>单价</th>
                                                 <th>货币汇率</th>
                                                 <th>商品数量</th>
-                                                <th>转运费</th>
+                                                {{--<th>转运费</th>--}}
                                                 <th>手续费率</th>
                                                 <th>手续费</th>
                                                 <th>合计总价</th>
@@ -169,7 +174,7 @@
                                                     <td>{{$vv->final_price_text}}</td>
                                                     <td>{{$vv->rate}}</td>
                                                     <td>{{$vv->task_num}}</td>
-                                                    <td>{{$vv->transport}} 元</td>
+                                                    {{--<td>{{$vv->transport}} 元</td>--}}
                                                     <td>{{$vv->srate * 100}} %</td>
                                                     <td>{{$vv->golds}} <img width="12" src="/img/gold.png" /></td>
                                                     <td>{{$vv->amount}} 元</td>

@@ -140,9 +140,11 @@
                                     </label>
                                     @endif
                                     <p class="help-block with-errors"></p>
-                                    <div>
-                                        {!! \App\Faq::getFaqA(20) !!}
-                                    </div>
+                                    <Alert type="warning">
+                                        <template slot="desc">
+                                            {!! \App\Faq::getFaqA(20) !!}
+                                        </template>
+                                    </Alert>
                                 </div>
                             </div>
 
