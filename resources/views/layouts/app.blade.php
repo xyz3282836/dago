@@ -225,7 +225,7 @@
         $(function () {
             Ladda.bind( 'table .ladda-button', { timeout: 1500 } );
             Ladda.bind( 'form .btn.ladda-button[type=submit]', { timeout: 3000 } );
-        })
+        });
         function formatDate(date, fmt) {
             if (/(y+)/.test(fmt)) {
                 fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
@@ -244,8 +244,7 @@
                 }
             }
             return fmt;
-        };
-
+        }
         function padLeftZero(str) {
             return ('00' + str).substr(str.length);
         }
