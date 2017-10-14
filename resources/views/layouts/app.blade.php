@@ -193,11 +193,11 @@
                                     </div>
                                     <div class="rows">
                                         <div class="col-xs-6"><a href="javascript:;">{{Auth::user()->balance - Auth::user()->lock_balance}}元</a></div>
-                                        <div class="col-xs-6 rightb"><a href="javascript:;">充值余额</a></div>
+                                        <div class="col-xs-6 rightb"><a href="javascript:;" style="color: gray;">充值余额</a></div>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="rows">
-                                        <div class="col-xs-6"><a href="{{url('orderlist')}}">订单</a></div>
+                                        <div class="col-xs-6"><a href="{{url('billlist')}}">账单</a></div>
                                         <div class="col-xs-6 rightb"><a href="{{ url('rechargelist') }}">充值记录</a></div>
                                         <div class="clearfix"></div>
                                     </div>
@@ -221,6 +221,7 @@
                                     </div>
                                 </div>
                             </li>
+                            <li><a href="{{ url('recharge') }}">升级</a></li>
                         @endif
                         <li><a href="{{ url('faqs') }}">帮助</a></li>
                     </ul>
