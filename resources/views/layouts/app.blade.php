@@ -96,6 +96,21 @@
         [v-cloak] {
             display: none;
         }
+        .dropdown-menu .rows{
+            text-align: center;
+        }
+        .dropdown-menu .rightb{
+            /*border-left: 1px solid #555;*/
+        }
+        .dropdown-menu .col-xs-6,.dropdown-menu .col-xs-12 {
+            padding: 5px;
+        }
+        .dropdown-menu .col-xs-6 a,.dropdown-menu .col-xs-12 a {
+            font-weight: 400;
+            line-height: 1.6;
+            color: #333;
+            white-space: nowrap;
+        }
     </style>
     @yield('css')
     <!-- Scripts -->
@@ -127,81 +142,87 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    @if (!Auth::guest())
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li>
-                            <a href="{{url('card')}}">购物车</a>
-                        </li>
-                        <li>
-                            <a href="{{url('orderlist')}}">我的订单</a>
-                        </li>
-                        <li>
-                            <a href="{{url('mycfrlist')}}">我要评价</a>
-                        </li>
-                        <li>
-                            <a href="{{url('promotionlist')}}">我要点赞</a>
-                        </li>
+                        <li><a href="javascript:;">帮助QQ交流群:238866069</a></li>
                     </ul>
-                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">登入</a></li>
+                            <li><a href="{{ route('login') }}"><i class="fa fa-user-circle" aria-hidden="true"></i> 登入</a></li>
                             <li><a href="{{ route('register') }}">注册</a></li>
                         @else
-                            <li><a href="{{ url('billlist') }}">账单</a></li>
                             <li class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    地址管理 <span class="caret"></span>
+                                    我的海淘 <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('addr') }}">达购转运</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{Auth::user()->role->desc}}
-                                    金币:<span class="color-red font-yahei">{{Auth::user()->golds - Auth::user()->lock_golds}}<img width="15" src="/img/gold.png" /></span>
-                                    <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('recharge') }}">充值金币</a></li>
-                                    <li><a href="{{ url('rechargelist') }}">充值记录</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="{{ url('viplist') }}">会员有效期记录</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                    余额:<span class="color-red font-yahei">{{Auth::user()->balance - Auth::user()->lock_balance}}元</span>
-                                    <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('my') }}">个人资料</a></li>
-                                    <li><a href="{{ url('uppwd') }}">修改密码</a></li>
                                     <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            退出账号
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
+                                        <a href="{{url('orderlist')}}">我的订单</a>
                                     </li>
+                                    <li>
+                                        <a href="{{url('mycfrlist')}}">我要评价</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('promotionlist')}}">我要点赞</a>
+                                    </li>
+{{--                                    <li><a href="{{ url('addr') }}">达购转运</a></li>--}}
                                 </ul>
+                            </li>
+                            <li><a href="{{ url('card') }}"><Icon type="android-cart"></Icon> 购物车</a></li>
+                            <li class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <Icon type="heart"></Icon> 海淘心愿 <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ url('faqs') }}">产品Q&A</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    {{Auth::user()->name}} <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" style="width: 180px;padding:5px">
+                                    <div class="rows">
+                                        <div class="col-xs-6"><a href="javascript:;">{{Auth::user()->golds - Auth::user()->lock_golds}}<img width="15" src="/img/gold.png" /></a></div>
+                                        <div class="col-xs-6 rightb"><a href="{{ url('recharge') }}">充值金币</a></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="rows">
+                                        <div class="col-xs-6"><a href="javascript:;">{{Auth::user()->balance - Auth::user()->lock_balance}}元</a></div>
+                                        <div class="col-xs-6 rightb"><a href="javascript:;">充值余额</a></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="rows">
+                                        <div class="col-xs-6"><a href="{{url('orderlist')}}">订单</a></div>
+                                        <div class="col-xs-6 rightb"><a href="{{ url('rechargelist') }}">充值记录</a></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="rows">
+                                        <div class="col-xs-6"><a href="{{ url('my') }}">个人资料</a></div>
+                                        <div class="col-xs-6 rightb"><a href="{{ url('uppwd') }}">修改密码</a></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="rows">
+                                        <div class="col-xs-12">
+                                            <a href="{{ route('logout') }}"
+                                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                注销账号
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
                             </li>
                         @endif
                         <li><a href="{{ url('faqs') }}">帮助</a></li>
-                        <li><a href="javascript:;">帮助QQ交流群:238866069</a></li>
                     </ul>
                 </div>
             </div>
