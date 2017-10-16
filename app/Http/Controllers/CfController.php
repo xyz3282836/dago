@@ -34,6 +34,7 @@ class CfController extends Controller
         $site      = request('site', 1);
         $trans     = gconfig('cost.transport');
         $rmbtogold = gconfig('rmbtogold');
+        $user      = Auth::user();
         return view('cf.add_clickfarm')->with([
             'rate'      => get_rate($site),
             'ctext'     => get_currency($site),
@@ -41,10 +42,11 @@ class CfController extends Controller
             'trans'     => $trans,
             'rmbtogold' => $rmbtogold,
             'ad'        => Banner::getAd(4),
-            'level'     => Auth::user()->level,
-            's1'        => Auth::user()->getActionGold('sdefault'),
-            's2'        => Auth::user()->getActionGold('scpc'),
-            's3'        => Auth::user()->getActionGold('swishlist'),
+            'user'      => $user,
+            'level'     => $user->level,
+            's1'        => $user->getActionGold('sdefault'),
+            's2'        => $user->getActionGold('scpc'),
+            's3'        => $user->getActionGold('swishlist'),
         ]);
     }
 

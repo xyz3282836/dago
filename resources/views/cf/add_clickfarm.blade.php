@@ -350,6 +350,14 @@
                     return false;
                 }
             }
+            if("{{$user->checkAction('seckill')}}" != 'true'){
+                layer.msg('{{\app\Action::where('name', 'seckill')->value('auth_desc')}}');
+                return false;
+            }
+            if("{{$user->checkAction('fbm')}}" != 'true'){
+                layer.msg('{{\app\Action::where('name', 'fbm')->value('auth_desc')}}');
+                return false;
+            }
         })
     </script>
 @endsection
