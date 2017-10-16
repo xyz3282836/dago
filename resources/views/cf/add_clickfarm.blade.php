@@ -339,6 +339,10 @@
         });
         $('#dgform').validator().on('submit', function (e) {
             if(APP.is_fba == 0){
+                if("{{$user->checkAction('fbm')?'true':'false'}}" != 'true'){
+                    layer.msg('FBM{{\app\Action::where('name', 'fbm')->value('auth_desc')}}');
+                    return false;
+                }
                 if(APP.getUnitPrice < {{gconfig('fbm.low.price')}}){
                     layer.msg('商品金额过低，存在刷单风险，请选择其他商品');
                     return false;
@@ -350,13 +354,11 @@
                     return false;
                 }
             }
-            if("{{$user->checkAction('seckill')?'true':'false'}}" != 'true'){
-                layer.msg('{{\app\Action::where('name', 'seckill')->value('auth_desc')}}');
-                return false;
-            }
-            if("{{$user->checkAction('fbm')?'true':'false'}}" != 'true'){
-                layer.msg('{{\app\Action::where('name', 'fbm')->value('auth_desc')}}');
-                return false;
+            if(APP.is_ld == 1){
+                if("{{$user->checkAction('seckill')?'true':'false'}}" != 'true'){
+                    layer.msg('秒杀{{\app\Action::where('name', 'seckill')->value('auth_desc')}}');
+                    return false;
+                }
             }
         })
     </script>
