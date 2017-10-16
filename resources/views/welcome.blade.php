@@ -12,6 +12,7 @@
         }
         .vedio h1{
             margin-bottom: 40px;
+            margin-top: 40px;
         }
         footer{
             min-height: 100px;
