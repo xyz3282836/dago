@@ -175,10 +175,10 @@ function get_cf_price($cf)
             $tmp += $cf->task_num * (\Auth::user()->getActionGold('swishlist') + \Auth::user()->getActionGold('sdefault'));
             break;
     }
-    if ($cf->is_ld) {
+    if ($cf->is_ld == 1) {
         $tmp += $cf->task_num * \Auth::user()->getActionGold('seckill');
     }
-    if ($cf->fbm) {
+    if ($cf->is_fba == 0) {
         $tmp += $cf->task_num * \Auth::user()->getActionGold('fbm');
     }
     $cf->golds     = $tmp;
