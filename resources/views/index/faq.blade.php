@@ -27,3 +27,11 @@
         </div>
     </div>
 @endsection
+
+@section('js')
+    <script>
+        new Vue({
+            el: '#app',
+        });
+    </script>
+@endsection

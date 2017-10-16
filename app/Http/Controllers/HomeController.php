@@ -126,6 +126,9 @@ class HomeController extends Controller
             case 'idcard':
                 $file     = $request->file('upimg');
                 $ext      = $file->getClientOriginalExtension();
+                if(!in_array(strtolower($ext),['jpeg','png','jpg'])){
+                    return error('文件类型不合法');
+                }
                 $filename = time() . rand(100000, 999999) . '.' . $ext;
                 $file->move('../public/upfile/idcard/', $filename);
                 $fullname = '/upfile/idcard/' . $filename;
@@ -143,6 +146,9 @@ class HomeController extends Controller
                 }
                 $file     = $request->file('file');
                 $ext      = $file->getClientOriginalExtension();
+                if(!in_array(strtolower($ext),['jpeg','png','jpg'])){
+                    return error('文件类型不合法');
+                }
                 $filename = time() . rand(100000, 999999) . '.' . $ext;
                 $file->move('../public/upfile/epic/', $filename);
                 $fullname = '/upfile/epic/' . $filename;

@@ -26,7 +26,7 @@ class Promotion extends Model
 
     public function getStatusTextAttribute()
     {
-        $arr = config('linepro.promotion_status');
+        $arr = config('linepro.promotion_statuss');
         if (!isset($arr[$this->status])) {
             return '未定义';
         }

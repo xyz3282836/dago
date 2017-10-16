@@ -211,6 +211,9 @@ class PayController extends Controller
         }
         //金币不够
         if ($ptype == 'cycle') {
+            if (strtotime($start) > strtotime($end)) {
+                return error('开始时间不能大于结束时间');
+            }
             $days  = diffBetweenTwoDays($start, $end);
             $golds *= $days;
             $price *= $days;
@@ -221,27 +224,30 @@ class PayController extends Controller
         if ($ptype == 'cycle') {
             //TODO 验证日期
             $days = diffBetweenTwoDays($start, $end);
-            if ($days > 1) {
-                for ($i = 0; $i < $days; $i++) {
-                    $day = date('Y-m-d H:i:s', strtotime($start) + 86400 * $i + rand(0, 86400));
-                    if ($i == 0) {
-                        if ($start == date('Y-m-d')) {
-                            $day = date('Y-m-d H:i:s');
-                        }
-                        foreach ($list as $v) {
-                            $v->start_time = $day;
-                            $v->save();
-                        }
-                        continue;
+            for ($i = 0; $i < $days; $i++) {
+                $day = date('Y-m-d H:i:s', strtotime($start) + 86400 * $i + rand(0, 86400));
+                if ($i == 0) {
+                    if ($start == date('Y-m-d')) {
+                        $day = date('Y-m-d H:i:s');
                     }
                     foreach ($list as $v) {
-                        $one             = $v->replicate();
-                        $one->start_time = $day;
-                        $one->save();
-                        $ids[] = $one->id;
+                        $v->start_time = $day;
+                        $v->save();
                     }
+                    continue;
                 }
-                $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
+                foreach ($list as $v) {
+                    $one             = $v->replicate();
+                    $one->start_time = $day;
+                    $one->save();
+                    $ids[] = $one->id;
+                }
+            }
+            $list = ClickFarm::where('uid', $user->id)->where('status', 1)->whereIn('id', $ids)->get();
+        } else {
+            foreach ($list as $v) {
+                $v->start_time = date('Y-m-d H:i:s');
+                $v->save();
             }
         }
 

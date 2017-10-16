@@ -95,7 +95,7 @@
                                 <td>
                                     @{{ one.shop_id }}
                                     <br>
-                                    <span style="font-size:16px;font-weight:bold;color:#464c5b;" v-text="'('+one.fba_text+')'"></span>
+                                    <span style="font-size:12px;color:#464c5b;" v-text="'('+one.fba_text+')'"></span>
                                 </td>
                                 <td><span class="flag-icon" :class="'flag-icon-'+one.flag"></span></td>
                                 <td v-text="one.delivery_type_text"></td>
@@ -123,21 +123,37 @@
                             </tr>
                             </tbody>
                         </table>
-                        <Card style="width:350px">
+                        <Card style="width:400px">
                             <p slot="title">计划任务</p>
-                            <i-Form>
+                            <i-Form ref="formCustom" :model="formCustom" :rules="ruleValidate">
                                 <Form-Item>
                                     <Radio-Group v-model="plantype">
                                         <Radio label="once">一次性任务</Radio>
                                         <Radio label="cycle">周期性任务</Radio>
                                     </Radio-Group>
                                 </Form-Item>
-                                <Form-Item label="安排代购时间" v-if="plantype == 'cycle'">
-                                    <Date-Picker :editable="false" :on-change="dates(date)" :clearable="false" size="large" type="daterange" :options="options3" v-model="date" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                <Form-Item label="安排代购时间" v-if="plantype == 'cycle'" label-width="90">
+                                    <Row>
+                                        <i-Col span="11">
+                                            <Form-Item prop="start">
+                                                <Date-Picker :on-change="sdates(formCustom.start)" size="large" type="date" v-model="formCustom.start" :options="options3" placeholder="选择开始日期" style="width: 125px"></Date-Picker>
+                                            </Form-Item>
+                                        </i-Col>
+                                        <i-Col span="2" style="text-align: center">-</i-Col>
+                                        <i-Col span="11">
+                                            <Form-Item prop="end">
+                                                <Date-Picker :on-change="edates(formCustom.end)" size="large" type="date" v-model="formCustom.end" :options="options3" placeholder="选择结束日期" style="width: 125px"></Date-Picker>
+                                            </Form-Item>
+                                        </i-Col>
+                                    </Row>
                                 </Form-Item>
+                                <Alert type="warning">
+                                    <template slot="desc">
+                                        {!! \App\Faq::getFaqA(19) !!}
+                                    </template>
+                                </Alert>
                             </i-Form>
                         </Card>
-
                         <div class="pull-right">
                             <div class="col-xs-6">
                                 <p>总金币：<span class="color-red" v-text="allGold"></span> <img width="18" src="/img/gold.png" /></p>
@@ -151,7 +167,7 @@
 
                             </div>
                             <button :disabled="ids.length == 0" class="btn btn-danger btn-md ladda-button"
-                                    data-style="contract" @click="payall">支付下单
+                                    data-style="contract" @click="payall('formCustom')">支付下单
                             </button>
                         </div>
                     </div>
@@ -166,17 +182,26 @@
         var app = new Vue({
             el: '#app',
             data: {
+                formCustom:{
+                    start:'',
+                    end:''
+                },
+                ruleValidate: {
+                    start: [
+                        { required: true, type: 'date', message: '请选择日期', trigger: 'change' }
+                    ],
+                    end: [
+                        { required: true, type: 'date', message: '请选择日期', trigger: 'change' }
+                    ],
+                },
                 plantype:'once',
                 options3: {
                     disabledDate (date) {
-                        return date && date.valueOf() < Date.now() - 86400000;
+                        return date && date.valueOf() < {{msectime()}} - 86400000;
                     }
                 },
                 startd:'{{date('Y-m-d')}}',
                 endd:'{{date('Y-m-d')}}',
-                date:[
-                    new Date('{{date('Y-m-d')}}'),new Date('{{date('Y-m-d')}}')
-                ],
                 grate:{{gconfig('rmbtogold')}},
                 list:{!! $list !!},
                 cardlist:{!! $list->keyBy('id') !!},
@@ -196,11 +221,28 @@
                     iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);
                     return iDays + 1;
                 },
-                dates(date){
-                    this.startd = formatDate(date[0],'yyyy-MM-dd');
-                    this.endd = formatDate(date[1],'yyyy-MM-dd');
+                sdates(date){
+                    if(date != '' && date != undefined){
+                        this.startd = formatDate(date,'yyyy-MM-dd');
+                    }
                 },
-                payall: function () {
+                edates(date){
+                    if(date != '' && date != undefined){
+                        this.endd = formatDate(date,'yyyy-MM-dd');
+                    }
+                },
+                payall(name) {
+                    if(this.plantype == 'once'){
+                        this.pay();
+                    }else{
+                        this.$refs[name].validate((valid) => {
+                            if (valid) {
+                                this.pay();
+                            }
+                        })
+                    }
+                },
+                pay(){
                     var ids = this.ids;
                     var startd = this.startd;
                     var endd = this.endd;
@@ -286,7 +328,10 @@
                     this.ids.forEach((v) => {
                         price += Number(this.cardlist[v].amount);
                     });
-                    var days = this.dateDiff(this.startd,this.endd);
+                    var days = 1;
+                    if(this.plantype == 'cycle'){
+                        days = this.dateDiff(this.startd,this.endd);
+                    }
                     return (price * days).toFixed(2);
                 },
                 allGold(){
@@ -294,7 +339,10 @@
                     this.ids.forEach((v) => {
                         golds += Number(this.cardlist[v].golds);
                     });
-                    var days = this.dateDiff(this.startd,this.endd);
+                    var days = 1;
+                    if(this.plantype == 'cycle'){
+                        days = this.dateDiff(this.startd,this.endd);
+                    }
                     return golds * days;
                 }
             },
