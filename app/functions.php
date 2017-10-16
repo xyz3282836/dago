@@ -163,23 +163,23 @@ function get_cf_price($cf)
     $srate     = get_srate();
     $tmp       = round($cf->task_num * $cf->final_price * $rate * $srate[$cf->time_type]['rate'] * $rmbtogold);
     $tmp       = $tmp < $srate[$cf->time_type]['mingolds'] * $cf->task_num ? $srate[$cf->time_type]['mingolds'] * $cf->task_num : $tmp;
-
+    $user      = Auth::user();
     switch ($cf->search_type) {
         case 1:
-            $tmp += $cf->task_num * \Auth::user()->getActionGold('sdefault');
+            $tmp += $cf->task_num * $user->getActionGold('sdefault');
             break;
         case 2:
-            $tmp += $cf->task_num * (\Auth::user()->getActionGold('scpc') + \Auth::user()->getActionGold('sdefault'));
+            $tmp += $cf->task_num * ($user->getActionGold('scpc') + $user->getActionGold('sdefault'));
             break;
         case 3:
-            $tmp += $cf->task_num * (\Auth::user()->getActionGold('swishlist') + \Auth::user()->getActionGold('sdefault'));
+            $tmp += $cf->task_num * ($user->getActionGold('swishlist') + $user->getActionGold('sdefault'));
             break;
     }
     if ($cf->is_ld == 1) {
-        $tmp += $cf->task_num * \Auth::user()->getActionGold('seckill');
+        $tmp += $cf->task_num * $user->getActionGold('seckill');
     }
     if ($cf->is_fba == 0) {
-        $tmp += $cf->task_num * \Auth::user()->getActionGold('fbm');
+        $tmp += $cf->task_num * $user->getActionGold('fbm');
     }
     $cf->golds     = $tmp;
     $cf->rate      = $rate;
