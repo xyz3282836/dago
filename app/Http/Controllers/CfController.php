@@ -47,6 +47,8 @@ class CfController extends Controller
             's1'        => $user->getActionGold('sdefault'),
             's2'        => $user->getActionGold('scpc'),
             's3'        => $user->getActionGold('swishlist'),
+            's4'        => $user->getActionGold('fbm'),
+            's5'        => $user->getActionGold('seckill'),
         ]);
     }
 
