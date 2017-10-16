@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Action;
 use App\Banner;
 use App\CfResult;
 use App\ClickFarm;
@@ -67,18 +68,28 @@ class CfController extends Controller
             'from_site'     => 'required|integer',
             'delivery_type' => 'required|integer',
             'is_fba'        => 'required|integer',
+            'is_ld'         => 'required|integer',
         ]);
 
         $pdata = request()->all();
 
-        switch ($pdata['is_fba']){
+        if ($pdata['is_ld'] == 1) {
+            if (!Auth::user()->checkAction('seckill')) {
+                return error(Action::where('name', 'seckill')->value('auth_desc'));
+            }
+        }
+
+        switch ($pdata['is_fba']) {
             case 0:
-                if($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fbm.low.price')){
+                if (!Auth::user()->checkAction('fbm')) {
+                    return error(Action::where('name', 'fbm')->value('auth_desc'));
+                }
+                if ($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fbm.low.price')) {
                     return error('商品金额过低，存在刷单风险，请选择其他商品');
                 }
                 break;
             case 1:
-                if($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fba.low.price')){
+                if ($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fba.low.price')) {
                     return error('商品金额过低，存在刷单风险，请选择其他商品');
                 }
                 break;
@@ -135,6 +146,7 @@ class CfController extends Controller
         $model->keyword       = $pdata['keyword'];
         $model->search_type   = $pdata['search_type'];
         $model->is_fba        = $pdata['is_fba'];
+        $model->is_ld         = $pdata['is_ld'];
         //1.0
         $model->time_type        = 1;
         $model->discount_code    = '';

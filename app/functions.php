@@ -7,6 +7,7 @@
  */
 
 
+use App\Action;
 use Omnipay\Omnipay;
 const MODEL_NOT_FOUNT   = '无此数据';
 const NO_ACCESS         = '无权限';
@@ -173,6 +174,12 @@ function get_cf_price($cf)
         case 3:
             $tmp += $cf->task_num * (\Auth::user()->getActionGold('swishlist') + \Auth::user()->getActionGold('sdefault'));
             break;
+    }
+    if ($cf->is_ld) {
+        $tmp += $cf->task_num * \Auth::user()->getActionGold('seckill');
+    }
+    if ($cf->fbm) {
+        $tmp += $cf->task_num * \Auth::user()->getActionGold('fbm');
     }
     $cf->golds     = $tmp;
     $cf->rate      = $rate;

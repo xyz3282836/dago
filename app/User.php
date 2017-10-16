@@ -110,7 +110,6 @@ class User extends Authenticatable
         $rarr = [];
         foreach ($payarr as $k => $v) {
             if (!isset($arr[$k])) {
-                Log::error('用户id' . $this->id . '没有评价' . $k . '权限');
                 return false;
             }
             if ($arr[$k]['type'] == 1) {

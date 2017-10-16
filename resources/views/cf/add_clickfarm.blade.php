@@ -168,9 +168,14 @@
                                         <input disabled type="radio" v-model="is_fba" :value="k">@{{ v }}
                                     </label>
                                     <input type="hidden" name="is_fba" v-model="is_fba">
+                                    <input type="hidden" name="is_ld" v-model="is_ld">
                                     <br>
-                                    <p v-show="is_fba == 0" class="color-red">考虑到平台防刷单风险，FBM下单不可留评，还请知晓</p>
                                     <p class="help-block with-errors"></p>
+                                    <Alert type="warning" v-show="is_fba == 0">
+                                        <template slot="desc">
+                                            {!! \App\Faq::getFaqA(21) !!}
+                                        </template>
+                                    </Alert>
                                 </div>
                             </div>
 
@@ -326,6 +331,7 @@
                 task_num: 0,
                 time_type: 1,
                 is_fba: {{request('isFba')}},
+                is_ld: {{request('isLd',0)}},
                 is_fbac: {!! json_encode(config('linepro.is_fba')) !!},
                 delivery_type: 1,
                 delivery_typec: {!! json_encode(config('linepro.delivery_type')) !!},

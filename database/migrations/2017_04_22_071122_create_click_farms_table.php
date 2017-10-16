@@ -45,6 +45,7 @@ class CreateClickFarmsTable extends Migration
             $table->tinyInteger('platform_type')->default(1);//平台
 
             $table->tinyInteger('is_fba');//是否FBA发货
+            $table->tinyInteger('is_ld');//是否秒杀
             $table->char('discount_code', 24)->nullable();//优惠码
             $table->tinyInteger('is_reviews')->default(0);//是否需要reviews 0:no 1:yes 2:Uncertain
             $table->tinyInteger('is_link')->default(0);//是否需要reviews 0:no 1:yes 2:Uncertain

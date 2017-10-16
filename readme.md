@@ -54,7 +54,7 @@ php artisan db:seed
 ## sql
 ```sql
 alter table `users` add `cumulative_golds` int DEFAULT '0' after `lock_balance`;
-alter table `click_farms` add `search_type` tinyint DEFAULT '1' after `bd`;
+alter table `click_farms` add `is_ld` tinyint DEFAULT '0' after `is_fba`;
 alter table `cf_results` modify column `title` varchar(200);
 alter table `cf_results` modify column `content` varchar(10240);
 
