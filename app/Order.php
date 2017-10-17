@@ -225,7 +225,7 @@ class Order extends Model
                 'oid'     => $one->id,
                 'type'    => Bill::TYPE_PROMOTION,
                 'orderid' => $one->orderid,
-                'gout'      => $golds,
+                'gout'    => $golds,
                 'rate'    => gconfig('rmbtogold'),
             ]);
             DB::commit();
@@ -330,13 +330,13 @@ class Order extends Model
         DB::beginTransaction();
         try {
             $user                = $one->user;
-            $user->balance       += $one->price;
+            $user->balance       += $one->price - $one->balance;
             $one->alipay_orderid = $alipay_orderid;
             $order               = Order::create([
                 'uid'     => $user->id,
                 'type'    => Order::TYPE_DEL_PAID,
                 'orderid' => get_order_id(),
-                'price'   => $one->price,
+                'price'   => $one->price - $one->balance,
                 'rate'    => gconfig('rmbtogold'),
                 'status'  => Order::STATUS_PAID
             ]);
@@ -345,7 +345,7 @@ class Order extends Model
                 'oid'     => $order->id,
                 'type'    => Bill::TYPE_DEL_PAID,
                 'orderid' => $order->orderid,
-                'in'      => $one->price,
+                'in'      => $one->price - $one->balance,
                 'rate'    => gconfig('rmbtogold'),
             ]);
             $user->save();
