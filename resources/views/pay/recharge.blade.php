@@ -75,7 +75,7 @@
                 type:'1',
                 amount:{{$role->gold_recharge}},
                 rate:{{gconfig('rmbtogold')}},
-                typec: {!! json_encode(config('linepro.order_ptype')) !!},
+                typec: {!! json_encode(config('linepro.order_ptypec')) !!},
             },
             computed:{
                 getgolds(){

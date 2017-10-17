@@ -34,6 +34,9 @@ return [
         1     => '进行中',
         3     => '已完成',
     ],
+    'order_ptypec'      => [
+        1 => '支付宝',
+    ],
     /**
      * form
      */
@@ -221,7 +224,7 @@ return [
         0 => 'FBM',
         1 => 'FBA',
     ],
-    'promotion_statuss'  => [
+    'promotion_statuss' => [
         -1 => '已退款',
         0  => '失败',
         1  => '进行中',
