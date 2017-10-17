@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
         })->everyFiveMinutes();
 
         $schedule->call(function () {
-            $list = Order::where('status', Order::STATUS_DEL)->where('type',Order::TYPE_RECHARGE)->where('uid',561)->get();
+            $list = Order::where('status', Order::STATUS_DEL)->where('type',Order::TYPE_RECHARGE)->get();
             foreach ($list as $v) {
                 \DB::beginTransaction();
                 try {
