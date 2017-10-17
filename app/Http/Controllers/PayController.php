@@ -153,7 +153,7 @@ class PayController extends Controller
                 } elseif ($model->status == Order::STATUS_PAID) {
                     $flag = true;
                 } elseif ($model->status == Order::STATUS_DEL) {
-                    Log::error('付款已删除订单,平台order-id'.$model->id.',支付宝订单号'.$alipay_orderid);
+                    Log::error('付款已删除订单，平台order-id'.$model->id.'，支付宝订单号'.$alipay_orderid.'，数据库支付宝单号'.$model->alipay_orderid);
                     $flag = true;
                     if ($model->alipay_orderid == '') {
                         Order::errorBack($model, $alipay_orderid);
