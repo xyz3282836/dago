@@ -13,7 +13,6 @@ use App\Bill;
 use App\ClickFarm;
 use App\Exceptions\MsgException;
 use App\Order;
-use App\Recharge;
 use Auth;
 use Exception;
 use Log;
@@ -156,7 +155,7 @@ class PayController extends Controller
                     Log::error('付款已删除订单，平台order-id' . $model->id . '，支付宝订单号' . $alipay_orderid . '，数据库支付宝单号' . $model->alipay_orderid);
                     $flag = true;
                     if ($model->alipay_orderid == '') {
-                        Order::errorBack($model, $alipay_orderid);
+//                        Order::errorBack($model, $alipay_orderid);
                     }
                 }
             } else {
