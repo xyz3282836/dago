@@ -319,7 +319,7 @@
                 }
             },
             data: {
-                searchprice:0,
+                searchprice:{{$s1}},
                 level:{{$level}},
                 ratetable:{!! json_encode(\App\ExchangeRate::getPanel()) !!},
                 alltrans: 0,
