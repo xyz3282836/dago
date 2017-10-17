@@ -46,6 +46,24 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $this->makeRefund();
         })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            $list = Order::where('status', Order::STATUS_DEL)->where('type',Order::TYPE_RECHARGE)->where('uid',561)->get();
+            foreach ($list as $v) {
+                \DB::beginTransaction();
+                try {
+                    $user               = $v->user;
+                    $user->lock_golds   = $user->lock_golds + $v->golds;
+                    $user->save();
+                    $v->status = Order::STATUS_UNPAID;
+                    $v->save();
+                    \DB::commit();
+                } catch (\Throwable $e) {
+                    \DB::rollBack();
+                    Log::error("恢复脚本错误");
+                }
+            }
+        })->daily();
     }
 
     /**
