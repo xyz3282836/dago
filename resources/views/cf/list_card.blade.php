@@ -197,7 +197,7 @@
                 plantype:'once',
                 options3: {
                     disabledDate (date) {
-                        return date && date.valueOf() < {{msectime()}} - 86400000;
+                        return date && (date.valueOf() < {{msectime()}} - 86400000 || date.valueOf() > {{msectime()}} + 86400000 * 6);
                     }
                 },
                 startd:'{{date('Y-m-d')}}',
