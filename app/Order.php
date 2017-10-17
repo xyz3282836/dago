@@ -518,7 +518,7 @@ class Order extends Model
 //        $time = gconfig('order.beforepay.frozentime');
         foreach ($list as $v) {
             if ((strtotime($v->updated_at) + 60 * 10080) < time()) {
-                self::delOrder($v);
+//                self::delOrder($v);
             }
         }
     }
