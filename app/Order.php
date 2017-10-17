@@ -550,7 +550,7 @@ class Order extends Model
      */
     public static function makeCfr()
     {
-        $list = self::where('status', self::STATUS_FROZEN)->get();
+        $list = self::where('status', self::STATUS_FROZEN)->where('type', self::TYPE_CONSUME)->get();
 //        $time = gconfig('order.afterpay.frozentime');
         foreach ($list as $v) {
             if ((strtotime($v->updated_at) + 60 * 5) < time()) {
