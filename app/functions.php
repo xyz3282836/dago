@@ -160,8 +160,8 @@ function get_cf_price($cf)
     $trans     = gconfig('cost.transport');
     $rmbtogold = gconfig('rmbtogold');
     $rate      = get_rate($cf->from_site);
-    $srate     = get_srate();
     $user      = Auth::user();
+    $srate     = get_srate($user);
     if ($cf->is_fba == 1) {
         $tmp = round($cf->task_num * $cf->final_price * $rate * $srate[$cf->time_type]['rate'] * $rmbtogold);
         $tmp = $tmp < $srate[$cf->time_type]['mingolds'] * $cf->task_num ? $srate[$cf->time_type]['mingolds'] * $cf->task_num : $tmp;
@@ -190,31 +190,19 @@ function get_cf_price($cf)
     $cf->amount    = round(($cf->task_num * $cf->final_price * $rate + $cf->transport), 2);
 }
 
-function get_srate()
+function get_srate($user)
 {
-    if (Auth::user()->level == 1) {
-        $arr = [
-            1 => [
-                'mingolds' => gconfig('regular.service.one.min'),
-                'rate'     => gconfig('regular.service.one.rate')
-            ],
-            3 => [
-                'mingolds' => gconfig('regular.service.three.min'),
-                'rate'     => gconfig('regular.service.three.rate')
-            ]
-        ];
-    } else {
-        $arr = [
-            1 => [
-                'mingolds' => gconfig('vip.service.one.min'),
-                'rate'     => gconfig('vip.service.one.rate')
-            ],
-            3 => [
-                'mingolds' => gconfig('vip.service.three.min'),
-                'rate'     => gconfig('vip.service.three.rate')
-            ]
-        ];
-    }
+    $role = $user->role;
+    $arr = [
+        1 => [
+            'mingolds' => $role->service_one_min,
+            'rate'     => $role->service_one_rate
+        ],
+        3 => [
+            'mingolds' => $role->service_three_min,
+            'rate'     => $role->service_three_rate
+        ]
+    ];
     return $arr;
 }
 

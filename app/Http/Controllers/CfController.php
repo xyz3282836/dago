@@ -38,12 +38,11 @@ class CfController extends Controller
         return view('cf.add_clickfarm')->with([
             'rate'      => get_rate($site),
             'ctext'     => get_currency($site),
-            'srate'     => json_encode(get_srate()),
+            'srate'     => json_encode(get_srate($user)),
             'trans'     => $trans,
             'rmbtogold' => $rmbtogold,
             'ad'        => Banner::getAd(4),
             'user'      => $user,
-            'level'     => $user->level,
             's1'        => $user->getActionGold('sdefault'),
             's2'        => $user->getActionGold('scpc'),
             's3'        => $user->getActionGold('swishlist'),

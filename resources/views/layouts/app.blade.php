@@ -183,7 +183,7 @@
                             </li>
                             <li class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{Auth::user()->name}} <span class="caret"></span>
+                                    {{Auth::user()->role->desc .': '. Auth::user()->name}} <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" style="width: 180px;padding:5px">
                                     <div class="rows">
