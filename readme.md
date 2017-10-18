@@ -58,4 +58,7 @@ alter table `click_farms` add `is_ld` tinyint DEFAULT '0' after `is_fba`;
 alter table `cf_results` modify column `title` varchar(200);
 alter table `cf_results` modify column `content` varchar(10240);
 
+alter table `bills` add `bin` decimal(10,2) DEFAULT '0' after `out`;
+alter table `bills` add `bout` decimal(10,2) DEFAULT '0' after `bin`;
+
 ```

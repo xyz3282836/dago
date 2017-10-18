@@ -194,7 +194,7 @@ class Order extends Model
     }
 
     /**
-     * 消费电子需求
+     * 消费点赞
      * @param $list
      * @param $golds
      * @param null $user
@@ -305,6 +305,7 @@ class Order extends Model
                 'orderid'        => $one->orderid,
                 'alipay_orderid' => $one->alipay_orderid,
                 'out'            => $one->price - $one->balance,
+                'bout'           => $one->balance,
                 'gout'           => $one->golds,
                 'rate'           => gconfig('rmbtogold'),
             ]);
@@ -345,7 +346,7 @@ class Order extends Model
                 'oid'     => $order->id,
                 'type'    => Bill::TYPE_DEL_PAID,
                 'orderid' => $order->orderid,
-                'in'      => $one->price - $one->balance,
+                'bin'      => $one->price - $one->balance,
                 'rate'    => gconfig('rmbtogold'),
             ]);
             $user->save();
@@ -385,7 +386,7 @@ class Order extends Model
                 'oid'     => $order->id,
                 'type'    => Bill::TYPE_REFUND,
                 'orderid' => $order->orderid,
-                'in'      => $one->price,
+                'bin'      => $one->price,
                 'gin'     => $one->golds,
                 'rate'    => gconfig('rmbtogold'),
             ]);
@@ -432,6 +433,7 @@ class Order extends Model
                 'oid'     => $one->id,
                 'type'    => Bill::TYPE_CONSUME,
                 'orderid' => $one->orderid,
+                'bout'    => $price,
                 'gout'    => $golds,
                 'rate'    => gconfig('rmbtogold'),
             ]);

@@ -21,6 +21,8 @@ class CreateBillsTable extends Migration
             $table->char('alipay_orderid',64)->default('');//订单号
             $table->decimal('in',10,2)->default(0.00);//收入
             $table->decimal('out',10,2)->default(0.00);//支出
+            $table->decimal('bin',10,2)->default(0.00);//余额收入
+            $table->decimal('bout',10,2)->default(0.00);//余额支出
             $table->integer('gin')->default(0);//金币收入
             $table->integer('gout')->default(0);//金币支出
             $table->integer('oid')->default(0);//订单id
