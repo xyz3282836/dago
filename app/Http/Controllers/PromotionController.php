@@ -123,7 +123,7 @@ class PromotionController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
-            if ($v['type'] != 'true') {
+            if ($v['type'] != '1') {
                 $tmparr['type']  = 2;
                 $tmparr['golds'] = $downgold * $v['num'];
             } else {
