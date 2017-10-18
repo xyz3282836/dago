@@ -25,7 +25,7 @@ class Bill extends Model
 
     protected $appends = ['type_text'];
     protected $fillable = [
-        'uid', 'type', 'orderid', 'alipay_orderid', 'in', 'out', 'gin', 'gout', 'rate', 'oid'
+        'uid', 'type', 'orderid', 'alipay_orderid', 'in', 'out', 'gin', 'gout', 'bin', 'bout', 'rate', 'oid'
     ];
 
     /**
