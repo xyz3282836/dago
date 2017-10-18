@@ -89,10 +89,16 @@
                                 </i-Col>
                                 <i-Col span="3" offset="1" class-name="text-center">
                                     <Form-Item >
-                                        <i-Switch v-model="item.type" size="large">
-                                            <span slot="open">点<Icon type="thumbsup"></Icon></span>
-                                            <span slot="close">点<Icon type="thumbsdown"></Icon></span>
-                                        </i-Switch>
+                                        <Radio-Group v-model="item.type">
+                                            <Radio label="1">
+                                                <Icon type="thumbsup"></Icon>
+                                                <span>点赞</span>
+                                            </Radio>
+                                            <Radio label="2">
+                                                <Icon type="thumbsdown"></Icon>
+                                                <span>点踩</span>
+                                            </Radio>
+                                        </Radio-Group>
                                     </Form-Item>
                                 </i-Col>
                                 <i-Col span="3" offset="1">
@@ -105,8 +111,8 @@
                                 <i-Col span="3" offset="1" class-name="text-center">
                                     &nbsp;
                                     <span v-if="checkNum(item.num)" v-cloak>
-                                        <span v-if="item.type == true"> @{{ goldUp }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldUp * item.num) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
-                                        <span v-if="item.type == false"> @{{ goldDown }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldDown * item.num).toFixed(0) }}<img width="15" src="/img/gold.png"></span>
+                                        <span v-if="item.type == 1"> @{{ goldUp }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldUp * item.num) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
+                                        <span v-if="item.type == 2"> @{{ goldDown }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldDown * item.num).toFixed(0) }}<img width="15" src="/img/gold.png"></span>
                                     </span>
                                     &nbsp;
                                 </i-Col>
@@ -170,7 +176,7 @@
                     items: [
                         {
                             url: '',
-                            type:true,
+                            type:1,
                             num:''
                         }
                     ]
@@ -182,10 +188,10 @@
                     this.formDynamic.items.forEach((v) => {
                         if(v.num > 0){
                             switch (v.type){
-                                case true:
+                                case 1:
                                     golds += this.goldUp * v.num;
                                     break;
-                                case false:
+                                case 2:
                                     golds += this.goldDown * v.num;
                                     break;
                             }
@@ -226,7 +232,7 @@
                 handleAdd () {
                     this.formDynamic.items.push({
                         url: '',
-                        type:true,
+                        type:1,
                         num:''
                     });
                 },

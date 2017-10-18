@@ -161,9 +161,13 @@ function get_cf_price($cf)
     $rmbtogold = gconfig('rmbtogold');
     $rate      = get_rate($cf->from_site);
     $srate     = get_srate();
-    $tmp       = round($cf->task_num * $cf->final_price * $rate * $srate[$cf->time_type]['rate'] * $rmbtogold);
-    $tmp       = $tmp < $srate[$cf->time_type]['mingolds'] * $cf->task_num ? $srate[$cf->time_type]['mingolds'] * $cf->task_num : $tmp;
     $user      = Auth::user();
+    if ($cf->is_fba == 1) {
+        $tmp = round($cf->task_num * $cf->final_price * $rate * $srate[$cf->time_type]['rate'] * $rmbtogold);
+        $tmp = $tmp < $srate[$cf->time_type]['mingolds'] * $cf->task_num ? $srate[$cf->time_type]['mingolds'] * $cf->task_num : $tmp;
+    } else {
+        $tmp = $cf->task_num * $user->getActionGold('fbm');
+    }
     switch ($cf->search_type) {
         case 1:
             $tmp += $cf->task_num * $user->getActionGold('sdefault');
@@ -177,9 +181,6 @@ function get_cf_price($cf)
     }
     if ($cf->is_ld == 1) {
         $tmp += $cf->task_num * $user->getActionGold('seckill');
-    }
-    if ($cf->is_fba == 0) {
-        $tmp += $cf->task_num * $user->getActionGold('fbm');
     }
     $cf->golds     = $tmp;
     $cf->rate      = $rate;
