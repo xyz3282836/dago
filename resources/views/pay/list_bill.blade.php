@@ -36,7 +36,7 @@
                                 <th>类型</th>
                                 <th>订单号</th>
                                 <th>支付宝订单号</th>
-                                <th>人民币收入</th>
+                                {{--<th>人民币收入</th>--}}
                                 <th>人民币支出</th>
                                 <th>余额收入</th>
                                 <th>余额支出</th>
@@ -52,7 +52,7 @@
                                     <td>{{$v->type_text}}</td>
                                     <td class="break">{{$v->orderid}}</td>
                                     <td class="break">{{$v->alipay_orderid}}</td>
-                                    <td :class="{'color-red': {{$v->in}}>0.00}">+ {{$v->in}}</td>
+{{--                                    <td :class="{'color-red': {{$v->in}}>0.00}">+ {{$v->in}}</td>--}}
                                     <td :class="{'color-green': {{$v->out}}>0.00}">- {{$v->out}}</td>
                                     <td :class="{'color-red': {{$v->bin}}>0.00}">+ {{$v->bin}}</td>
                                     <td :class="{'color-green': {{$v->bout}}>0.00}">- {{$v->bout}}</td>
