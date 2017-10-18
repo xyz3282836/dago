@@ -176,7 +176,7 @@
                     items: [
                         {
                             url: '',
-                            type:1,
+                            type:'1',
                             num:''
                         }
                     ]
@@ -232,7 +232,7 @@
                 handleAdd () {
                     this.formDynamic.items.push({
                         url: '',
-                        type:1,
+                        type:'1',
                         num:''
                     });
                 },
