@@ -42,9 +42,9 @@ class ConfigController extends Controller
             $grid->disablePagination();
 //            $grid->disableCreation();
             $grid->disableRowSelector();
-            $grid->actions(function ($actions) {
-                $actions->disableDelete();
-            });
+//            $grid->actions(function ($actions) {
+//                $actions->disableDelete();
+//            });
         });
     }
 
