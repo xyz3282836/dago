@@ -188,10 +188,10 @@
                     this.formDynamic.items.forEach((v) => {
                         if(v.num > 0){
                             switch (v.type){
-                                case 1:
+                                case '1':
                                     golds += this.goldUp * v.num;
                                     break;
-                                case 2:
+                                case '2':
                                     golds += this.goldDown * v.num;
                                     break;
                             }
