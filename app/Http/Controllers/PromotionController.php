@@ -82,7 +82,7 @@ class PromotionController extends Controller
         $upgold   = $user->getActionGold('eup');
         $downgold = $user->getActionGold('edown');
         foreach ($list as $v) {
-            $p   = '/https:\/\/www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)\/(review|gp\/customer-reviews)\/([0-9A-Z]+)/';
+            $p   = '/https:\/\/www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)\/(gp\/review|review|gp\/customer-reviews)\/([0-9A-Z]+)/';
             $url = trim($v['url']);
             $arr = [];
             preg_match($p, $url, $arr);

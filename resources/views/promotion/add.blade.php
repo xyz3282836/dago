@@ -151,7 +151,7 @@
 @section('js')
     <script>
         var validateUrl = (rule,value,callback) => {
-            var strRegex ='https://www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)/(review|gp/customer-reviews)/[0-9A-Z]+';
+            var strRegex ='https://www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)/(gp/review|review|gp/customer-reviews)/[0-9A-Z]+';
             var re=new RegExp(strRegex);
             if (!re.test(value)) {
                 callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'));
