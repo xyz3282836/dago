@@ -516,11 +516,11 @@ class Order extends Model
      */
     public static function makeRefund()
     {
-        $list = self::where('status', self::STATUS_UNPAID)->get();
+        $list = self::where('status', self::STATUS_UNPAID)->where('type', self::TYPE_CONSUME)->get();
 //        $time = gconfig('order.beforepay.frozentime');
         foreach ($list as $v) {
             if ((strtotime($v->updated_at) + 60 * 10080) < time()) {
-//                self::delOrder($v);
+                self::delOrder($v);
             }
         }
     }
