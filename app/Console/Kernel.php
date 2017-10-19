@@ -47,39 +47,44 @@ class Kernel extends ConsoleKernel
         })->everyFiveMinutes();
 
         $schedule->call(function () {
-            $list = Order::where('type', Order::TYPE_REFUND)->where('status', Order::STATUS_PAID)->get();
-            foreach ($list as $order) {
-                $bill = DB::table('bills')->where('oid', $order->id)->first();
-                if ($bill) {
-                    $yin       = $bill->in;
-                    $bill->in  = 0;
-                    $bill->bin = $order->price;
-                    $bill->save();
-                    Log::error('cfr退单：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-price' . $order->price);
+            DB::beginTransaction();
+            try {
+                $list = Order::where('type', Order::TYPE_REFUND)->where('status', Order::STATUS_PAID)->get();
+                foreach ($list as $order) {
+                    $bill = DB::table('bills')->where('oid', $order->id)->first();
+                    if ($bill) {
+                        $yin = $bill->in;
+                        DB::table('bills')->where('id', $bill->id)->update(['in' => 0, 'bin' => $order->price]);
+                        Log::error('cfr退单：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-price' . $order->price);
+                    }
                 }
+
+                $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
+                foreach ($list as $order) {
+                    $bill = DB::table('bills')->where('oid', $order->id)->first();
+                    if ($bill) {
+                        $yin = $bill->in;
+                        DB::table('bills')->where('id', $bill->id)->update(['in' => 0, 'bin' => $order->price]);
+                        Log::error('补偿退单：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-price' . $order->price);
+                    }
+                }
+
+                $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
+                foreach ($list as $order) {
+                    $bill = DB::table('bills')->where('oid', $order->id)->first();
+                    if ($bill) {
+                        DB::table('bills')->where('id', $bill->id)->update(['in' => 0, 'bout' => $order->balance]);
+                        Log::error('消费：order-id ' . $order->id . ' bill-id ' . $bill->id . ' order-balance' . $order->balance);
+                    }
+                }
+                DB::commit();
+            } catch (\Throwable $e) {
+                DB::rollBack();
+                Log::error('账单脚本异常');
+                Log::error($e);
             }
 
-            $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
-            foreach ($list as $order) {
-                $bill = DB::table('bills')->where('oid', $order->id)->first();
-                if ($bill) {
-                    $yin       = $bill->in;
-                    $bill->in  = 0;
-                    $bill->bin = $order->price;
-                    $bill->save();
-                    Log::error('补偿退单：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-price' . $order->price);
-                }
-            }
 
-            $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
-            foreach ($list as $order) {
-                $bill = DB::table('bills')->where('oid', $order->id)->first();
-                if ($bill) {
-                    $bill->bout = $order->balance;
-                    $bill->save();
-                    Log::error('消费：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-balance' . $order->balance);
-                }
-            }
         })->daily();
     }
 
