@@ -346,7 +346,7 @@ class Order extends Model
                 'oid'     => $order->id,
                 'type'    => Bill::TYPE_DEL_PAID,
                 'orderid' => $order->orderid,
-                'bin'      => $one->price - $one->balance,
+                'bin'     => $one->price - $one->balance,
                 'rate'    => gconfig('rmbtogold'),
             ]);
             $user->save();
@@ -386,7 +386,7 @@ class Order extends Model
                 'oid'     => $order->id,
                 'type'    => Bill::TYPE_REFUND,
                 'orderid' => $order->orderid,
-                'bin'      => $one->price,
+                'bin'     => $one->price,
                 'gin'     => $one->golds,
                 'rate'    => gconfig('rmbtogold'),
             ]);

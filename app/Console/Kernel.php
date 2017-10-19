@@ -2,11 +2,9 @@
 
 namespace App\Console;
 
-use App\Bill;
 use App\CfResult;
 use App\ExchangeRate;
 use App\Order;
-use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -46,6 +44,42 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $this->makeRefund();
         })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            $list = Order::where('type', Order::TYPE_REFUND)->where('status', Order::STATUS_PAID)->get();
+            foreach ($list as $order) {
+                $bill = \DB::table('bills')->where('oid', $order->id)->first();
+                if ($bill) {
+                    $yin       = $bill->in;
+                    $bill->in  = 0;
+                    $bill->bin = $order->price;
+                    $bill->save();
+                    Log::error('cfr退单：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-price' . $order->price);
+                }
+            }
+
+            $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
+            foreach ($list as $order) {
+                $bill = \DB::table('bills')->where('oid', $order->id)->first();
+                if ($bill) {
+                    $yin       = $bill->in;
+                    $bill->in  = 0;
+                    $bill->bin = $order->price;
+                    $bill->save();
+                    Log::error('补偿退单：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-price' . $order->price);
+                }
+            }
+
+            $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
+            foreach ($list as $order) {
+                $bill = \DB::table('bills')->where('oid', $order->id)->first();
+                if ($bill) {
+                    $bill->bout = $order->balance;
+                    $bill->save();
+                    Log::error('消费：order-id ' . $order->id . ' bill-id ' . $bill->id . ' bill原始in ' . $yin . ' order-balance' . $order->balance);
+                }
+            }
+        })->daily();
     }
 
     /**
