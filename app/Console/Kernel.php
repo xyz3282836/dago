@@ -101,7 +101,7 @@ class Kernel extends ConsoleKernel
                 foreach ($list as $order) {
                     $bill = DB::table('bills')->where('oid', $order->id)->first();
                     if ($bill) {
-                        DB::table('bills')->where('id', $bill->id)->update(['in' => 0, 'bout' => $order->balance]);
+                        DB::table('bills')->where('id', $bill->id)->update(['bout' => $order->balance]);
                         Log::error('消费：order-id ' . $order->id . ' bill-id ' . $bill->id . ' order-balance' . $order->balance);
                     }
                 }
