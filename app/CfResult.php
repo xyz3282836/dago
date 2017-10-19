@@ -70,7 +70,7 @@ class CfResult extends Model
                     'oid'     => $order->id,
                     'type'    => Bill::TYPE_REFUND,
                     'orderid' => $order->orderid,
-                    'in'      => $price,
+                    'bin'     => $price,
                     'gin'     => $golds,
                     'rate'    => gconfig('rmbtogold'),
                 ]);
