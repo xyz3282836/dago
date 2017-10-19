@@ -97,7 +97,7 @@ class Kernel extends ConsoleKernel
             DB::beginTransaction();
             try {
 
-                $list = Order::where('type', Order::TYPE_DEL_PAID)->get();
+                $list = Order::where('type', Order::TYPE_CONSUME)->get();
                 foreach ($list as $order) {
                     $bill = DB::table('bills')->where('oid', $order->id)->first();
                     if ($bill) {
