@@ -5,6 +5,7 @@ namespace App\Console;
 use App\CfResult;
 use App\ExchangeRate;
 use App\Order;
+use DB;
 use GuzzleHttp\Client;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -48,7 +49,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $list = Order::where('type', Order::TYPE_REFUND)->where('status', Order::STATUS_PAID)->get();
             foreach ($list as $order) {
-                $bill = \DB::table('bills')->where('oid', $order->id)->first();
+                $bill = DB::table('bills')->where('oid', $order->id)->first();
                 if ($bill) {
                     $yin       = $bill->in;
                     $bill->in  = 0;
@@ -60,7 +61,7 @@ class Kernel extends ConsoleKernel
 
             $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
             foreach ($list as $order) {
-                $bill = \DB::table('bills')->where('oid', $order->id)->first();
+                $bill = DB::table('bills')->where('oid', $order->id)->first();
                 if ($bill) {
                     $yin       = $bill->in;
                     $bill->in  = 0;
@@ -72,7 +73,7 @@ class Kernel extends ConsoleKernel
 
             $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
             foreach ($list as $order) {
-                $bill = \DB::table('bills')->where('oid', $order->id)->first();
+                $bill = DB::table('bills')->where('oid', $order->id)->first();
                 if ($bill) {
                     $bill->bout = $order->balance;
                     $bill->save();
