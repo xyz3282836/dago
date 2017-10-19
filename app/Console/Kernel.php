@@ -59,6 +59,20 @@ class Kernel extends ConsoleKernel
                     }
                 }
 
+                DB::commit();
+            } catch (\Throwable $e) {
+                DB::rollBack();
+                Log::error('账单脚本异常');
+                Log::error($e);
+            }
+
+
+        })->daily();
+
+        $schedule->call(function () {
+            DB::beginTransaction();
+            try {
+
                 $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
                 foreach ($list as $order) {
                     $bill = DB::table('bills')->where('oid', $order->id)->first();
@@ -69,7 +83,21 @@ class Kernel extends ConsoleKernel
                     }
                 }
 
-                $list = Order::where('type', Order::TYPE_DEL_PAID)->where('status', Order::STATUS_PAID)->get();
+                DB::commit();
+            } catch (\Throwable $e) {
+                DB::rollBack();
+                Log::error('账单脚本异常');
+                Log::error($e);
+            }
+
+
+        })->daily();
+
+        $schedule->call(function () {
+            DB::beginTransaction();
+            try {
+
+                $list = Order::where('type', Order::TYPE_DEL_PAID)->get();
                 foreach ($list as $order) {
                     $bill = DB::table('bills')->where('oid', $order->id)->first();
                     if ($bill) {
