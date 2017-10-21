@@ -350,9 +350,10 @@ class CfController extends Controller
             $payarr['evaluate'] = 1;
         }
 
-        if ($model->estatus == 1 || $model->estatus == 7) {
+        if ($model->estatus == CfResult::ESTATUS_BEFORE_SUBMIT || $model->estatus == CfResult::ESTATUS_REPEAT || $model->estatus == CfResult::ESTATUS_SYNC) {
             $model->estatus = CfResult::ESTATUS_SUBMIT;
         }
+
         if (count(json_decode($epic, true)) > $model->epicnum) {
             $payarr['euploadpic'] = count(json_decode($epic, true)) - $model->epicnum;
             $model->epicnum       = count(json_decode($epic, true));
