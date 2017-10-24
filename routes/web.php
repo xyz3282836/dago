@@ -82,3 +82,8 @@ Route::get('promotionlist', 'PromotionController@list');
 Route::get('promotion/add', 'PromotionController@add');
 Route::post('checkpromotionurl', 'HomeController@checkPromotionUrl');
 Route::post('addpromotion', 'PromotionController@postAdd');
+
+//wishlist
+Route::get('wishlist', 'WishListController@list');
+Route::get('wish/add', 'WishListController@add');
+Route::post('addwish', 'WishListController@postAdd');

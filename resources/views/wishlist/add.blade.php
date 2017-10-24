@@ -19,15 +19,15 @@
                 <div class="panel panel-default">
                     <ol class="breadcrumb">
                         <li><a href="/">首页</a></li>
-                        <li><a href="{{url('promotionlist')}}">我要点赞</a></li>
-                        <li class="active">发布新点赞需求</li>
+                        <li><a href="{{url('wishlist')}}">心愿单</a></li>
+                        <li class="active">搜索添加心愿单</li>
                     </ol>
                     <div class="panel-body">
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        不知道怎么发布需求？[点击这里查看帮助]
+                                        什么是搜索后添加购物车和心愿单？[点击这里查看帮助]
                                     </a>
                                 </h4>
                             </div>
@@ -35,10 +35,10 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-xs-6">
-                                            <img width="100%" src="{{URL::asset('img/promotion.gif')}}" alt="">
+                                            <img width="100%" src="{{URL::asset('img/wishlist.gif')}}" alt="">
                                         </div>
                                         <div class="col-xs-6">
-                                            {!! \App\Faq::getFaqA(18) !!}
+                                            {!! \App\Faq::getFaqA(22) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -46,22 +46,20 @@
                         </div>
 
                         <Row>
-                            <i-Col span="8" class-name="text-center">
-                                <span style="font-size: 16px">
-                                    需求推广review详情链接
-                                    <Tooltip placement="top">
-                                        <Icon type="help-circled"></Icon>
-                                        <div slot="content" style="white-space: normal;">
-                                            产品评价区域，点击评价标题，跳转的页面URL地址栏即评价详情链接，页面左上方点击【查看帮助】看教程
-                                        </div>
-                                    </Tooltip>
-                                </span>
+                            <i-Col span="2" class-name="text-center">
+                                <span style="font-size: 16px">站点</span>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
-                                <span style="font-size: 16px"><Icon type="thumbsup"></Icon> 或者 <Icon type="thumbsdown"></Icon></span>
+                                <span style="font-size: 16px">ASIN</span>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
-                                <span style="font-size: 16px">点赞需求数量</span>
+                                <span style="font-size: 16px">关键词</span>
+                            </i-Col>
+                            <i-Col span="3" offset="1" class-name="text-center">
+                                <span style="font-size: 16px">单天添加心愿单账号数量</span>
+                            </i-Col>
+                            <i-Col span="3" offset="1" class-name="text-center">
+                                <span style="font-size: 16px">选择起始时间</span>
                             </i-Col>
                             <i-Col span="3" offset="1" class-name="text-center">
                                 <span style="font-size: 16px">需花费金币</span>
@@ -72,41 +70,35 @@
                             <Row
                                 v-for="(item, index) in formDynamic.items"
                                 :key="index">
-                                <i-Col span="8">
+                                <i-Col span="2">
                                     <Form-Item
-                                            :prop="'items.' + index + '.url'"
-                                            :rules="[{required: true, message: '该评价详情链接不能为空', trigger: 'blur'},{type: 'url', message: '必须为正确url', trigger: 'blur'},{validator:validateUrl, trigger: 'blur'}]">
-                                        <i-Input type="text" v-model="item.url" placeholder="请输入评价详情链接"></i-Input>
+                                            :prop="'items.' + index + '.from_site'"
+                                            :rules="[{required: true, message: '站点不能为空', trigger: 'blur'}]">
+                                        <i-Select v-model="formValidate.from_site" style="width:100px">
+                                            <i-Option v-for="(v,k) in sitec" :value="k" :key="k" v-cloak>@{{ v }}</i-Option>
+                                        </i-Select>
                                     </Form-Item>
                                 </i-Col>
                                 <i-Col span="3" offset="1" class-name="text-center">
-                                    <Form-Item >
-                                        <Radio-Group v-model="item.type">
-                                            <Radio label="1">
-                                                <Icon type="thumbsup"></Icon>
-                                                <span>点赞</span>
-                                            </Radio>
-                                            <Radio label="2">
-                                                <Icon type="thumbsdown"></Icon>
-                                                <span>点踩</span>
-                                            </Radio>
-                                        </Radio-Group>
-                                    </Form-Item>
-                                </i-Col>
-                                <i-Col span="3" offset="1">
                                     <Form-Item
-                                            :prop="'items.' + index + '.num'"
-                                            :rules="[{ type: 'integer', min: 1, message: '该需求量最小大于0且为整数', trigger: 'change' }]">
-                                        <i-Input :number="true" type="number" step="1" v-model="item.num" placeholder="需求量"></i-Input>
+                                            :prop="'items.' + index + '.asin'"
+                                            :rules="[{required: true, message: 'ASIN不能为空', trigger: 'blur'}]">
+                                        <i-Input type="text" v-model="item.asin" placeholder="请输入ASIN"></i-Input>
                                     </Form-Item>
                                 </i-Col>
                                 <i-Col span="3" offset="1" class-name="text-center">
-                                    &nbsp;
-                                    <span v-if="checkNum(item.num)" v-cloak>
-                                        <span v-if="item.type == 1"> @{{ goldUp }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldUp * item.num) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
-                                        <span v-if="item.type == 2"> @{{ goldDown }} <img width="15" src="/img/gold.png">  × @{{ item.num }} = @{{ (goldDown * item.num).toFixed(0) }}<img width="15" src="/img/gold.png"></span>
-                                    </span>
-                                    &nbsp;
+                                    <Form-Item
+                                            :prop="'items.' + index + '.keywords'"
+                                            :rules="[{required: true, message: '关键词不能为空', trigger: 'blur'}]">
+                                        <i-Input type="text" v-model="item.keywords" placeholder="请输入关键词"></i-Input>
+                                    </Form-Item>
+                                </i-Col>
+                                <i-Col span="3" offset="1" class-name="text-center">
+                                    <Form-Item
+                                            :prop="'items.' + index + '.date'"
+                                            :rules="[{required: true, message: '起始时间不能为空', trigger: 'blur'}]">
+                                         <Date-Picker :value="item.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-Picker>
+                                    </Form-Item>
                                 </i-Col>
                                 <i-Col span="3" offset="1">
                                     <Poptip
@@ -120,7 +112,7 @@
                             <Form-Item>
                                 <Row>
                                     <i-Col span="3">
-                                    <i-Button type="dashed" long @click="handleAdd" icon="plus-round">添加新的推广需求</i-Button>
+                                    <i-Button type="dashed" long @click="handleAdd" icon="plus-round">添加新的任务</i-Button>
                                     </i-Col>
                                 </Row>
                             </Form-Item>
@@ -129,7 +121,7 @@
                             </Form-Item>
                             <Form-Item>
                                 <i-Button {{$btn}} type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
-                                <span class="color-red" v-if="'{{$btn}}' == 'disabled'" v-text="'{{\app\Action::where('name', 'eup')->value('auth_desc')}}'"></span>
+                                <span class="color-red" v-if="'{{$btn}}' == 'disabled'" v-text="'{{\app\Action::where('name', 'wishlist')->value('auth_desc')}}'"></span>
                                 {{--<i-Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">重置</i-Button>--}}
                             </Form-Item>
                         </i-Form>
@@ -142,34 +134,19 @@
 
 @section('js')
     <script>
-        var validateUrl = (rule,value,callback) => {
-            var strRegex ='https://www.amazon.(com|co.uk|ca|de|fr|co.jp|es|it)/(gp/review|review|gp/customer-reviews)/[0-9A-Z]+';
-            var re=new RegExp(strRegex);
-            if (!re.test(value)) {
-                callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'));
-            }else{
-                callback();
-            }
-        {{--axios.post("{{url('checkpromotionurl')}}", {url:value}).then(function (d) {--}}
-                {{--var data = d.data;--}}
-                {{--if (data.code) {--}}
-                    {{--callback();--}}
-                {{--} else {--}}
-                    {{--callback(new Error('该评价详情链接不正确，请仔细检查核对后，重新下单'))--}}
-                {{--}--}}
-            {{--});--}}
-        };
         var app = new Vue({
             el: '#app',
             data:{
-                goldUp:{{\Auth::user()->getActionGold('eup')}},
-                goldDown:{{\Auth::user()->getActionGold('edown')}},
+                sitec: {!! json_encode(config('linepro.cfr_sitec')) !!},
+                goldDay:{{\Auth::user()->getActionGold('wishlist')}},
                 formDynamic: {
                     items: [
                         {
-                            url: '',
-                            type:'1',
-                            num:''
+                            form_site: 2,
+                            asin:'',
+                            keywords:'',
+                            num:'',
+                            date:['',''],
                         }
                     ]
                 }
@@ -178,21 +155,23 @@
                 allgold(){
                     var golds = 0;
                     this.formDynamic.items.forEach((v) => {
-                        if(v.num > 0){
-                            switch (v.type){
-                                case '1':
-                                    golds += this.goldUp * v.num;
-                                    break;
-                                case '2':
-                                    golds += this.goldDown * v.num;
-                                    break;
-                            }
+                        if(v.num > 0 && v.date[0] != '' && v.date[1] != ''){
+                            golds += this.goldDay * v.num;
                         }
                     });
                     return golds.toFixed(0);
                 }
             },
             methods:{
+                dateDiff(sDate1, sDate2) { //sDate1和sDate2是2006-12-18格式
+                    var aDate, oDate1, oDate2, iDays;
+                    aDate = sDate1.split("-");
+                    oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+                    aDate = sDate2.split("-");
+                    oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+                    iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);
+                    return iDays + 1;
+                },
                 handleSubmit (name) {
                     this.$refs[name].validate((valid) => {
                         if (valid) {
@@ -201,10 +180,10 @@
                                 content: '提交评价成功后即作下单，金币无法回退',
                                 loading: true,
                                 onOk: () => {
-                                    axios.post("{{url('addpromotion')}}", {data:this.formDynamic.items}).then(res => {
+                                    axios.post("{{url('addwish')}}", {data:this.formDynamic.items}).then(res => {
                                         if (res.data.code) {
                                             this.$Message.success('提交成功!');
-                                            window.location = '/promotionlist';
+                                            window.location = '/wishlist';
                                         } else {
                                             this.$Notice.error({
                                                 title: '提交失败',
@@ -223,9 +202,11 @@
 //                },
                 handleAdd () {
                     this.formDynamic.items.push({
-                        url: '',
-                        type:'1',
-                        num:''
+                        form_site: 2,
+                        asin:'',
+                        keywords:'',
+                        num:'',
+                        date:['',''],
                     });
                 },
                 handleRemove (index) {
