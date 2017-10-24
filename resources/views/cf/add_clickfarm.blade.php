@@ -168,7 +168,6 @@
                                         <input disabled type="radio" v-model="is_fba" :value="k">@{{ v }}
                                     </label>
                                     <input type="hidden" name="is_fba" v-model="is_fba">
-                                    <input type="hidden" name="is_ld" v-model="is_ld">
                                     <br>
                                     <p class="help-block with-errors"></p>
                                     <Alert type="warning" v-show="is_fba == 0">
@@ -176,6 +175,20 @@
                                             {!! \App\Faq::getFaqA(21) !!}
                                         </template>
                                     </Alert>
+                                </div>
+                            </div>
+
+                            {{--秒杀--}}
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"><span class="color-red">*</span> 秒杀商品</label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" v-model="is_ld" value="1">是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" v-model="is_ld" value="0">否
+                                    </label>
+                                    <input type="hidden" name="is_fba" v-model="is_ld">
                                 </div>
                             </div>
 
