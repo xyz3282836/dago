@@ -35,6 +35,7 @@ class Order extends Model
     const TYPE_UPLOAD_VIDEO = 6;//上传视频
     const TYPE_DEL_PAID     = 7;//删除后付款 订单异常补偿
     const TYPE_PROMOTION    = 8;//点赞需求
+    const TYPE_WISHLIST     = 9;//wish
 
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
@@ -632,7 +633,7 @@ class Order extends Model
 
     public function scopeType($query, $type)
     {
-        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7])) {
+        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7, 8, 9])) {
             return $query;
         }
 

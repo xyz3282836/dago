@@ -35,7 +35,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-xs-6">
-                                            <img width="100%" src="{{URL::asset('img/wishlist.gif')}}" alt="">
+                                            <img width="100%" src="{{URL::asset('img/wishlist.png')}}" alt="">
                                         </div>
                                         <div class="col-xs-6">
                                             {!! \App\Faq::getFaqA(22) !!}
@@ -70,11 +70,11 @@
                             <Row
                                 v-for="(item, index) in formDynamic.items"
                                 :key="index">
-                                <i-Col span="2">
+                                <i-Col span="2" class-name="text-center">
                                     <Form-Item
                                             :prop="'items.' + index + '.from_site'"
                                             :rules="[{required: true, message: '站点不能为空', trigger: 'blur'}]">
-                                        <i-Select v-model="formValidate.from_site" style="width:100px">
+                                        <i-Select v-model="item.from_site">
                                             <i-Option v-for="(v,k) in sitec" :value="k" :key="k" v-cloak>@{{ v }}</i-Option>
                                         </i-Select>
                                     </Form-Item>
@@ -93,14 +93,28 @@
                                         <i-Input type="text" v-model="item.keywords" placeholder="请输入关键词"></i-Input>
                                     </Form-Item>
                                 </i-Col>
+                                <i-Col span="3" offset="1">
+                                    <Form-Item
+                                            :prop="'items.' + index + '.num'"
+                                            :rules="[{ type: 'integer', min: 1, message: '该需求量最小大于0且为整数', trigger: 'change' }]">
+                                        <i-Input :number="true" type="number" step="1" v-model="item.num" placeholder="数量"></i-Input>
+                                    </Form-Item>
+                                </i-Col>
                                 <i-Col span="3" offset="1" class-name="text-center">
                                     <Form-Item
                                             :prop="'items.' + index + '.date'"
-                                            :rules="[{required: true, message: '起始时间不能为空', trigger: 'blur'}]">
-                                         <Date-Picker :value="item.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-Picker>
+                                            :rules="[{validator:validateDateRange, trigger: 'change'}]">
+                                        <Date-Picker :options="options3" v-model="item.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-Picker>
                                     </Form-Item>
                                 </i-Col>
-                                <i-Col span="3" offset="1">
+                                <i-Col span="3" offset="1" class-name="text-center">
+                                    &nbsp;
+                                    <span v-if="checkNum(item.num) && item.date.length > 0" v-cloak>
+                                        @{{ goldDay }} <img width="15" src="/img/gold.png">  × @{{ item.num }} × @{{ getDays(item.date) }} = @{{ (goldDay * item.num * getDays(item.date)) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
+                                    </span>
+                                    &nbsp;
+                                </i-Col>
+                                <i-Col span="1" offset="1">
                                     <Poptip
                                             confirm
                                             title="有未保存的内容，是否确定删除？"
@@ -134,19 +148,31 @@
 
 @section('js')
     <script>
+        var validateDateRange = (rule,value,callback) => {
+            if(value.length == 0){
+                callback(new Error('起始时间不能为空'));
+            }else{
+                callback();
+            }
+        };
         var app = new Vue({
             el: '#app',
             data:{
-                sitec: {!! json_encode(config('linepro.cfr_sitec')) !!},
+                options3: {
+                    disabledDate (date) {
+                        return date && ((date.valueOf() < {{msectime()}} - 86400000));
+                    }
+                },
+                sitec: {!! json_encode(config('linepro.from_sitec')) !!},
                 goldDay:{{\Auth::user()->getActionGold('wishlist')}},
                 formDynamic: {
                     items: [
                         {
-                            form_site: 2,
+                            from_site: '1',
                             asin:'',
                             keywords:'',
                             num:'',
-                            date:['',''],
+                            date:[],
                         }
                     ]
                 }
@@ -155,8 +181,8 @@
                 allgold(){
                     var golds = 0;
                     this.formDynamic.items.forEach((v) => {
-                        if(v.num > 0 && v.date[0] != '' && v.date[1] != ''){
-                            golds += this.goldDay * v.num;
+                        if(v.num > 0 && v.date.length > 0){
+                            golds += this.goldDay * v.num * this.getDays(v.date);
                         }
                     });
                     return golds.toFixed(0);
@@ -171,6 +197,11 @@
                     oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
                     iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);
                     return iDays + 1;
+                },
+                getDays(date){
+                    var start = formatDate(date[0],'yyyy-MM-dd');
+                    var end = formatDate(date[1],'yyyy-MM-dd');
+                    return this.dateDiff(start,end);
                 },
                 handleSubmit (name) {
                     this.$refs[name].validate((valid) => {
@@ -202,11 +233,11 @@
 //                },
                 handleAdd () {
                     this.formDynamic.items.push({
-                        form_site: 2,
+                        from_site: '1',
                         asin:'',
                         keywords:'',
                         num:'',
-                        date:['',''],
+                        date:[],
                     });
                 },
                 handleRemove (index) {
