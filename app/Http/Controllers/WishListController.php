@@ -83,6 +83,9 @@ class WishListController extends Controller
         foreach ($list as $v) {
             $start = date('Y-m-d', strtotime($v['date'][0]));
             $end   = date('Y-m-d', strtotime($v['date'][1]));
+            if (strtotime($v['date'][0]) < strtotime(date('Y-m-d'))) {
+                return error('开始时间不能早于今天' . date('Y-m-d'));
+            }
             if (strtotime($v['date'][0]) > strtotime($v['date'][1])) {
                 return error('结束时间早于开始时间');
             }
