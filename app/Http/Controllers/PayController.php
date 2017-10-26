@@ -283,7 +283,7 @@ class PayController extends Controller
         if ($type >= 0) {
             $table->where('type', $type);
         } else {
-            $table->where('type', '<', 10);
+            $table->where('type', '<', 15);
         }
         $list = $table->orderBy('id', 'desc')->paginate(10);
         return view('pay.list_bill')->with('tname', '账单列表')->with('list', $list)->with([

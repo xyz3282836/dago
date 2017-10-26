@@ -36,6 +36,7 @@ class Order extends Model
     const TYPE_DEL_PAID     = 7;//删除后付款 订单异常补偿
     const TYPE_PROMOTION    = 8;//点赞需求
     const TYPE_WISHLIST     = 9;//wish
+    const TYPE_QA           = 10;//wish
 
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
@@ -191,6 +192,50 @@ class Order extends Model
         } catch (\Throwable $e) {
             DB::rollBack();
             throw new MsgException();
+        }
+    }
+
+    /**
+     * 消费Qa
+     * @param $list
+     * @param $golds
+     * @param null $user
+     * @throws MsgException
+     */
+    public static function consumeQa($list, $golds, $user = null)
+    {
+        $user = $user == null ? Auth::user() : $user;
+        DB::beginTransaction();
+        try {
+            $one         = self::create([
+                'uid'          => $user->id,
+                'type'         => self::TYPE_QA,
+                'payment_type' => self::PTYPE_GOLD,
+                'orderid'      => get_order_id(),
+                'golds'        => $golds,
+                'rate'         => gconfig('rmbtogold'),
+                'status'       => self::STATUS_PAID
+            ]);
+            $user->golds -= $golds;
+            $user->save();
+            foreach ($list as $k => $v) {
+                $list[$k]['oid'] = $one->id;
+            }
+            Qa::insert($list);
+            Bill::create([
+                'uid'     => $user->id,
+                'oid'     => $one->id,
+                'type'    => Bill::TYPE_QA,
+                'orderid' => $one->orderid,
+                'gout'    => $golds,
+                'rate'    => gconfig('rmbtogold'),
+            ]);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Q&A');
+            Log::error($e);
+            throw new MsgException('');
         }
     }
 
@@ -677,7 +722,7 @@ class Order extends Model
 
     public function scopeType($query, $type)
     {
-        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7, 8, 9])) {
+        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
             return $query;
         }
 

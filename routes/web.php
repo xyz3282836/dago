@@ -87,3 +87,8 @@ Route::post('addpromotion', 'PromotionController@postAdd');
 Route::get('wishlist', 'WishListController@list');
 Route::get('wish/add', 'WishListController@add');
 Route::post('addwish', 'WishListController@postAdd');
+
+//qa
+Route::get('qalist', 'QaController@list');
+Route::get('qa/add', 'QaController@add');
+Route::post('addqa', 'QaController@postAdd');

@@ -19,15 +19,15 @@
                 <div class="panel panel-default">
                     <ol class="breadcrumb">
                         <li><a href="/">首页</a></li>
-                        <li><a href="{{url('wishlist')}}">心愿单</a></li>
-                        <li class="active">搜索添加心愿单</li>
+                        <li><a href="{{url('qalist')}}">亚马逊Q&A</a></li>
+                        <li class="active">添加Q&A</li>
                     </ol>
                     <div class="panel-body">
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        什么是搜索后添加购物车和心愿单？[点击这里查看帮助]
+                                        什么是亚马逊Q&A？[点击这里查看帮助]
                                     </a>
                                 </h4>
                             </div>
@@ -35,10 +35,10 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-xs-6">
-                                            <img width="100%" src="{{URL::asset('img/wishlist.png')}}" alt="">
+                                            <img width="100%" src="{{URL::asset('img/qa.png')}}" alt="">
                                         </div>
                                         <div class="col-xs-6">
-                                            {!! \App\Faq::getFaqA(22) !!}
+                                            {!! \App\Faq::getFaqA(23) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -46,23 +46,14 @@
                         </div>
 
                         <Row>
-                            <i-Col span="2" class-name="text-center">
+                            <i-Col span="3" class-name="text-center">
                                 <span style="font-size: 16px">站点</span>
                             </i-Col>
-                            <i-Col span="3" offset="1" class-name="text-center">
+                            <i-Col span="4" offset="1" class-name="text-center">
                                 <span style="font-size: 16px">ASIN</span>
                             </i-Col>
-                            <i-Col span="3" offset="1" class-name="text-center">
-                                <span style="font-size: 16px">关键词</span>
-                            </i-Col>
-                            <i-Col span="3" offset="1" class-name="text-center">
-                                <span style="font-size: 16px">单天添加心愿单账号数量</span>
-                            </i-Col>
-                            <i-Col span="3" offset="1" class-name="text-center">
-                                <span style="font-size: 16px">选择起止时间</span>
-                            </i-Col>
-                            <i-Col span="3" offset="1" class-name="text-center">
-                                <span style="font-size: 16px">需花费金币</span>
+                            <i-Col span="8" offset="1" class-name="text-center">
+                                <span style="font-size: 16px">问题</span>
                             </i-Col>
                         </Row>
                         <br>
@@ -70,7 +61,7 @@
                             <Row
                                 v-for="(item, index) in formDynamic.items"
                                 :key="index">
-                                <i-Col span="2" class-name="text-center">
+                                <i-Col span="3" class-name="text-center">
                                     <Form-Item
                                             :prop="'items.' + index + '.from_site'"
                                             :rules="[{required: true, message: '站点不能为空', trigger: 'blur'}]">
@@ -79,40 +70,19 @@
                                         </i-Select>
                                     </Form-Item>
                                 </i-Col>
-                                <i-Col span="3" offset="1" class-name="text-center">
+                                <i-Col span="4" offset="1" class-name="text-center">
                                     <Form-Item
                                             :prop="'items.' + index + '.asin'"
                                             :rules="[{required: true, message: 'ASIN不能为空', trigger: 'blur'}]">
                                         <i-Input type="text" v-model="item.asin" placeholder="请输入亚马孙的ASIN"></i-Input>
                                     </Form-Item>
                                 </i-Col>
-                                <i-Col span="3" offset="1" class-name="text-center">
+                                <i-Col span="8" offset="1" class-name="text-center">
                                     <Form-Item
-                                            :prop="'items.' + index + '.keywords'"
-                                            :rules="[{required: true, message: '关键词不能为空', trigger: 'blur'}]">
-                                        <i-Input type="text" v-model="item.keywords" placeholder="请输入关键词"></i-Input>
+                                            :prop="'items.' + index + '.q'"
+                                            :rules="[{required: true, message: '问题不能为空', trigger: 'blur'}]">
+                                        <i-Input type="text" v-model="item.q" placeholder="请输入您的问题"></i-Input>
                                     </Form-Item>
-                                </i-Col>
-                                <i-Col span="3" offset="1">
-                                    <Form-Item
-                                            :prop="'items.' + index + '.num'"
-                                            :rules="[{ type: 'integer', min: 1, message: '该需求量最小大于0且为整数', trigger: 'change' }]">
-                                        <i-Input :number="true" type="number" step="1" v-model="item.num" placeholder="数量"></i-Input>
-                                    </Form-Item>
-                                </i-Col>
-                                <i-Col span="3" offset="1" class-name="text-center">
-                                    <Form-Item
-                                            :prop="'items.' + index + '.date'"
-                                            :rules="[{validator:validateDateRange, trigger: 'change'}]">
-                                        <Date-Picker :options="options3" v-model="item.date" format="yyyy年MM月dd日" type="daterange" placement="bottom-end" placeholder="选择起止时间" style="width: 250px"></Date-Picker>
-                                    </Form-Item>
-                                </i-Col>
-                                <i-Col span="3" offset="1" class-name="text-center">
-                                    &nbsp;
-                                    <span v-if="checkNum(item.num) && item.date.length > 0" v-cloak>
-                                        @{{ goldDay }} <img width="15" src="/img/gold.png">  × @{{ item.num }} × @{{ getDays(item.date) }} = @{{ (goldDay * item.num * getDays(item.date)) .toFixed(0)}}<img width="15" src="/img/gold.png"></span>
-                                    </span>
-                                    &nbsp;
                                 </i-Col>
                                 <i-Col span="1" offset="1">
                                     <Poptip
@@ -135,7 +105,7 @@
                             </Form-Item>
                             <Form-Item>
                                 <i-Button {{$btn}} type="primary" @click="handleSubmit('formDynamic')">提交</i-Button>
-                                <span class="color-red" v-if="'{{$btn}}' == 'disabled'" v-text="'{{\app\Action::where('name', 'wishlist')->value('auth_desc')}}'"></span>
+                                <span class="color-red" v-if="'{{$btn}}' == 'disabled'" v-text="'{{\app\Action::where('name', 'qa')->value('auth_desc')}}'"></span>
                                 {{--<i-Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">重置</i-Button>--}}
                             </Form-Item>
                         </i-Form>
@@ -148,31 +118,17 @@
 
 @section('js')
     <script>
-        var validateDateRange = (rule,value,callback) => {
-            if(value.length == 0){
-                callback(new Error('起止时间不能为空'));
-            }else{
-                callback();
-            }
-        };
         var app = new Vue({
             el: '#app',
             data:{
-                options3: {
-                    disabledDate (date) {
-                        return date && ((date.valueOf() < {{msectime()}} - 86400000));
-                    }
-                },
                 sitec: {!! json_encode(config('linepro.from_sitec')) !!},
-                goldDay:{{\Auth::user()->getActionGold('wishlist')}},
+                onegold:{{\Auth::user()->getActionGold('qa')}},
                 formDynamic: {
                     items: [
                         {
                             from_site: '1',
                             asin:'',
-                            keywords:'',
-                            num:'',
-                            date:[],
+                            q:'',
                         }
                     ]
                 }
@@ -181,28 +137,14 @@
                 allgold(){
                     var golds = 0;
                     this.formDynamic.items.forEach((v) => {
-                        if(v.num > 0 && v.date.length > 0){
-                            golds += this.goldDay * v.num * this.getDays(v.date);
+                        if(v.q != '' && v.asin != ''){
+                            golds += this.onegold;
                         }
                     });
                     return golds.toFixed(0);
                 }
             },
             methods:{
-                dateDiff(sDate1, sDate2) { //sDate1和sDate2是2006-12-18格式
-                    var aDate, oDate1, oDate2, iDays;
-                    aDate = sDate1.split("-");
-                    oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
-                    aDate = sDate2.split("-");
-                    oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
-                    iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);
-                    return iDays + 1;
-                },
-                getDays(date){
-                    var start = formatDate(date[0],'yyyy-MM-dd');
-                    var end = formatDate(date[1],'yyyy-MM-dd');
-                    return this.dateDiff(start,end);
-                },
                 handleSubmit (name) {
                     this.$refs[name].validate((valid) => {
                         if (valid) {
@@ -211,10 +153,10 @@
                                 content: '提交后金币无法回退，请一定核对清晰站点、ASIN，以免执行失败',
                                 loading: true,
                                 onOk: () => {
-                                    axios.post("{{url('addwish')}}", {data:this.formDynamic.items}).then(res => {
+                                    axios.post("{{url('addqa')}}", {data:this.formDynamic.items}).then(res => {
                                         if (res.data.code) {
                                             this.$Message.success('提交成功!');
-                                            window.location = '/wishlist';
+                                            window.location = '/qalist';
                                         } else {
                                             this.$Notice.error({
                                                 title: '提交失败',
@@ -235,22 +177,12 @@
                     this.formDynamic.items.push({
                         from_site: '1',
                         asin:'',
-                        keywords:'',
-                        num:'',
-                        date:[],
+                        q:'',
                     });
                 },
                 handleRemove (index) {
                     this.formDynamic.items.splice(index, 1);
                 },
-                checkNum(num){
-                    if(Number.isInteger(num)){
-                        if(num > 0){
-                            return true;
-                        }
-                    }
-                    return false;
-                }
             }
         });
     </script>

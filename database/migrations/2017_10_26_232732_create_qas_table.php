@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWishListsTable extends Migration
+class CreateQasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateWishListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('wish_lists', function (Blueprint $table) {
+        Schema::create('qas', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('uid')->default(0);//用户id
             $table->integer('oid')->default(0);//order-id
 
             $table->char('asin', 24)->default('');//购买的asin
             $table->tinyInteger('from_site')->default(0); // 来自站点
-            $table->string('keywords', 100)->default('');//keywords
-            $table->date('start');//开始日期
-            $table->date('end');//结束日期
+            $table->string('q', 500)->default('');//q
 
             $table->smallInteger('num')->default(0);//
             $table->integer('golds')->default(0);//金币
@@ -34,7 +32,6 @@ class CreateWishListsTable extends Migration
             $table->index(['uid', 'from_site']);
             $table->index(['uid', 'status']);
             $table->index(['uid', 'asin']);
-            $table->index(['uid', 'keywords']);
             $table->index(['oid']);
         });
     }
@@ -46,6 +43,6 @@ class CreateWishListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wish_lists');
+        Schema::dropIfExists('qas');
     }
 }

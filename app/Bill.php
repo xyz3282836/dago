@@ -23,6 +23,7 @@ class Bill extends Model
     const TYPE_DEL_PAID     = 7;//订单异常补偿
     const TYPE_PROMOTION    = 8;//点赞
     const TYPE_WISHLIST     = 9;//wish
+    const TYPE_QA           = 10;//wish
 
     protected $appends = ['type_text'];
     protected $fillable = [

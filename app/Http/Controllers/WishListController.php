@@ -11,7 +11,6 @@ namespace App\Http\Controllers;
 
 use App\Action;
 use App\Order;
-use App\Promotion;
 use App\WishList;
 use Auth;
 use Carbon\Carbon;
@@ -50,9 +49,9 @@ class WishListController extends Controller
             }
         }
         $list    = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
-        $daygold = Auth::user()->getActionGold('wishlist');
+        $gold = Auth::user()->getActionGold('wishlist');
         return view('wishlist.list')->with([
-            'daygold'  => $daygold,
+            'daygold'  => $gold,
             'list'     => $list,
             'keywords' => $keywords,
             'asin'     => $asin,

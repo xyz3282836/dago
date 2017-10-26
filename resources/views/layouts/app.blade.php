@@ -169,9 +169,6 @@
                                     <li>
                                         <a href="{{url('promotionlist')}}">我要点赞</a>
                                     </li>
-                                    <li>
-                                        <a href="{{url('wishlist')}}">心愿单</a>
-                                    </li>
 {{--                                    <li><a href="{{ url('addr') }}">达购转运</a></li>--}}
                                 </ul>
                             </li>
@@ -181,7 +178,12 @@
                                     <i class="fa fa-heart" aria-hidden="true"></i> 海淘心愿 <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('faqs') }}">产品Q&A</a></li>
+                                    <li>
+                                        <a href="{{ url('qalist') }}">产品Q&A</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('wishlist')}}">心愿单</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
