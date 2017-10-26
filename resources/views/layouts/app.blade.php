@@ -169,6 +169,9 @@
                                     <li>
                                         <a href="{{url('promotionlist')}}">我要点赞</a>
                                     </li>
+                                    <li>
+                                        <a href="{{url('wishlist')}}">心愿单</a>
+                                    </li>
 {{--                                    <li><a href="{{ url('addr') }}">达购转运</a></li>--}}
                                 </ul>
                             </li>
