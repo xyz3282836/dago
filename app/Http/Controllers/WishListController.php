@@ -37,7 +37,7 @@ class WishListController extends Controller
             $list = $list->where('asin', $asin);
         }
         if ($keywords != '') {
-            $list = $list->where('eid', $keywords);
+            $list = $list->where('keywords', $keywords);
         }
         if ($site > 0) {
             $list = $list->where('from_site', $site);
