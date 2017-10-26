@@ -195,6 +195,50 @@ class Order extends Model
     }
 
     /**
+     * 消费心愿单
+     * @param $list
+     * @param $golds
+     * @param null $user
+     * @throws MsgException
+     */
+    public static function consumeWishlist($list, $golds, $user = null)
+    {
+        $user = $user == null ? Auth::user() : $user;
+        DB::beginTransaction();
+        try {
+            $one         = self::create([
+                'uid'          => $user->id,
+                'type'         => self::TYPE_WISHLIST,
+                'payment_type' => self::PTYPE_GOLD,
+                'orderid'      => get_order_id(),
+                'golds'        => $golds,
+                'rate'         => gconfig('rmbtogold'),
+                'status'       => self::STATUS_PAID
+            ]);
+            $user->golds -= $golds;
+            $user->save();
+            foreach ($list as $k => $v) {
+                $list[$k]['oid'] = $one->id;
+            }
+            WishList::insert($list);
+            Bill::create([
+                'uid'     => $user->id,
+                'oid'     => $one->id,
+                'type'    => Bill::TYPE_WISHLIST,
+                'orderid' => $one->orderid,
+                'gout'    => $golds,
+                'rate'    => gconfig('rmbtogold'),
+            ]);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('心愿单');
+            Log::error($e);
+            throw new MsgException('');
+        }
+    }
+
+    /**
      * 消费点赞
      * @param $list
      * @param $golds

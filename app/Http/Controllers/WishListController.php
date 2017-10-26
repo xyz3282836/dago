@@ -49,8 +49,10 @@ class WishListController extends Controller
                 $list = $list->where('status', $status);
             }
         }
-        $list = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
+        $list    = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
+        $daygold = Auth::user()->getActionGold('wishlist');
         return view('wishlist.list')->with([
+            'daygold'  => $daygold,
             'list'     => $list,
             'keywords' => $keywords,
             'asin'     => $asin,
@@ -77,26 +79,32 @@ class WishListController extends Controller
         if (!$user->checkAction('wishlist')) {
             return error(Action::where('name', 'wishlist')->value('auth_desc'));
         }
-        $daygold = $user->getActionGold('eup');
+        $daygold = $user->getActionGold('wishlist');
         foreach ($list as $v) {
+            $start = date('Y-m-d', strtotime($v['date'][0]));
+            $end   = date('Y-m-d', strtotime($v['date'][1]));
+            if (strtotime($v['date'][0]) > strtotime($v['date'][1])) {
+                return error('结束时间早于开始时间');
+            }
             $tmparr  = [
                 'uid'        => $user->id,
-                'start'      => $v['date'][0],
-                'end'        => $v['date'][1],
+                'start'      => $start,
+                'end'        => $end,
                 'keywords'   => $v['keywords'],
                 'num'        => $v['num'],
                 'from_site'  => $v['from_site'],
                 'asin'       => $v['asin'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'golds'      => $daygold * $v['num']
+                'golds'      => $daygold * $v['num'] * diffBetweenTwoDays($start, $end)
             ];
+            $golds   += $tmparr['golds'];
             $dbarr[] = $tmparr;
         }
         if (($user->golds - $user->lock_golds) < $golds) {
             return error(NO_ENOUGH_GOLDS);
         }
-
+        Order::consumeWishlist($dbarr, $golds, $user);
         return success();
 
     }
