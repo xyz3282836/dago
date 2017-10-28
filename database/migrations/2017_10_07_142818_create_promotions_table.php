@@ -27,7 +27,7 @@ class CreatePromotionsTable extends Migration
             $table->smallInteger('num')->default(0);//
             $table->integer('golds')->default(0);//金币
 
-            $table->tinyInteger('status')->default(1);//-1已退款 0失败 1进行中 3已同步 3成功
+            $table->tinyInteger('status')->default(1);//-1已退款 0失败 1进行中 2已同步 3成功
             $table->timestamps();
 
             //索引
