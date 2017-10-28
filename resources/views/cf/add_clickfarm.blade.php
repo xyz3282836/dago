@@ -188,7 +188,7 @@
                                     <label class="radio-inline">
                                         <input disabled type="radio" v-model="is_ld" value="0">否
                                     </label>
-                                    <input type="hidden" name="is_fba" v-model="is_ld">
+                                    <input type="hidden" name="is_ld" v-model="is_ld">
                                 </div>
                             </div>
 

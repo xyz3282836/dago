@@ -132,7 +132,7 @@
                                                         {{$vv->shop_name}}<br>
                                                         {{ $vv->shop_id }}
                                                         <br>
-                                                        <span style="font-size:12px;color:#464c5b;">({{$vv->fba_text}})</span>
+                                                        <span style="font-size:12px;color:#464c5b;">({{$vv->is_ld == 1?'秒杀':$vv->fba_text}})</span>
                                                     </td>
                                                     <td>
                                                         {{substr($vv->start_time,0,10)}}<br>
