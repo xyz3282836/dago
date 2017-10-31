@@ -61,7 +61,7 @@
                     <div class="panel-body">
                         <form class="form-inline margin-bottom-30" action="{{url('orderlist')}}" method="get">
                             <div class="form-group">
-                                <Date-Picker :on-change="dates(date)" size="large" type="daterange" v-model="date"  :options="options2" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
+                                <Date-Picker @on-change="dates(date)" size="large" type="daterange" v-model="date"  :options="options2" placement="bottom-start" placeholder="选择日期" style="width: 220px"></Date-Picker>
                                 <input type="hidden" name="start" v-model="start">
                                 <input type="hidden" name="end" v-model="end">
                             </div>
