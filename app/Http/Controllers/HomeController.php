@@ -6,6 +6,7 @@ use App\Action;
 use App\CfResult;
 use App\VipBill;
 use Auth;
+use Cache;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -124,9 +125,9 @@ class HomeController extends Controller
     {
         switch (request('type')) {
             case 'idcard':
-                $file     = $request->file('upimg');
-                $ext      = $file->getClientOriginalExtension();
-                if(!in_array(strtolower($ext),['jpeg','png','jpg'])){
+                $file = $request->file('upimg');
+                $ext  = $file->getClientOriginalExtension();
+                if (!in_array(strtolower($ext), ['jpeg', 'png', 'jpg'])) {
                     return error('文件类型不合法');
                 }
                 $filename = time() . rand(100000, 999999) . '.' . $ext;
@@ -144,9 +145,9 @@ class HomeController extends Controller
                 if (!Auth::user()->checkAction('euploadpic')) {
                     return error(Action::where('name', 'euploadpic')->value('auth_desc'));
                 }
-                $file     = $request->file('file');
-                $ext      = $file->getClientOriginalExtension();
-                if(!in_array(strtolower($ext),['jpeg','png','jpg'])){
+                $file = $request->file('file');
+                $ext  = $file->getClientOriginalExtension();
+                if (!in_array(strtolower($ext), ['jpeg', 'png', 'jpg'])) {
                     return error('文件类型不合法');
                 }
                 $filename = time() . rand(100000, 999999) . '.' . $ext;
@@ -173,6 +174,13 @@ class HomeController extends Controller
         }
         $list = VipBill::where('uid', Auth::user()->id)->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         return view('my.list_vip')->with('tname', $tname)->with('list', $list);
+    }
+
+    public function updateNotice()
+    {
+        $uid = Auth::user()->id;
+        Cache::forever('notice-' . $uid, time());
+        return success();
     }
 
 }

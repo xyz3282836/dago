@@ -61,6 +61,7 @@ Route::get('getbilldesc', 'PayController@billDesc');
 
 //upfile
 Route::post('upload', 'HomeController@upload');
+Route::get('upnotice', 'HomeController@updateNotice');
 
 
 //captcha
