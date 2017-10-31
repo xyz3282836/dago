@@ -16,8 +16,9 @@ class Faq extends Model
             $faqs = [];
             foreach ($list as $v) {
                 $faqs[$v->id] = [
-                    'q' => $v->q,
-                    'a' => $v->a,
+                    'q'    => $v->q,
+                    'a'    => $v->a,
+                    'time' => $v->updated_at->toDateTimeString()
                 ];
             }
             Cache::forever('faqs', $faqs);
@@ -25,20 +26,22 @@ class Faq extends Model
         }
     }
 
-    public static function getFaq($id){
+    public static function getFaq($id)
+    {
         $arr = self::getFaqs();
-        if(isset($arr[$id])){
+        if (isset($arr[$id])) {
             return json_encode($arr[$id]);
-        }else{
-            return json_encode(['a'=>'','q'=>'']);
+        } else {
+            return json_encode(['a' => '', 'q' => '', 'time' => '']);
         }
     }
 
-    public static function getFaqA($id){
+    public static function getFaqA($id)
+    {
         $arr = self::getFaqs();
-        if(isset($arr[$id])){
+        if (isset($arr[$id])) {
             return $arr[$id]['a'];
-        }else{
+        } else {
             return '';
         }
     }

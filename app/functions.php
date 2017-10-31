@@ -223,3 +223,15 @@ function msectime()
     $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
     return $msectime;
 }
+
+function check_notice($uid){
+    $show = 1;
+    $faq = json_decode(\App\Faq::getFaq(24),true);
+    if(Cache::has('notice-'.$uid)){
+        $time = Cache::get('notice-'.$uid);
+        if($time > strtotime($faq['time'])){
+            $show = 0;
+        }
+    }
+    return [$show,$faq['a']];
+}

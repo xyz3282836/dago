@@ -193,7 +193,8 @@ class CfController extends Controller
             $dend = date('Y-m-d H:i:s');
         }
         $type = request('type', 0);
-        $list = Order::with('cfs')->where('uid', Auth::user()->id)->where('type', Order::TYPE_CONSUME);
+        $user = Auth::user();
+        $list = Order::with('cfs')->where('uid', $user->id)->where('type', Order::TYPE_CONSUME);
         switch ($type) {
             case 1:
                 $list = $list->where('status', 1);
@@ -207,10 +208,11 @@ class CfController extends Controller
 
         $list = $list->whereBetween('created_at', [$start, $dend])->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         return view('cf.list_order')->with('tname', '订单管理')->with('list', $list)->with([
-            'start' => $start,
-            'end'   => $end,
-            'type'  => $type,
-            'ad'    => Banner::getAd(3)
+            'start'  => $start,
+            'end'    => $end,
+            'type'   => $type,
+            'ad'     => Banner::getAd(3),
+            'notice' => check_notice($user->id)
         ]);
     }
 

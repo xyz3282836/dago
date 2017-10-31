@@ -44,6 +44,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
+                @if($notice[0]==1)
+                    <Alert type="warning" closable @on-close="upnotice">
+                        {!! $notice[1] !!}
+                        <span slot="close">我知道了</span>
+                    </Alert>
+                @endif
                 <div class="panel panel-default">
                     <div class="ad">
                         <a target="_blank" href="{{$ad['link']}}"><img src="{{$ad['pic']}}" alt=""></a>
@@ -258,6 +264,9 @@
                 }
             },
             methods:{
+                upnotice(){
+                    axios.get("{{url('upnotice')}}")
+                },
                 del(id) {
                     axios.post("{{url('delorder')}}", {id: id}).then(function (d) {
                         var data = d.data;
