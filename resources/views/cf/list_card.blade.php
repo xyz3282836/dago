@@ -137,13 +137,13 @@
                                     <Row>
                                         <i-Col span="11">
                                             <Form-Item prop="start">
-                                                <Date-Picker :on-change="sdates(formCustom.start)" size="large" type="date" v-model="formCustom.start" :options="options3" placeholder="选择开始日期" style="width: 125px"></Date-Picker>
+                                                <Date-Picker @on-change="sdates(formCustom.start)" size="large" type="date" v-model="formCustom.start" :options="options3" placeholder="选择开始日期" style="width: 125px"></Date-Picker>
                                             </Form-Item>
                                         </i-Col>
                                         <i-Col span="2" style="text-align: center">-</i-Col>
                                         <i-Col span="11">
                                             <Form-Item prop="end">
-                                                <Date-Picker :on-change="edates(formCustom.end)" size="large" type="date" v-model="formCustom.end" :options="options3" placeholder="选择结束日期" style="width: 125px"></Date-Picker>
+                                                <Date-Picker @on-change="edates(formCustom.end)" size="large" type="date" v-model="formCustom.end" :options="options3" placeholder="选择结束日期" style="width: 125px"></Date-Picker>
                                             </Form-Item>
                                         </i-Col>
                                     </Row>
