@@ -27,6 +27,8 @@ class CreateWishListsTable extends Migration
             $table->smallInteger('num')->default(0);//
             $table->integer('golds')->default(0);//金币
 
+            $table->integer('rank')->default(0);//排名
+
             $table->tinyInteger('status')->default(1);//-1已退款 0失败 1进行中 2已同步 3成功
             $table->timestamps();
 

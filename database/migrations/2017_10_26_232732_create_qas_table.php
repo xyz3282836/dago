@@ -22,7 +22,6 @@ class CreateQasTable extends Migration
             $table->tinyInteger('from_site')->default(0); // 来自站点
             $table->string('q', 500)->default('');//q
 
-            $table->smallInteger('num')->default(0);//
             $table->integer('golds')->default(0);//金币
 
             $table->tinyInteger('status')->default(1);//-1已退款 0失败 1进行中 2已同步 3成功
