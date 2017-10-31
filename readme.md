@@ -61,4 +61,8 @@ alter table `cf_results` modify column `content` varchar(10240);
 alter table `bills` add `bin` decimal(10,2) DEFAULT '0' after `out`;
 alter table `bills` add `bout` decimal(10,2) DEFAULT '0' after `bin`;
 
+alter table `wish_lists` add column `rank` int DEFAULT '0' after `golds`;
+alter table `qas` drop column `num`;
+
+
 ```
