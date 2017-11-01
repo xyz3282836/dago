@@ -28,14 +28,14 @@ class WishList extends Model
         if ($this->rank == 0) {
             return '暂无排名';
         }
-        $page = floor($this->rank / 20);
-        $id   = $this->rank % 20;
+        $page = floor($this->rank / 16);
+        $id   = $this->rank % 16;
         $page++;
         if ($id == 0) {
             $page--;
-            $id = 20;
+            $id = 16;
         }
-        return '第' . $page . '页，第' . $id . '名';
+        return '第' . $page . '页，第' . $id . '名(以16/页为参照)';
     }
 
     public function getFlagAttribute()
