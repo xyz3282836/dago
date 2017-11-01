@@ -156,7 +156,7 @@
             }
         };
         var validateNum = (rule,value,callback) => {
-            if(value%24 == 0){
+            if(value%24 != 0){
                 callback(new Error('需求量必须为24的倍数'));
             }else{
                 callback();
