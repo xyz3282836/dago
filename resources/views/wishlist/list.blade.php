@@ -107,7 +107,7 @@
                                 <td>{{$v->golds}} <img width="12" src="/img/gold.png" /></td>
                                 <td>{{$v->status_text}}</td>
                                 <td>
-                                    <i-Button type="primary">立即获取最新排名</i-Button>
+                                    {{$v->rank_text}}
                                 </td>
                             </tr>
                             @empty
