@@ -28,7 +28,7 @@ class WishList extends Model
         if ($this->rank == 0) {
             return '暂无排名';
         }
-        $page = $this->rank / 20;
+        $page = floor($this->rank / 20);
         $id   = $this->rank % 20;
         $page++;
         if ($id == 0) {
