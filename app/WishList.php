@@ -35,7 +35,7 @@ class WishList extends Model
             $page--;
             $id = 20;
         }
-        return '第' . $page . '页 ' . $id . '名';
+        return '第' . $page . '页，第' . $id . '名';
     }
 
     public function getFlagAttribute()
