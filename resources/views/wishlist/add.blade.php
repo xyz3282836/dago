@@ -96,7 +96,7 @@
                                 <i-Col span="3" offset="1">
                                     <Form-Item
                                             :prop="'items.' + index + '.num'"
-                                            :rules="[{ type: 'integer', min: 1, message: '该需求量最小大于0且为整数', trigger: 'change' }]">
+                                            :rules="[{ type: 'integer', min: 24, message: '需求量必须为24的倍数', trigger: 'change' },{validator:validateNum, trigger: 'change'}]">
                                         <i-Input :number="true" type="number" step="1" v-model="item.num" placeholder="数量"></i-Input>
                                     </Form-Item>
                                 </i-Col>
@@ -151,6 +151,13 @@
         var validateDateRange = (rule,value,callback) => {
             if(value.length == 0){
                 callback(new Error('起止时间不能为空'));
+            }else{
+                callback();
+            }
+        };
+        var validateNum = (rule,value,callback) => {
+            if(value%24 == 0){
+                callback(new Error('需求量必须为24的倍数'));
             }else{
                 callback();
             }

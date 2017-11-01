@@ -48,7 +48,7 @@ class WishListController extends Controller
                 $list = $list->where('status', $status);
             }
         }
-        $list    = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
+        $list = $list->orderBy('id', 'desc')->paginate(config('linepro.perpage'));
         $gold = Auth::user()->getActionGold('wishlist');
         return view('wishlist.list')->with([
             'daygold'  => $gold,
@@ -87,6 +87,9 @@ class WishListController extends Controller
             }
             if (strtotime($v['date'][0]) > strtotime($v['date'][1])) {
                 return error('结束时间早于开始时间');
+            }
+            if (!($v['num'] >= 24 && $v['num'] % 24 == 0)) {
+                return error('需求量必须为24的倍数');
             }
             $tmparr  = [
                 'uid'        => $user->id,
