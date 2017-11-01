@@ -80,8 +80,8 @@
                                 <i-Col span="8" offset="1" class-name="text-center">
                                     <Form-Item
                                             :prop="'items.' + index + '.q'"
-                                            :rules="[{required: true, message: '问题不能为空', trigger: 'blur'}]">
-                                        <i-Input type="text" v-model="item.q" placeholder="请输入您的问题"></i-Input>
+                                            :rules="[{required: true, message: '问题不能为空', trigger: 'blur'},{}]">
+                                        <i-Input type="text" :maxlength="100" v-model="item.q" placeholder="请输入您的问题"></i-Input>
                                     </Form-Item>
                                 </i-Col>
                                 <i-Col span="1" offset="1">
