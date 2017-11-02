@@ -253,7 +253,8 @@ class PayController extends Controller
         }
 
         $balance = $user->balance - $user->lock_balance;
-        if(bccomp($price,$balance,2) > 0){
+
+        if (round($price, 2) > round($balance, 2)) {
             //余额+充值 跳转 不生成bill
             $one = Order::consumeByPartRecharge($price, $golds, $balance, $list);
             return success(['type' => 'p', 'id' => $one->id]);
