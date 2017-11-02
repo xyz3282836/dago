@@ -25,7 +25,7 @@ class WishList extends Model
 
     public function getRankTextAttribute()
     {
-        if ($this->rank == 0) {
+        if ($this->rank < 1) {
             return '暂无排名';
         }
         $page = floor($this->rank / 16);
