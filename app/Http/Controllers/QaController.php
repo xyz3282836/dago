@@ -74,9 +74,13 @@ class QaController extends Controller
         }
         $daygold = $user->getActionGold('qa');
         foreach ($list as $v) {
+            $q = trim($v['q']);
+            if (mb_strlen($q, 'utf-8') > 1024) {
+                return error('最多1024个字符');
+            }
             $tmparr  = [
                 'uid'        => $user->id,
-                'q'          => $v['q'],
+                'q'          => $q,
                 'from_site'  => $v['from_site'],
                 'asin'       => $v['asin'],
                 'created_at' => Carbon::now(),

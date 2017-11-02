@@ -20,7 +20,7 @@ class CreateQasTable extends Migration
 
             $table->char('asin', 24)->default('');//购买的asin
             $table->tinyInteger('from_site')->default(0); // 来自站点
-            $table->string('q', 500)->default('');//q
+            $table->string('q', 1024)->default('');//q
 
             $table->integer('golds')->default(0);//金币
 
