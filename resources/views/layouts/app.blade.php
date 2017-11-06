@@ -181,9 +181,9 @@
                                     <li>
                                         <a href="{{ url('qalist') }}">产品Q&A</a>
                                     </li>
-                                    {{--<li>--}}
-                                        {{--<a href="{{url('wishlist')}}">添加心愿单</a>--}}
-                                    {{--</li>--}}
+                                    <li>
+                                        <a href="{{url('wishlist')}}">添加心愿单</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
