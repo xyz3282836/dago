@@ -84,7 +84,7 @@
                                 <th>金币单价</th>
                                 <th>总花费金币</th>
                                 <th>目前状态</th>
-                                <th>关键词搜索排名</th>
+                                {{--<th>关键词搜索排名</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -106,9 +106,9 @@
                                 <td>{{$daygold}} <img width="12" src="/img/gold.png" /></td>
                                 <td>{{$v->golds}} <img width="12" src="/img/gold.png" /></td>
                                 <td>{{$v->status_text}}</td>
-                                <td>
-                                    {{$v->rank_text}}
-                                </td>
+                                {{--<td>--}}
+                                    {{--{{$v->rank_text}}--}}
+                                {{--</td>--}}
                             </tr>
                             @empty
                                 <tr>
