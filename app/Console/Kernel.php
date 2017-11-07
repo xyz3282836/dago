@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $this->makeCfr();
-        })->everyFiveMinutes();
+        })->everyMinute();
 
         $schedule->call(function () {
             $this->makeRefund();

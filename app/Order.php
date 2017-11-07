@@ -645,7 +645,7 @@ class Order extends Model
         $list = self::where('status', self::STATUS_FROZEN)->where('type', self::TYPE_CONSUME)->get();
 //        $time = gconfig('order.afterpay.frozentime');
         foreach ($list as $v) {
-            if ((strtotime($v->updated_at) + 60 * 5) < time()) {
+            if ((strtotime($v->updated_at) + 60 * 2) < time()) {
                 self::dealOrder($v);
             }
         }
