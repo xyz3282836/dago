@@ -97,7 +97,7 @@
                                     <Form-Item
                                             :prop="'items.' + index + '.num'"
                                             :rules="[{ type: 'integer', min: 1, message: '该需求量最小大于0且为整数', trigger: 'change' }]">
-                                        <i-Input :number="true" type="number" step="1" v-model="item.num" placeholder="需求量"></i-Input>
+                                        <i-Input :number="true" step="1" v-model="item.num" placeholder="需求量"></i-Input>
                                     </Form-Item>
                                 </i-Col>
                                 <i-Col span="3" offset="1" class-name="text-center">
