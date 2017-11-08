@@ -221,6 +221,16 @@
                             {{--</div>--}}
 
                             <div class="form-group">
+                                <label class="col-md-4 control-label"><span class="color-red">*</span> 配送方式</label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline" v-for="(v,k) in delivery_typec" v-cloak>
+                                        <input type="radio" v-model="delivery_type" name="delivery_type" :value="k" required>@{{ v }}
+                                    </label>
+                                    <p class="help-block with-errors"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 使用prime会员代购</label>
                                 <div class="col-md-6">
                                     <label class="radio-inline">
@@ -229,19 +239,6 @@
                                     <label class="radio-inline">
                                         <input type="radio" v-model="is_prime" value="0">否
                                     </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label"><span class="color-red">*</span> 秒杀商品</label>
-                                <div class="col-md-6">
-                                    <label class="radio-inline">
-                                        <input disabled type="radio" v-model="is_ld" value="1">是
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input disabled type="radio" v-model="is_ld" value="0">否
-                                    </label>
-                                    <input type="hidden" name="is_ld" v-model="is_ld">
                                 </div>
                             </div>
 
