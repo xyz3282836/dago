@@ -98,7 +98,7 @@
                                     <br>
                                     <span style="font-size:12px;color:#464c5b;">(@{{ one.is_ld == 1?'秒杀':one.fba_text }})</span>
                                     <br v-if="one.is_prime == 1">
-                                    <span v-if="one.is_prime == 1"><img height="12" src="/img/prime.png" /></span>
+                                    <span v-if="one.is_prime == 1"><img height="26" src="/img/prime.png" /></span>
                                 </td>
                                 <td><span class="flag-icon" :class="'flag-icon-'+one.flag"></span></td>
                                 <td v-text="one.delivery_type_text"></td>
