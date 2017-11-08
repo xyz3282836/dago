@@ -69,7 +69,7 @@ function createsql()
 {
 
     //  创建数据表
-    $sql = "CREATE TABLE Querys (
+    $sql = "use devlinepro;CREATE TABLE Querys (
 		ReturnValue varchar(5),
 		User varchar(30),
 		Pass varchar(30),
@@ -88,7 +88,7 @@ function api()
     $user = $_GET["user"];
     $pass = $_GET["pass"];
 
-    $sql = "INSERT INTO Querys (ReturnValue, User, Pass) VALUES ('query', '" . $user . "', '" . $pass . "')";
+    $sql = "use devlinepro;INSERT INTO Querys (ReturnValue, User, Pass) VALUES ('query', '" . $user . "', '" . $pass . "')";
     echo $sql;
     sqlquery($sql, "", "");
 
@@ -108,7 +108,7 @@ function apiresult()
 		}');
     }
 
-    $sql    = "SELECT * FROM Querys";
+    $sql    = "use devlinepro;SELECT * FROM Querys";
     $result = sqlquery($sql, "", '{
 			"return": "false",
 			"user": null,
@@ -140,7 +140,7 @@ function apisimple()
         die('Api 查询密码错误！');
     }
 
-    $sql    = "SELECT * FROM Querys WHERE user='" . $_GET["queryname"] . "'";
+    $sql    = "use devlinepro;SELECT * FROM Querys WHERE user='" . $_GET["queryname"] . "'";
     $result = sqlquery($sql, "", '数据库查询错误！');
 
     $i = 0;
@@ -160,7 +160,7 @@ function host()
         die('Host 端密码错误！');
     }
 
-    $sql    = "SELECT * FROM Querys";
+    $sql    = "use devlinepro;SELECT * FROM Querys";
     $result = sqlquery($sql, "任务列表查询成功", "任务列表查询失败");
 
     $i = 0;
@@ -185,7 +185,7 @@ function hostresult()
 
     $user = $_GET["user"];
     $link = str_replace("LINKAND", "&", $_GET["link"]);
-    $sql  = "INSERT INTO Querys (ReturnValue, User, Link) VALUES ('true', '" . $user . "', '" . $link . "')";
+    $sql  = "use devlinepro;INSERT INTO Querys (ReturnValue, User, Link) VALUES ('true', '" . $user . "', '" . $link . "')";
     sqlquery($sql, "提交结果成功 页面将在 5s 后关闭", "提交结果失败 页面将在 5s 后关闭");
 
 }
