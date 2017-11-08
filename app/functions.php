@@ -182,6 +182,9 @@ function get_cf_price($cf)
     if ($cf->is_ld == 1) {
         $tmp += $cf->task_num * $user->getActionGold('seckill');
     }
+    if ($cf->is_prime == 1) {
+        $tmp += $cf->task_num * $user->getActionGold('prime');
+    }
     $cf->golds     = $tmp;
     $cf->rate      = $rate;
     $cf->srate     = $srate[$cf->time_type]['rate'];

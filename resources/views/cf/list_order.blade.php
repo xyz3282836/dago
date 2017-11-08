@@ -139,6 +139,10 @@
                                                         {{ $vv->shop_id }}
                                                         <br>
                                                         <span style="font-size:12px;color:#464c5b;">({{$vv->is_ld == 1?'秒杀':$vv->fba_text}})</span>
+                                                        @if($vv->is_prime == 1)
+                                                            <br>
+                                                            <span><img height="12" src="/img/prime.png" /></span>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         {{substr($vv->start_time,0,10)}}<br>

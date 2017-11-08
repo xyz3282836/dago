@@ -64,5 +64,7 @@ alter table `bills` add `bout` decimal(10,2) DEFAULT '0' after `bin`;
 alter table `wish_lists` add column `rank` int DEFAULT '0' after `golds`;
 alter table `qas` drop column `num`;
 
+alter table `click_farms` add `is_prime` tinyint DEFAULT '0' after `is_ld`;
+
 
 ```

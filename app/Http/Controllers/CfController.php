@@ -71,6 +71,7 @@ class CfController extends Controller
             'from_site'     => 'required|integer',
             'delivery_type' => 'required|integer',
             'is_fba'        => 'required|integer',
+            'is_prime'      => 'required|integer',
             'is_ld'         => 'required|integer',
         ]);
 
@@ -79,6 +80,12 @@ class CfController extends Controller
         if ($pdata['is_ld'] == 1) {
             if (!Auth::user()->checkAction('seckill')) {
                 return error(Action::where('name', 'seckill')->value('auth_desc'));
+            }
+        }
+
+        if ($pdata['is_prime'] == 1) {
+            if (!Auth::user()->checkAction('prime')) {
+                return error(Action::where('name', 'prime')->value('auth_desc'));
             }
         }
 
@@ -149,6 +156,7 @@ class CfController extends Controller
         $model->keyword       = $pdata['keyword'];
         $model->search_type   = $pdata['search_type'];
         $model->is_fba        = $pdata['is_fba'];
+        $model->is_prime      = $pdata['is_prime'];
         $model->is_ld         = $pdata['is_ld'];
         //1.0
         $model->time_type        = 1;

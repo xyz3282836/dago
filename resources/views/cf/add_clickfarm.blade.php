@@ -221,12 +221,27 @@
                             {{--</div>--}}
 
                             <div class="form-group">
-                                <label class="col-md-4 control-label"><span class="color-red">*</span> 配送方式</label>
+                                <label class="col-md-4 control-label"><span class="color-red">*</span> 使用prime会员代购</label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline" v-for="(v,k) in delivery_typec" v-cloak>
-                                        <input type="radio" v-model="delivery_type" name="delivery_type" :value="k" required>@{{ v }}
+                                    <label class="radio-inline">
+                                        <input type="radio" v-model="is_prime" value="1">是
                                     </label>
-                                    <p class="help-block with-errors"></p>
+                                    <label class="radio-inline">
+                                        <input type="radio" v-model="is_prime" value="0">否
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"><span class="color-red">*</span> 秒杀商品</label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" v-model="is_ld" value="1">是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input disabled type="radio" v-model="is_ld" value="0">否
+                                    </label>
+                                    <input type="hidden" name="is_ld" v-model="is_ld">
                                 </div>
                             </div>
 
@@ -353,6 +368,7 @@
                 is_fbac: {!! json_encode(config('linepro.is_fba')) !!},
                 delivery_type: 1,
                 delivery_typec: {!! json_encode(config('linepro.delivery_type')) !!},
+                is_prime: 1
             }
         });
         $('#dgform').validator().on('submit', function (e) {
@@ -375,6 +391,12 @@
             if(APP.is_ld == 1){
                 if("{{$user->checkAction('seckill')?'true':'false'}}" != 'true'){
                     layer.msg('秒杀{{\app\Action::where('name', 'seckill')->value('auth_desc')}}');
+                    return false;
+                }
+            }
+            if(APP.is_prime == 1){
+                if("{{$user->checkAction('prime')?'true':'false'}}" != 'true'){
+                    layer.msg('prime{{\app\Action::where('name', 'prime')->value('auth_desc')}}');
                     return false;
                 }
             }
