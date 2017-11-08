@@ -239,6 +239,7 @@
                                     <label class="radio-inline">
                                         <input type="radio" v-model="is_prime" value="0">否
                                     </label>
+                                    <input type="hidden" name="is_prime" v-model="is_prime">
                                 </div>
                             </div>
 
