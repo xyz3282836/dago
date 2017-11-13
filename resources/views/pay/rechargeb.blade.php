@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label"><span class="color-red">*</span> 充值方式</label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline" v-for="(v,k) in typec">
+                                    <label class="radio-inline" v-for="(v,k) in typec" v-cloak>
                                         <input type="radio" v-model="type" name="type" :value="k" required>@{{ v }}
                                     </label>
                                     <p class="help-block with-errors"></p>
