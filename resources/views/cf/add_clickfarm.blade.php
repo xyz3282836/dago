@@ -199,7 +199,7 @@
                                 <div class="col-md-6">
                                     <div class="input-group">
                                         <input readonly type="number" required class="form-control" name="final_price" min="0" max="999999" v-model="final_price">
-                                        <input type="hidden" name="from_site" value="{{request('site')}}">
+                                        <input type="hidden" name="from_site" v-model="from_site">
                                         <div class="input-group-addon">{{$ctext}}</div>
                                     </div>
                                     <span v-show="(getUnitPrice < {{gconfig('fbm.low.price')}} && is_fba == 0) || (getUnitPrice < {{gconfig('fba.low.price')}} && is_fba == 1)" class="color-red">商品金额过低，存在刷单风险，请选择其他商品</span>
@@ -369,7 +369,8 @@
                 is_fbac: {!! json_encode(config('linepro.is_fba')) !!},
                 delivery_type: 1,
                 delivery_typec: {!! json_encode(config('linepro.delivery_type')) !!},
-                is_prime: 0
+                is_prime: 0,
+                from_site:{{request('site')}}
             }
         });
         $('#dgform').validator().on('submit', function (e) {
@@ -396,12 +397,16 @@
                 }
             }
             if(APP.is_prime == 1){
+                if(APP.from_site != 1){
+                    layer.msg('目前仅美国站可使用PRIME购买');
+                    return false;
+                }
                 if("{{$user->checkAction('prime')?'true':'false'}}" != 'true'){
                     layer.msg('prime{{\app\Action::where('name', 'prime')->value('auth_desc')}}');
                     return false;
                 }
-                if(APP.getUnitPrice < {{gconfig('prime.low.price')}}){
-                    layer.msg('价格不可超过{{gconfig('prime.low.price')}}元');
+                if(APP.getUnitPrice > {{gconfig('prime.low.price') * get_rate(1)}}){
+                    layer.msg('价格不可超过{{gconfig('prime.low.price')}}美元');
                     return false;
                 }
             }

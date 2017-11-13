@@ -85,8 +85,14 @@ class CfController extends Controller
         }
 
         if ($pdata['is_prime'] == 1) {
+            if ($pdata['from_site'] != 1) {
+                return error('目前仅美国站可使用PRIME购买');
+            }
             if (!Auth::user()->checkAction('prime')) {
                 return error(Action::where('name', 'prime')->value('auth_desc'));
+            }
+            if ($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fbm.low.price') * get_rate(1)) {
+                return error('商品金额过低，存在刷单风险，请选择其他商品');
             }
         }
 

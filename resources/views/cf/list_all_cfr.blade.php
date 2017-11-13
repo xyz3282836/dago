@@ -122,8 +122,12 @@
                                                 <button class="btn btn-primary btn-sm"
                                                         @click="initForm('formValidate',{{$v->id}})">{{$v->estatus_text}}</button>
                                             @elseif($v->estatus == 5)
-                                                {{$v->estatus_text}} <a href="{{$v->amazon_review_id}}"
-                                                                        target="_blank">查看</a>
+                                                @if(stripos($v->amazon_review_id,'fucked'))
+                                                    疑似因亚马逊风控政策导致留评失败
+                                                @else
+                                                    {{$v->estatus_text}} <a href="{{$v->amazon_review_id}}"
+                                                                            target="_blank">查看</a>
+                                                @endif
                                             @else
                                                 {{$v->estatus_text}}
                                             @endif
@@ -136,8 +140,6 @@
                                                 <span class="color-red">评价文字重复</span>
                                             @endif
                                         @endif
-
-
                                     </td>
                                 </tr>
                             @empty
