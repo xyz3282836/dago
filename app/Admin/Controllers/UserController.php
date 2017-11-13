@@ -58,6 +58,9 @@ class UserController extends Controller
             $grid->actions(function ($actions) {
                 $actions->disableEdit();
             });
+            $grid->filter(function ($filter) {
+                $filter->equal('email', '用户Email');
+            });
             $grid->tools(function ($tools) {
                 $arr        = Role::all()->pluck('desc', 'name');
                 $arr['all'] = '全部';
