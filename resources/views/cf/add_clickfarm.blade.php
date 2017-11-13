@@ -240,11 +240,10 @@
                                         <label class="radio-inline">
                                             <input type="radio" v-model="is_prime" value="0">否
                                         </label>
-                                        <input type="hidden" name="is_prime" v-model="is_prime">
                                     </div>
                                 </div>
                             @endif
-
+                            <input type="hidden" name="is_prime" v-model="is_prime">
 
                             <div class="form-group" v-show="delivery_type == 2">
                                 <label class="col-md-4 control-label">国内转运地址</label>

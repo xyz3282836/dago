@@ -198,6 +198,8 @@ class PayController extends Controller
                 $flag = false;
             }
         } catch (Exception $e) {
+            Log::error('支付回调失败：');
+            Log::error($e);
             $flag = false;
         } finally {
             if ($flag) {
