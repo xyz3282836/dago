@@ -34,6 +34,11 @@ class PayController extends Controller
         return view('pay.recharge', ['role' => Auth::user()->role]);
     }
 
+    public function getRechargeBalance()
+    {
+        return view('pay.rechargeb', ['role' => Auth::user()->role]);
+    }
+
     /**
      * post
      * 支付宝支付
@@ -59,6 +64,29 @@ class PayController extends Controller
         $redirectUrl = $response->getRedirectUrl();
         return redirect($redirectUrl);
     }
+
+    public function rechargeBalance()
+    {
+        $this->validate(request(), [
+            'amount' => 'required|numeric|min:1',
+        ]);
+        $amount = request('amount');
+        $one    = Order::rechargeBalance($amount);
+
+        $gateway = get_alipay();
+        $request = $gateway->purchase();
+        $request->setBizContent([
+            'out_trade_no' => $one->orderid,
+            'total_amount' => $amount,
+            'subject'      => '充值余额',
+            'product_code' => 'FAST_INSTANT_TRADE_PAY',
+        ]);
+
+        $response    = $request->send();
+        $redirectUrl = $response->getRedirectUrl();
+        return redirect($redirectUrl);
+    }
+
 
     /**
      * 删除订单
@@ -99,6 +127,10 @@ class PayController extends Controller
         switch ($one->type) {
             case Order::TYPE_RECHARGE:
                 $subject = '充值金币';
+                $amount  = round($one->golds / $one->rate, 2);
+                break;
+            case Order::TYPE_RECHARGE_BALANCE:
+                $subject = '充值余额';
                 $amount  = round($one->golds / $one->rate, 2);
                 break;
             case Order::TYPE_CONSUME:
@@ -143,6 +175,10 @@ class PayController extends Controller
                             $typeurl = 'rechargelist';
                             Order::payRechargeGolds($model, $alipay_orderid);
                             break;
+                        case Order::TYPE_RECHARGE_BALANCE:
+                            $typeurl = 'rechargeblist';
+                            Order::payRechargeBalance($model, $alipay_orderid);
+                            break;
                         case Order::TYPE_CONSUME:
                             $typeurl = 'orderlist';
                             Order::payOrder($model, $alipay_orderid);
@@ -185,6 +221,12 @@ class PayController extends Controller
     {
         $list = Order::where('uid', Auth::user()->id)->where('type', Order::TYPE_RECHARGE)->orderBy('id', 'desc')->paginate(10);
         return view('pay.list_recharge')->with('tname', '充值金币记录列表')->with('list', $list);
+    }
+
+    public function listRechargeBalance()
+    {
+        $list = Order::where('uid', Auth::user()->id)->where('type', Order::TYPE_RECHARGE_BALANCE)->orderBy('id', 'desc')->paginate(10);
+        return view('pay.list_rechargeb')->with('tname', '充值余额记录列表')->with('list', $list);
     }
 
     /**

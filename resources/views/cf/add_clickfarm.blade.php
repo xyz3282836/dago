@@ -230,18 +230,21 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-md-4 control-label"><span class="color-red">*</span> 使用prime会员代购</label>
-                                <div class="col-md-6">
-                                    <label class="radio-inline">
-                                        <input type="radio" v-model="is_prime" value="1">是
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" v-model="is_prime" value="0">否
-                                    </label>
-                                    <input type="hidden" name="is_prime" v-model="is_prime">
+                            @if(request('isPrime') == 666)
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label"><span class="color-red">*</span> 使用prime会员代购</label>
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+                                            <input type="radio" v-model="is_prime" value="1">是
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" v-model="is_prime" value="0">否
+                                        </label>
+                                        <input type="hidden" name="is_prime" v-model="is_prime">
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
+
 
                             <div class="form-group" v-show="delivery_type == 2">
                                 <label class="col-md-4 control-label">国内转运地址</label>
@@ -366,7 +369,7 @@
                 is_fbac: {!! json_encode(config('linepro.is_fba')) !!},
                 delivery_type: 1,
                 delivery_typec: {!! json_encode(config('linepro.delivery_type')) !!},
-                is_prime: 1
+                is_prime: 0
             }
         });
         $('#dgform').validator().on('submit', function (e) {
@@ -395,6 +398,10 @@
             if(APP.is_prime == 1){
                 if("{{$user->checkAction('prime')?'true':'false'}}" != 'true'){
                     layer.msg('prime{{\app\Action::where('name', 'prime')->value('auth_desc')}}');
+                    return false;
+                }
+                if(APP.getUnitPrice < {{gconfig('prime.low.price')}}){
+                    layer.msg('价格不可超过{{gconfig('prime.low.price')}}元');
                     return false;
                 }
             }

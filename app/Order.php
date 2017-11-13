@@ -27,16 +27,17 @@ class Order extends Model
     const STATUS_PART_FAILURE = 6;//部分失败
     const STATUS_FROZEN       = 8;//下单后冻结时间
 
-    const TYPE_RECHARGE     = 1;//充值
-    const TYPE_CONSUME      = 2;//消费
-    const TYPE_REFUND       = 3;//退款
-    const TYPE_EVALUATE     = 4;//评价
-    const TYPE_UPLOAD_IMG   = 5;//上传图片
-    const TYPE_UPLOAD_VIDEO = 6;//上传视频
-    const TYPE_DEL_PAID     = 7;//删除后付款 订单异常补偿
-    const TYPE_PROMOTION    = 8;//点赞需求
-    const TYPE_WISHLIST     = 9;//wish
-    const TYPE_QA           = 10;//wish
+    const TYPE_RECHARGE         = 1;//充值
+    const TYPE_CONSUME          = 2;//消费
+    const TYPE_REFUND           = 3;//退款
+    const TYPE_EVALUATE         = 4;//评价
+    const TYPE_UPLOAD_IMG       = 5;//上传图片
+    const TYPE_UPLOAD_VIDEO     = 6;//上传视频
+    const TYPE_DEL_PAID         = 7;//删除后付款 订单异常补偿
+    const TYPE_PROMOTION        = 8;//点赞需求
+    const TYPE_WISHLIST         = 9;//wish
+    const TYPE_QA               = 10;//qa
+    const TYPE_RECHARGE_BALANCE = 11;//recharge-balance
 
     const PTYPE_ALIPAY = 1;
     const PTYPE_GOLD   = 0;
@@ -66,6 +67,27 @@ class Order extends Model
                 'orderid'      => get_order_id(),
                 'golds'        => $golds,
                 'rate'         => gconfig('rmbtogold'),
+                'status'       => self::STATUS_UNPAID
+            ]);
+            DB::commit();
+            return $one;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw new MsgException();
+        }
+    }
+
+    public static function rechargeBalance($amount)
+    {
+        $user = Auth::user();
+        DB::beginTransaction();
+        try {
+            $one = self::create([
+                'uid'          => $user->id,
+                'type'         => self::TYPE_RECHARGE_BALANCE,
+                'payment_type' => self::PTYPE_ALIPAY,
+                'orderid'      => get_order_id(),
+                'price'        => $amount,
                 'status'       => self::STATUS_UNPAID
             ]);
             DB::commit();
@@ -135,7 +157,35 @@ class Order extends Model
             ]);
             DB::commit();
         } catch (\Throwable $e) {
-            Log::error('回调充值支付失败：');
+            Log::error('回调充值金币支付失败：');
+            Log::error($e);
+            DB::rollBack();
+            throw new Exception();
+        }
+    }
+
+    public static function payRechargeBalance(self $one, $alipay_orderid)
+    {
+        $user = User::find($one->uid);
+        DB::beginTransaction();
+        try {
+            $one->status         = self::STATUS_PAID;
+            $one->alipay_orderid = $alipay_orderid;
+            $one->save();
+            $user->balance += $one->price;
+//            $user->cumulative_balance += $one->balance;
+            $user->save();
+            Bill::create([
+                'uid'            => $user->id,
+                'oid'            => $one->id,
+                'type'           => Bill::TYPE_RECHARGE_BALANCE,
+                'orderid'        => $one->orderid,
+                'alipay_orderid' => $one->alipay_orderid,
+                'bin'            => $one->price,
+            ]);
+            DB::commit();
+        } catch (\Throwable $e) {
+            Log::error('回调充值余额支付失败：');
             Log::error($e);
             DB::rollBack();
             throw new Exception();

@@ -45,9 +45,12 @@ Route::get('viplist', 'HomeController@listVip');
 
 //recharge 充值
 Route::get('recharge', 'PayController@getRecharge');
+Route::get('rechargeb', 'PayController@getRechargeBalance');
 Route::post('recharge/pay', 'PayController@recharge');
+Route::post('rechargeb/pay', 'PayController@rechargeBalance');
 Route::any('recharge/result', 'PayController@result');
 Route::get('rechargelist', 'PayController@listRecharge');
+Route::get('rechargeblist', 'PayController@listRechargeBalance');
 
 //pay 支付产品
 Route::post('pay', 'PayController@postPay');

@@ -103,7 +103,7 @@
                                     {{$v->start}}-{{$v->end}}<br>
                                     (<span v-text="dateDiff('{{$v->start}}','{{$v->end}}')"></span> 天)
                                 </td>
-                                <td>{{$daygold}} <img width="12" src="/img/gold.png" /></td>
+                                <td>{{$v->golds/$v->num}} <img width="12" src="/img/gold.png" /></td>
                                 <td>{{$v->golds}} <img width="12" src="/img/gold.png" /></td>
                                 <td>{{$v->status_text}}</td>
                                 {{--<td>--}}

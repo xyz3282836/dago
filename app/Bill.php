@@ -13,17 +13,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
-    const TYPE_SYS          = 0;//系统送
-    const TYPE_RECHARGE     = 1;//充值送
-    const TYPE_CONSUME      = 2;//正常订单
-    const TYPE_REFUND       = 3;//退款
-    const TYPE_EVALUATE     = 4;//评价
-    const TYPE_UPLOAD_IMG   = 5;//上传图片
-    const TYPE_UPLOAD_VIDEO = 6;//上传视频
-    const TYPE_DEL_PAID     = 7;//订单异常补偿
-    const TYPE_PROMOTION    = 8;//点赞
-    const TYPE_WISHLIST     = 9;//wish
-    const TYPE_QA           = 10;//wish
+    const TYPE_SYS              = 0;//系统送
+    const TYPE_RECHARGE         = 1;//充值送
+    const TYPE_CONSUME          = 2;//正常订单
+    const TYPE_REFUND           = 3;//退款
+    const TYPE_EVALUATE         = 4;//评价
+    const TYPE_UPLOAD_IMG       = 5;//上传图片
+    const TYPE_UPLOAD_VIDEO     = 6;//上传视频
+    const TYPE_DEL_PAID         = 7;//订单异常补偿
+    const TYPE_PROMOTION        = 8;//点赞
+    const TYPE_WISHLIST         = 9;//wish
+    const TYPE_QA               = 10;//qa
+    const TYPE_RECHARGE_BALANCE = 11;//recharge-balance
 
     protected $appends = ['type_text'];
     protected $fillable = [
