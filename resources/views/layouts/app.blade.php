@@ -102,10 +102,10 @@
         .dropdown-menu .rightb{
             /*border-left: 1px solid #555;*/
         }
-        .dropdown-menu .col-xs-6,.dropdown-menu .col-xs-12 {
+        .dropdown-menu .col-xs-4,.dropdown-menu .col-xs-12 {
             padding: 5px;
         }
-        .dropdown-menu .col-xs-6 a,.dropdown-menu .col-xs-12 a {
+        .dropdown-menu .col-xs-4 a,.dropdown-menu .col-xs-12 a {
             font-weight: 400;
             line-height: 1.6;
             color: #333;
@@ -190,25 +190,23 @@
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{Auth::user()->role->desc .' : '. Auth::user()->name}} <span class="caret"></span>
                                 </a>
-                                <div class="dropdown-menu" style="width: 180px;padding:5px">
+                                <div class="dropdown-menu" style="width: 270px;padding:5px">
                                     <div class="rows">
-                                        <div class="col-xs-6"><a href="javascript:;">{{Auth::user()->golds - Auth::user()->lock_golds}}<img width="15" src="/img/gold.png" /></a></div>
-                                        <div class="col-xs-6 rightb"><a href="{{ url('recharge') }}">充值金币</a></div>
+                                        <div class="col-xs-4"><a href="javascript:;">{{Auth::user()->golds - Auth::user()->lock_golds}}<img width="15" src="/img/gold.png" /></a></div>
+                                        <div class="col-xs-4 rightb"><a href="{{ url('recharge') }}">充值金币</a></div>
+                                        <div class="col-xs-4 rightb"><a href="{{ url('rechargelist') }}">充值记录</a></div>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="rows">
-                                        <div class="col-xs-6"><a href="javascript:;">{{Auth::user()->balance - Auth::user()->lock_balance}}元</a></div>
-                                        <div class="col-xs-6 rightb"><a href="javascript:;" style="color: gray;">充值余额</a></div>
+                                        <div class="col-xs-4"><a href="javascript:;">{{Auth::user()->balance - Auth::user()->lock_balance}}元</a></div>
+                                        <div class="col-xs-4 rightb"><a href="javascript:;" style="color: gray;">充值余额</a></div>
+                                        <div class="col-xs-4 rightb"><a href="javascript:;" style="color: gray;">充值记录</a></div>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="rows">
-                                        <div class="col-xs-6"><a href="{{url('billlist')}}">账单</a></div>
-                                        <div class="col-xs-6 rightb"><a href="{{ url('rechargelist') }}">充值记录</a></div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="rows">
-                                        <div class="col-xs-6"><a href="{{ url('my') }}">个人资料</a></div>
-                                        <div class="col-xs-6 rightb"><a href="{{ url('uppwd') }}">修改密码</a></div>
+                                        <div class="col-xs-4"><a href="{{ url('my') }}">个人资料</a></div>
+                                        <div class="col-xs-4 rightb"><a href="{{ url('uppwd') }}">修改密码</a></div>
+                                        <div class="col-xs-4"><a href="{{url('billlist')}}">账单</a></div>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="rows">
@@ -216,7 +214,7 @@
                                             <a href="{{ route('logout') }}"
                                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                                注销账号
+                                                注销
                                             </a>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                                 {{ csrf_field() }}
