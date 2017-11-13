@@ -345,11 +345,12 @@
                         tmp += {{$s4}} * this.task_num;
                     }
                     if(this.is_ld == 1){
-                        tmp += this.searchprice * this.task_num + {{$s5}} * this.task_num;
+                        tmp += {{$s5}} * this.task_num;
                     }
                     if(this.is_prime == 1){
-                        tmp += this.searchprice * this.task_num + {{$s6}} * this.task_num;
+                        tmp += {{$s6}} * this.task_num;
                     }
+                    tmp += this.searchprice * this.task_num;
                     return tmp;
                 },
                 gettrans() {
