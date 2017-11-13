@@ -91,8 +91,8 @@ class CfController extends Controller
             if (!Auth::user()->checkAction('prime')) {
                 return error(Action::where('name', 'prime')->value('auth_desc'));
             }
-            if ($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fbm.low.price') * get_rate(1)) {
-                return error('商品金额过低，存在刷单风险，请选择其他商品');
+            if ($pdata['final_price'] * get_rate($pdata['from_site']) > gconfig('prime.low.price') * get_rate(1)) {
+                return error('价格不可超过' . gconfig('prime.low.price') . '美元');
             }
         }
 
