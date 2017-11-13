@@ -772,7 +772,7 @@ class Order extends Model
 
     public function scopeType($query, $type)
     {
-        if (!in_array($type, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+        if ($type == 'all') {
             return $query;
         }
 
