@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <Alert type="warning">充值金币（平台虚拟货币，仅可抵扣平台服务手续费，不可用于支付产品本金，如需充余额，请点击 <a href="/rechargeb">充值余额</a>）</Alert>
+                    <Alert type="warning">充值金币（平台虚拟货币，仅可抵扣平台服务手续费，不可用于支付产品本金，如需充值余额，请点击 <a href="/rechargeb">充值余额</a>）</Alert>
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('recharge/pay') }}">
                             {{ csrf_field() }}
