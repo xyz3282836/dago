@@ -16,12 +16,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">充值余额</div>
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    <Alert type="success">充值余额（平台虚拟货币，仅可抵扣平台服务手续费，不可用于支付产品本金，如需充余额，请点击 <a href="/recharge">充值金币</a>）</Alert>
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('rechargeb/pay') }}">
                             {{ csrf_field() }}
