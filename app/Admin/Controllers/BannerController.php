@@ -80,7 +80,11 @@ class BannerController extends Controller
                     $form->image('pic', '图片')->uniqueName()->move('banner')->rules('required');
                     break;
                 case 5:
-                    $form->text('title', '充值页面图片')->default('')->rules('required');
+                    $form->text('title', '充值金币页面图片')->default('')->rules('required');
+                    $form->image('pic', '图片')->uniqueName()->move('banner')->rules('required');
+                    break;
+                case 6:
+                    $form->text('title', '充值余额页面图片')->default('')->rules('required');
                     $form->image('pic', '图片')->uniqueName()->move('banner')->rules('required');
                     break;
                 default:
@@ -112,6 +116,7 @@ class BannerController extends Controller
         Cache::forget('banner-3');
         Cache::forget('banner-4');
         Cache::forget('banner-5');
+        Cache::forget('banner-6');
         Cache::forget('logo');
     }
 
