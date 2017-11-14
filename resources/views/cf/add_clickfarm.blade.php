@@ -240,6 +240,11 @@
                                         <label class="radio-inline">
                                             <input type="radio" v-model="is_prime" value="0">否
                                         </label>
+                                        <Alert type="warning" v-show="is_fba == 0">
+                                            <template slot="desc">
+                                                {!! \App\Faq::getFaqA(25) !!}
+                                            </template>
+                                        </Alert>
                                     </div>
                                 </div>
                             @endif
