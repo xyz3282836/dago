@@ -94,6 +94,9 @@ class CfController extends Controller
             if ($pdata['final_price'] * get_rate($pdata['from_site']) > gconfig('prime.low.price') * get_rate(1)) {
                 return error('价格不可超过' . gconfig('prime.low.price') . '美元');
             }
+            if ($pdata['is_fba'] == 0) {
+                return error('FBM购买模式下不可选择，使用PRIME拍单');
+            }
         }
 
         switch ($pdata['is_fba']) {
@@ -104,6 +107,7 @@ class CfController extends Controller
                 if ($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fbm.low.price')) {
                     return error('商品金额过低，存在刷单风险，请选择其他商品');
                 }
+
                 break;
             case 1:
                 if ($pdata['final_price'] * get_rate($pdata['from_site']) < gconfig('fba.low.price')) {

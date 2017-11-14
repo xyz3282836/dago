@@ -393,6 +393,10 @@
                     layer.msg('商品金额过低，存在刷单风险，请选择其他商品');
                     return false;
                 }
+                if(APP.is_prime == 1){
+                    layer.msg('FBM购买模式下不可选择，使用PRIME拍单');
+                    return false;
+                }
             }
             if(APP.is_fba == 1){
                 if(APP.getUnitPrice < {{gconfig('fba.low.price')}}){
